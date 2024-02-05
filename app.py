@@ -18,9 +18,6 @@ local_file_path = r'C:\Users\gabri\OneDrive\Área de Trabalho\DataID'
 
 container_client = blob_service_client.get_container_client(container_name)
 
-# Create a blob client using the local file name as the name for the blob
-blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-
 # Upload the file
 
 container_client = blob_service_client.get_container_client(container_name)
