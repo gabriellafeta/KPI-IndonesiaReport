@@ -3,7 +3,6 @@ import pandas as pd
 import streamlit as st
 from azure.storage.blob import BlobServiceClient, BlobClient
 from azure.core.exceptions import ResourceExistsError
-import os
 from io import StringIO
 
 #------------------------------------------------------------------------------------------------------
