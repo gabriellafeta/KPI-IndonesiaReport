@@ -2,6 +2,7 @@ altair==5.2.0
 asttokens==2.4.1
 attrs==23.2.0
 azure-core==1.30.0
+azure
 azure-storage-blob==12.19.0
 blinker==1.7.0
 branca==0.7.0
