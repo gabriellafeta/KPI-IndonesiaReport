@@ -4,6 +4,7 @@ import streamlit as st
 from azure.storage.blob import BlobServiceClient, BlobClient
 from azure.core.exceptions import ResourceExistsError
 from io import StringIO
+import os
 
 #------------------------------------------------------------------------------------------------------
 # Uploading data
@@ -27,8 +28,7 @@ except ResourceExistsError:
 
 
 # Iterate through the files and upload each one
-overwrite = False
-
+# overwrite = False
 # for root, dirs, files in os.walk(local_file_path):
 #     for file in files:
 #         file_path = os.path.join(root, file)
@@ -42,6 +42,19 @@ overwrite = False
 #         except ResourceExistsError:
 #             print(f'Blob "{blob_path}" already exists, skipping.')
 
+def upload_files_to_blob_storage(local_file_path, container_client, overwrite=False):
+    for root, dirs, files in os.walk(local_file_path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            blob_path = os.path.relpath(file_path, local_file_path).replace(os.sep, '/')
+
+            try:
+                blob_client = container_client.get_blob_client(blob=blob_path)
+                with open(file_path, "rb") as data:
+                    blob_client.upload_blob(data, overwrite=overwrite)
+                print(f"Uploaded '{file_path}' to Blob '{blob_path}' in container '{container_client.container_name}'.")
+            except ResourceExistsError:
+                print(f'Blob "{blob_path}" already exists, skipping.')
 
 #------------------------------------------------------------------------------------------------------
 # Tables
