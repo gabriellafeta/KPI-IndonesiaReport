@@ -45,7 +45,7 @@ except ResourceExistsError:
 #             print(f'Blob "{blob_path}" already exists, skipping.')
 
 def upload_files_to_blob_storage(local_file_path, container_client, overwrite=True):
-    for root, files in os.walk(local_file_path):
+    for root, dirs, files in os.walk(local_file_path):
         for file in files:
             file_path = os.path.join(root, file)
             blob_path = os.path.relpath(file_path, local_file_path).replace(os.sep, '/')
@@ -62,7 +62,7 @@ def upload_files_to_blob_storage(local_file_path, container_client, overwrite=Tr
 
 #------------------------------------------------------------------------------------------------------
 #### Mandar arquivos na pasta DataID para o Azure Blob Storage
-upload_files_to_blob_storage(local_file_path, container_name, overwrite=True)
+upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
 
 ##### Tables
 # Tabela teste
