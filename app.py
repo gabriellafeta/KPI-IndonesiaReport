@@ -7,6 +7,8 @@ from io import StringIO
 import os
 
 #------------------------------------------------------------------------------------------------------
+st.set_page_config(layout="wide") # Configuração da página larga
+#------------------------------------------------------------------------------------------------------
 # Uploading data
 
 connection_string = "DefaultEndpointsProtocol=https;AccountName=beesexpansion0001;AccountKey=QBAsqeUnSwNe7hKHJwWrKfH1XE0LpERqc/N/x5jg51pKCvoOgaZw0NvIgxKwyciZ2JxnnjdBbu0b+ASt9jRAaA==;EndpointSuffix=core.windows.net"
@@ -42,8 +44,8 @@ except ResourceExistsError:
 #         except ResourceExistsError:
 #             print(f'Blob "{blob_path}" already exists, skipping.')
 
-def upload_files_to_blob_storage(local_file_path, container_client, overwrite=False):
-    for root, dirs, files in os.walk(local_file_path):
+def upload_files_to_blob_storage(local_file_path, container_client, overwrite=True):
+    for root, files in os.walk(local_file_path):
         for file in files:
             file_path = os.path.join(root, file)
             blob_path = os.path.relpath(file_path, local_file_path).replace(os.sep, '/')
@@ -56,21 +58,47 @@ def upload_files_to_blob_storage(local_file_path, container_client, overwrite=Fa
             except ResourceExistsError:
                 print(f'Blob "{blob_path}" already exists, skipping.')
 
+
+
 #------------------------------------------------------------------------------------------------------
-# Tables
+#### Mandar arquivos na pasta DataID para o Azure Blob Storage
+upload_files_to_blob_storage(local_file_path, container_name, overwrite=True)
+
+##### Tables
+# Tabela teste
+                
 blob_name = 'export.csv'
-
 blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-
 blob_content = blob_client.download_blob().content_as_text()
-
 data = StringIO(blob_content)
 df = pd.read_csv(data)
 
 
+##### Imagens
+
+logo = "logo.png"
+blob_client_logo = blob_service_client.get_blob_client(container=container_name, blob=logo)
+blob_content_logo = blob_client_logo.download_blob().readall()
+
 #------------------------------------------------------------------------------------------------------
 
-# app
+#### app
+# Abas
 
-st.write('Hello World!')
-st.dataframe(df)
+abas = st.tabs(["In scope"])
+aba0 = abas[0]
+
+
+# Aba0
+with aba0:
+    colA = st.columns(1)
+
+# Colunas
+with colA[0]:
+    st.image(blob_content_logo, use_column_width='always')
+
+
+# Teste
+
+
+
