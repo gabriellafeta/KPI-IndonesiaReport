@@ -92,11 +92,24 @@ aba0 = abas[0]
 # Aba0
 with aba0:
     colA = st.columns(1)
+    colB = st.columns(1)
 
 # Colunas
+
 with colA[0]:
     st.image(blob_content_logo, use_column_width='always')
-
+with colB[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada1 {
+        font-size: 20px;
+        font-style: bold;
+    }
+    </style>
+    <div class="fonte-personalizada1">
+        KPI's management - Indonesia
+    </div>
+    """, unsafe_allow_html=True)
 
 # Teste
 
