@@ -202,7 +202,7 @@ kpi1_bram_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', t
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_bram_barplot.data[0].y]))
 
 kpi1_bram_barplot.update_layout(
-    width=500,  # Adjust the width to fit within the column
+    width=550,  # Adjust the width to fit within the column
     height=400  # You can also adjust the height if necessary
 )
 
