@@ -659,10 +659,20 @@ max_date_cum_t3 = df_t3_byday_sort['DAY'].max()
 start_date_cum_t3 = max_date_cum_t3 - pd.Timedelta(days=29)
 df_t3_last_30_days = df_t3_byday_sort[(df_t3_byday_sort['DAY'] >= start_date_cum_t3) & (df_t3['DAY'] <= max_date_cum_t3)]
 
+date_range = pd.date_range(start=start_date_cum_t3, end=max_date_cum_t3)
+date_range_df = pd.DataFrame(date_range, columns=['DAY'])
+df_complete = date_range_df.merge(df_t3_byday_sort, on='DAY', how='left')
+
+df_complete['TOTAL_ORDERS'] = df_complete['TOTAL_ORDERS'].fillna(0)
+
+df_complete['CUMULATIVE_ORDERS'] = df_complete['TOTAL_ORDERS'].cumsum()
+df_t3_last_30_days = df_complete[(df_complete['DAY'] >= start_date_cum_t3) & (df_complete['DAY'] <= max_date_cum_t3)]
+
+
 kpi3_barplot_cum = px.bar(df_t3_last_30_days, x='DAY', y='CUMULATIVE_ORDERS', color_discrete_sequence=['lightblue'])
 
 kpi3_barplot_cum.update_layout(
-    title='BEES Orders in Last 30 Days for ALL BDRs',
+    title='Cummulative BEES Orders in Last 30 Days for ALL BDRs',
     xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
