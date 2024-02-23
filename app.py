@@ -212,8 +212,6 @@ with colC[0]:
 
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
-with colD[1]:
-    st.plotly_chart(kpi1_bram_barplot)
 
 
 
