@@ -472,6 +472,7 @@ with aba0:
     colC = st.columns(1)
     colC_1 = st.columns(1)
     colC_2 = st.columns(1)
+    colC_3 = st.columns(1)
     colD = st.columns(2)
     colE = st.columns(2)
     colF = st.columns(2)
@@ -516,6 +517,14 @@ with colC_1[0]:
 
 with colC_2[0]:
     st.plotly_chart(kpi1_all_barplot_bdr_mtd, use_container_width=True)
+
+with colC_3[0]:
+    st.download_button(
+    label="Download data as CSV",
+    data=df_t1,
+    file_name='data.csv',
+    mime='text/csv',
+)
 
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
