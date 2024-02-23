@@ -62,6 +62,48 @@ def upload_files_to_blob_storage(local_file_path, container_client, overwrite=Tr
 
 
 #------------------------------------------------------------------------------------------------------
+# funções de uso geral
+
+def formata_numero(valor, prefixo=''):
+    if valor < 1000:
+        return f'{prefixo}{valor:.2f}'
+    elif valor < 1000000:
+        return f'{prefixo}{valor / 1000:.2f} k PHP'
+    elif valor < 1000000000:
+        return f'{prefixo}{valor / 1000000:.2f} mi PHP'
+    else:
+        return f'{prefixo}{valor / 1000000000:.2f} bi PHP'
+    
+
+def formata_percentual(valor, sufixo='%'):
+    return f'{valor*100:.1f}{sufixo}'     
+
+
+def style_table(df, title):
+    def format_as_percent(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}%'.format(value * 100).replace(',', '.')
+        return value
+
+    # Apply styles to the DataFrame
+    styler_pct = df.style.format(format_as_percent) \
+        .set_table_styles([
+            {'selector': 'thead th',
+             'props': [('background-color', 'yellow'), ('color', 'black'), ('font-weight', 'bold')]},
+            {'selector': 'td',
+             'props': [('text-align', 'center')]}
+        ], overwrite=False) \
+        .applymap(lambda v: 'color: red' if isinstance(v, float) and v < 0 else 'color: black') \
+        .background_gradient(cmap='RdYlGn', axis=None, low=0.3, high=0.7) \
+        .set_caption(title) \
+        .set_table_styles([
+            {'selector': 'caption',
+             'props': [('caption-side', 'top'), ('font-weight', 'bold'), ('font-size', '1.5em')]}
+        ], overwrite=False)
+
+    return styler_pct   
+
+#------------------------------------------------------------------------------------------------------
 #### Mandar arquivos na pasta DataID para o Azure Blob Storage
 upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
 
@@ -130,8 +172,13 @@ df_t1_iwan = df_t1[df_t1['BDR_name'] == 'Iwan Dwiarsono']
 df_t1_dian = df_t1[df_t1['BDR_name'] == 'Dian']
 df_t1_alvis = df_t1[df_t1['BDR_name'] == 'Alvis']
 
+# Data to csv for downloading button
+
 csv_t1 = df_t1.to_csv(index=False).encode('utf-8')
 csv_t2 = df_t2.to_csv(index=False).encode('utf-8')
+csv_t3 = df_t3.to_csv(index=False).encode('utf-8')
+csv_t4 = df_t4.to_csv(index=False).encode('utf-8')
+csv_t5 = df_t5.to_csv(index=False).encode('utf-8')
 #------------------------------------------------------------------------------------------------------
 # Criando visualizações
 
@@ -145,8 +192,7 @@ df_t1_sorted = df_t1.sort_values(by='VISIT_DATE')
 
 start_date = max_date - pd.Timedelta(days=29)
 end_date = max_date
-df_t1_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
-df_aggregated_t1 = df_t1_30_days.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
+df_aggregated_t1 = df_t1_sorted.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
 kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['lightblue'])
 
 # Layout
@@ -408,13 +454,13 @@ kpi1_alvis_barplot.update_layout(
     height=400  # You can also adjust the height if necessary
 )
 
-########## KPI1 per BDR in last 30 days
-df_aggregated_t1_BDR = df_t1_30_days.groupby('BDR_ID')['VISITED_STORES'].sum().reset_index()
+########## KPI1 per BDR ALLD
+df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR_ID')['VISITED_STORES'].sum().reset_index()
 df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITED_STORES', ascending=False)
 kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
 kpi1_all_barplot_bdr.update_layout(
-    title='Visited Stores in the Last 30 Days per BDR',
+    title='Visited Stores ALLD per BDR',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -466,8 +512,7 @@ df_t2_sorted = df_t2.sort_values(by='DATE')
 
 start_date = max_date_t2 - pd.Timedelta(days=29)
 
-df_t2_30_days = df_t2_sorted[(df_t2_sorted['DATE'] >= start_date) & (df_t2_sorted['DATE'] <= end_date)]
-df_aggregated_t2 = df_t2_30_days.groupby('DATE')['count_registered_stores'].sum().reset_index()
+df_aggregated_t2 = df_t2_sorted.groupby('DATE')['count_registered_stores'].sum().reset_index()
 kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='DATE', y='count_registered_stores', color_discrete_sequence=['lightblue'])
 
 kpi2_barplot_dateagg.update_layout(
@@ -492,14 +537,14 @@ kpi2_barplot_dateagg.update_layout(
 
 # KPI 2 per BDR
 
-df_t2_30_days['BDR_TEMP'] = df_t2_30_days.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
-df_aggregated_t2_BDR = df_t2_30_days.groupby('BDR_TEMP')['count_registered_stores'].sum().reset_index()
+df_t2_sorted['BDR_TEMP'] = df_t2_sorted.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
+df_aggregated_t2_BDR = df_t2_sorted.groupby('BDR_TEMP')['count_registered_stores'].sum().reset_index()
 df_aggregated_t2_BDR_sorted = df_aggregated_t2_BDR.sort_values(by='count_registered_stores', ascending = False)
 kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='BDR_TEMP', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr.update_layout(
-    title='Registered Stores in the Last 30 Days per BDR',
+    title='Registered Stores ALLD per BDR',
     xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -542,6 +587,41 @@ kpi2_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 )
 
 #------------------------------------------------------------------------------------------------------
+##### KPI 3.	Number & list of stores adopted (place order via apps) per day per BDR.
+
+### Tratando a base
+df_t3["TOTAL_ORDERS"] = df_t3["count_placed_orders_customer"] + df_t3["count_placed_orders_force"] + df_t3["count_placed_orders_grow"]
+df_t3["bdr_id"] = df_t3["bdr_id"].fillna("TBD")
+
+max_date_t3 = df_t2['DAY'].max()
+max_date_t3 = pd.to_datetime(max_date_t3)
+
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sorted = df_t2.sort_values(by='DAY')
+
+df_t3_agg_bees = df_t3_sorted.groupby('bdr_id')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_agg_bees_sort = df_t3_agg_bees.sort_values(by='TOTAL_ORDERS', ascending=False)
+
+# KPI 3 ORDERS - ALLD per BDR
+kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+
+kpi3_all_barplot_bdr.update_layout(
+    title='BEES Orders ALLD per BDR',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+kpi3_all_barplot_bdr.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi3_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+#------------------------------------------------------------------------------------------------------
 #### App
 # Abas
 
@@ -568,6 +648,8 @@ with aba0:
     colI = st.columns(1)
     colI_1 = st.columns(1)
     colJ = st.columns(1)
+    colK = st.columns(1)
+    colK_1 = st.columns(1)
 
 
 # Colunas
@@ -696,3 +778,20 @@ with colJ[0]:
         3.	Number of stores adopted (place order via apps) per day per BDR.
     </div>
     """, unsafe_allow_html=True)
+
+with colK[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada3 {
+        font-size: 10px;
+        font-style: italic
+    }
+    </style>
+    <div class="fonte-personalizada3">
+        Up to 23/02/2024 There were a considerable amount of null values in BDR columns.
+        Null values treated as "TBD".
+    </div>
+    """, unsafe_allow_html=True)
+
+with colK_1[0]:
+    st.plotly_chart(kpi3_all_barplot_bdr, use_container_width=True)
