@@ -659,6 +659,7 @@ max_date_cum_t3 = df_t3_byday_sort['DAY'].max()
 start_date_cum_t3 = max_date_cum_t3 - pd.Timedelta(days=29)
 df_t3_last_30_days = df_t3_byday_sort[(df_t3_byday_sort['DAY'] >= start_date_cum_t3) & (df_t3['DAY'] <= max_date_cum_t3)]
 
+
 date_range = pd.date_range(start=start_date_cum_t3, end=max_date_cum_t3)
 date_range_df = pd.DataFrame(date_range, columns=['DAY'])
 df_complete = date_range_df.merge(df_t3_byday_sort, on='DAY', how='left')
@@ -698,9 +699,12 @@ def format_sales(value):
     value_in_millions = value / 1_000_000
     return f"{value_in_millions:,.1f} MM PHP"
 
-
+df_t3['gmv_placed_customer'] = df_t3['gmv_placed_customer'].astype(float)
+df_t3['gmv_placed_force'] = df_t3['gmv_placed_force'].astype(float)
+df_t3['gmv_placed_grow'] = df_t3['gmv_placed_grow'].astype(float)
 
 df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
+df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'].astype(float)
 df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'].apply(formata_numero, prefixo='')
 
 df_t3_sales = df_t3.groupby('bdr_id')['TOTAL_SALES'].sum().reset_index().sort_values(by='TOTAL_SALES')
@@ -710,6 +714,7 @@ df_t3_sales_notnull.dropna(subset=['TOTAL_SALES'], inplace=True)
 df_t3_sales_notnull['TOTAL_SALES'] = df_t3_sales_notnull['TOTAL_SALES'].apply(format_sales)
 
 kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
+
 
 kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
