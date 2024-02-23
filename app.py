@@ -130,7 +130,7 @@ df_t1_iwan = df_t1[df_t1['BDR_name'] == 'Iwan Dwiarsono']
 df_t1_dian = df_t1[df_t1['BDR_name'] == 'Dian']
 df_t1_alvis = df_t1[df_t1['BDR_name'] == 'Alvis']
 
-
+csv_t1 = df_t1.to_csv(index=False).encode('utf-8')
 #------------------------------------------------------------------------------------------------------
 # Criando visualizações
 
@@ -521,7 +521,7 @@ with colC_2[0]:
 with colC_3[0]:
     st.download_button(
     label="Download data as CSV",
-    data=df_t1,
+    data=csv_t1,
     file_name='data.csv',
     mime='text/csv',
 )
