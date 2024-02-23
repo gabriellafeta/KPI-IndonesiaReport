@@ -128,6 +128,7 @@ with aba0:
 
 with colA[0]:
     st.image(blob_content_logo, use_column_width='always')
+
 with colB[0]:
     st.markdown("""
     <style>
@@ -144,13 +145,13 @@ with colB[0]:
 with colC[0]:
     st.markdown("""
     <style>
-    .fonte-personalizada1 {
+    .fonte-personalizada2 {
         font-size: 20px;
         font-style: bold;
         text-decoration: underline; /* This line adds the underline */
     }
     </style>
-    <div class="fonte-personalizada1">
+    <div class="fonte-personalizada2">
         1.	Number of stores visited per day per BDR.
     </div>
     """, unsafe_allow_html=True)
