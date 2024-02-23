@@ -648,6 +648,42 @@ kpi3_all_barplot_bdr_mtd.update_traces(
 kpi3_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
+
+# Cumulative
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+max_date_t3 = df_t3['DATE'].max()
+
+df_t3 = df_t3.sort_values(by="DAY")
+df_t3["Cummulative Orders"] = df_t3["TOTAL_ORDERS"].cumsum()
+
+df_agg_t3_cum = df_t3.groupby('DAY')['Cummulative Orders'].sum().reset_index()
+start_date_t3_cum = max_date_t3 - pd.Timedelta(days=29)
+
+kpi3_barplot_dateagg_cum = px.bar(df_agg_t3_cum, x='DATE', y='count_registered_stores', color_discrete_sequence=['lightblue'])
+
+kpi3_barplot_dateagg_cum.update_layout(
+    title='Cummulative BEES Orders per day for ALL BDRs',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white',
+    margin=dict(t=50)  # Set background color to white for a clean look
+)
+
+kpi3_barplot_dateagg_cum.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi3_barplot_dateagg_cum.update_layout(
+    width=500,  # Adjust the width to fit within the column
+    height=400  # You can also adjust the height if necessary
+)
+
+
+
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -678,6 +714,7 @@ with aba0:
     colK = st.columns(1)
     colK_1 = st.columns(1)
     colK_2 = st.columns(1)
+    colK_3 = st.columns(1)
 
 
 # Colunas
@@ -826,3 +863,6 @@ with colK_1[0]:
 
 with colK_2[0]:
     st.plotly_chart(kpi3_all_barplot_bdr_mtd, use_container_width=True)
+    
+with colK_3[0]:
+    st.plotly_chart(kpi3_barplot_dateagg_cum, use_container_width=True)
