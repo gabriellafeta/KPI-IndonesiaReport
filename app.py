@@ -711,7 +711,7 @@ df_t3_sales_notnull_sort = df_t3_sales_notnull.sort_values(by='gmv_placed_custom
 
 df_t3_sales_notnull_sort['gmv_placed_customer'] = df_t3_sales_notnull_sort['gmv_placed_customer'].fillna(0).apply(formata_numero, prefixo='')
 
-kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
+kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='bdr_id', y='gmv_placed_customer', color_discrete_sequence=['LightSalmon'])
 
 kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
