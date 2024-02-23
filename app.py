@@ -565,6 +565,8 @@ with aba0:
     colH_1 = st.columns(1)
     colH_3 = st.columns(1)
     colI = st.columns(1)
+    colJ = st.columns(1)
+
 
 # Colunas
 
@@ -669,3 +671,17 @@ with colH_3[0]:
 
 with colI[0]:
     st.plotly_chart(kpi2_barplot_dateagg, use_container_width=True)
+
+with colJ[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        3.	Number of stores adopted (place order via apps) per day per BDR.
+    </div>
+    """, unsafe_allow_html=True)
