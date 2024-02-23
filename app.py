@@ -607,7 +607,7 @@ kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='bdr_id', y='TOTAL_ORDERS',
 
 kpi3_all_barplot_bdr.update_layout(
     title='BEES Orders ALLD per BDR',
-    xaxis=dict(tickmode='linear', title=''),
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
@@ -619,6 +619,33 @@ kpi3_all_barplot_bdr.update_traces(
 )
 
 kpi3_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+
+# KPI 3 ORDERS - Latest Day
+
+df_t3_mtd = df_t3[df_t3['DAY'] == max_date_t3]
+df_t3_mtd_agg = df_t3_mtd.df_t3_sorted.groupby('bdr_id')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_mtd_agg = df_t3_mtd_agg.sort_values(by='TOTAL_ORDERS', ascending=False)
+
+
+kpi3_all_barplot_bdr_mtd = px.bar(df_t3_mtd_agg, x='bdr_id', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
+formatted_max_date_t3 = max_date_t3.strftime('%Y-%m-%d')
+
+kpi3_all_barplot_bdr_mtd.update_layout(
+    title=f'BEES Orders on {formatted_max_date_t3} per BDR',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+kpi3_all_barplot_bdr_mtd.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi3_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 #------------------------------------------------------------------------------------------------------
@@ -650,6 +677,7 @@ with aba0:
     colJ = st.columns(1)
     colK = st.columns(1)
     colK_1 = st.columns(1)
+    colK_2 = st.columns(1)
 
 
 # Colunas
@@ -795,3 +823,6 @@ with colK[0]:
 
 with colK_1[0]:
     st.plotly_chart(kpi3_all_barplot_bdr, use_container_width=True)
+
+with colK_2[0]:
+    st.plotly_chart(kpi3_all_barplot_bdr_mtd, use_container_width=True)
