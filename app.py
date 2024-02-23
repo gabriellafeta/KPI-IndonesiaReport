@@ -493,13 +493,13 @@ kpi2_barplot_dateagg.update_layout(
 
 df_t2_30_days['BDR_TEMP'] = df_t2_30_days.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
 df_aggregated_t2_BDR = df_t2_30_days.groupby('BDR_TEMP')['count_registered_stores'].sum().reset_index()
-df_aggregated_t2_BDR = df_aggregated_t2_BDR.sort_values(by='count_registered_stores', ascending=False)
+df_aggregated_t2_BDR = df_aggregated_t2_BDR.sort_values(by='count_registered_stores', ascending=True)
 kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR, x='BDR_TEMP', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr.update_layout(
     title='Registered Stores in the Last 30 Days per BDR',
-    xaxis=dict(tickmode='linear', title=''),
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
