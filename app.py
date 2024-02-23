@@ -696,9 +696,9 @@ df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] 
 df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'].apply(formata_numero, prefixo='')
 
 df_t3_sales = df_t3.groupby('bdr_id')['TOTAL_SALES'].sum().reset_index().sort_values(by='TOTAL_SALES')
-df_t3_sales = df_t3_sales[df_t3_sales['TOTAL_SALES'] != 0]
+df_t3_sales_notnull = df_t3_sales[df_t3_sales['TOTAL_SALES'] != 0]
 
-kpi4_all_barplot_bdr = px.bar(df_t3_sales, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
+kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
 
 kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
