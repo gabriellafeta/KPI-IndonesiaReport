@@ -243,7 +243,7 @@ kpi1_harris_barplot.update_layout(
 df_t1_cheryl['VISIT_DATE'] = pd.to_datetime(df_t1_cheryl['VISIT_DATE'])
 
 visits_per_day_cheryl = df_t1_cheryl.groupby(df_t1_cheryl['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
-visits_per_day_cheryl['VISIT_DATE'] = pd.to_datetime(visits_per_day_harris['VISIT_DATE'])
+visits_per_day_cheryl['VISIT_DATE'] = pd.to_datetime(visits_per_day_cheryl['VISIT_DATE'])
 
 full_data_cheryl = pd.merge(dates_df, visits_per_day_cheryl, on='VISIT_DATE', how='left').fillna(0)
 full_data_cheryl['VISIT_DATE'] = full_data_cheryl['VISIT_DATE'].dt.date
@@ -272,6 +272,73 @@ kpi1_cheryl_barplot.update_layout(
     height=400  # You can also adjust the height if necessary
 )
 
+###### Christian
+df_t1_christian['VISIT_DATE'] = pd.to_datetime(df_t1_christian['VISIT_DATE'])
+
+visits_per_day_christian = df_t1_christian.groupby(df_t1_christian['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_christian['VISIT_DATE'] = pd.to_datetime(visits_per_day_christian['VISIT_DATE'])
+
+full_data_christian = pd.merge(dates_df, visits_per_day_christian, on='VISIT_DATE', how='left').fillna(0)
+full_data_christian['VISIT_DATE'] = full_data_christian['VISIT_DATE'].dt.date
+
+kpi1_christian_barplot = px.bar(full_data_christian, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+
+kpi1_christian_barplot.update_layout(
+    title='Visited Stores in the Last 30 Days for Christian',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white',
+    margin=dict(t=50)  # Set background color to white for a clean look
+)
+
+kpi1_christian_barplot.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside',
+)
+
+kpi1_christian_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+    textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_christian_barplot.data[0].y]))
+
+kpi1_christian_barplot.update_layout(
+    width=500,  # Adjust the width to fit within the column
+    height=400  # You can also adjust the height if necessary
+)
+
+###### Iwan Dwiarsono
+df_t1_iwan['VISIT_DATE'] = pd.to_datetime(df_t1_iwan['VISIT_DATE'])
+
+visits_per_day_iwan = df_t1_iwan.groupby(df_t1_iwan['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_iwan['VISIT_DATE'] = pd.to_datetime(visits_per_day_iwan['VISIT_DATE'])
+
+full_data_iwan = pd.merge(dates_df, visits_per_day_iwan, on='VISIT_DATE', how='left').fillna(0)
+full_data_iwan['VISIT_DATE'] = full_data_iwan['VISIT_DATE'].dt.date
+
+kpi1_iwan_barplot = px.bar(full_data_iwan, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+
+kpi1_iwan_barplot.update_layout(
+    title='Visited Stores in the Last 30 Days for Iwan Dwiarsono',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white',
+    margin=dict(t=50)  # Set background color to white for a clean look
+)
+
+kpi1_iwan_barplot.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside',
+)
+
+kpi1_iwan_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+    textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_iwan_barplot.data[0].y]))
+
+kpi1_iwan_barplot.update_layout(
+    width=500,  # Adjust the width to fit within the column
+    height=400  # You can also adjust the height if necessary
+)
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -287,6 +354,8 @@ with aba0:
     colC = st.columns(1)
     colD = st.columns(2)
     colE = st.columns(2)
+    colF = st.columns(2)
+    colG = st.columns(2)
 
 # Colunas
 
@@ -329,6 +398,11 @@ with colE[0]:
     st.plotly_chart(kpi1_harris_barplot)
 with colE[1]:
     st.plotly_chart(kpi1_cheryl_barplot)
+
+with colF[0]:
+    st.plotly_chart(kpi1_christian_barplot)
+with colF[1]:
+    st.plotly_chart(kpi1_iwan_barplot)
 
 
 
