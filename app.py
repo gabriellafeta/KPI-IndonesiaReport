@@ -452,6 +452,10 @@ kpi1_all_barplot_bdr_mtd.update_traces(
 kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
+#------------------------------------------------------------------------------------------------------
+########## KPI 2
+
+
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -472,6 +476,7 @@ with aba0:
     colE = st.columns(2)
     colF = st.columns(2)
     colG = st.columns(2)
+    colH = st.columns(1)
 
 # Colunas
 
@@ -531,6 +536,20 @@ with colG[0]:
     st.plotly_chart(kpi1_dian_barplot)
 with colG[1]:
     st.plotly_chart(kpi1_alvis_barplot)
+
+with colH[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        2.	Number of stores registered by day per BDR.
+    </div>
+    """, unsafe_allow_html=True)
 
 
 
