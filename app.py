@@ -454,17 +454,38 @@ kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 )
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
+#### Agregado por dia
 
-# max_date_t2 = df_t2['DATE'].max()
+max_date_t2 = df_t2['DATE'].max()
+max_date_t2 = pd.to_datetime(max_date_t2)
 
-# df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
-# df_t2_sorted = df_t2.sort_values(by='DATE')
+df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+df_t2_sorted = df_t2.sort_values(by='DATE')
 
-# start_date = max_date_t2 - pd.Timedelta(days=29)
+start_date = max_date_t2 - pd.Timedelta(days=29)
 
-# df_t1_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
-# df_aggregated_t1 = df_t1_30_days.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
-# kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+df_t2_30_days = df_t2_sorted[(df_t2_sorted['DATE'] >= start_date) & (df_t2_sorted['DATE'] <= end_date)]
+df_aggregated_t2 = df_t1_30_days.groupby('DATE')['count_registered_stores'].sum().reset_index()
+kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+
+kpi2_barplot_dateagg.update_layout(
+    title='Registered stores in Last 30 Days for ALL BDRs',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white',
+    margin=dict(t=50)  # Set background color to white for a clean look
+)
+
+kpi2_barplot_dateagg.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi2_barplot_dateagg.update_layout(
+    width=500,  # Adjust the width to fit within the column
+    height=400  # You can also adjust the height if necessary
+)
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -487,6 +508,7 @@ with aba0:
     colG = st.columns(2)
     colG_1 = st.columns(1)
     colH = st.columns(1)
+    colI = st.columns(1)
 
 # Colunas
 
@@ -569,3 +591,5 @@ with colH[0]:
     </div>
     """, unsafe_allow_html=True)
 
+with colI[0]:
+    st.plotly_chart(kpi2_barplot_dateagg, use_container_width=True)
