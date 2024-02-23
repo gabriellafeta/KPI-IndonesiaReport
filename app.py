@@ -730,25 +730,35 @@ kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 # Grafico empilhado
 df_t3_sales_empilhado = df_t3.groupby('bdr_id')[['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow']].sum().reset_index()
 
+df_t3_sales_empilhado['total_gmv'] = df_t3_sales_empilhado[['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow']].sum(axis=1)
+df_t3_sales_empilhado_sorted = df_t3_sales_empilhado.sort_values('total_gmv', ascending=False)
+
+# Create the stacked bar plot
 kpi4_all_stacked_barplot_bdr = px.bar(
-    df_t3_sales_empilhado, 
+    df_t3_sales_empilhado_sorted, 
     x='bdr_id', 
     y=['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow'],
     title='BEES Sales Stacked per BDR',
-    labels={'value': 'GMV', 'variable': 'Category'},  # variável 'variable' automaticamente criada pelo Plotly
-    color_discrete_map={  # Mapa de cores personalizado para cada categoria
-        'gmv_placed_customer': 'lightgreen',  # Substitua pelas cores que preferir
-        'gmv_placed_force': 'lightblue',
-        'gmv_placed_grow': 'lightcoral'
+    labels={'value': 'GMV', 'variable': 'Category'},
+    color_discrete_map={
+        'Customer GMV': 'lightblue',
+        'Force GMV': 'lightred',
+        'Grow GMV': 'lightcoral'
     }
 )
 
 kpi4_all_stacked_barplot_bdr.update_layout(
     xaxis=dict(tickangle=90),
     yaxis=dict(showgrid=False, title='Total GMV'),
-    showlegend=True,  # Certifique-se de que a legenda está visível
+    showlegend=True,
     plot_bgcolor='white'
 )
+
+kpi4_all_stacked_barplot_bdr.update_traces(
+    texttemplate='%{value}',  # This will display the individual segment values
+    textposition='inside'
+)
+
 
 
 #------------------------------------------------------------------------------------------------------
