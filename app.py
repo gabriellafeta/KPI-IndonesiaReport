@@ -693,12 +693,6 @@ kpi3_barplot_cum.update_layout(
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
 
-def formata_numero(valor):
-    # Garantir que o valor é um float
-    valor = float(valor)
-    # Formatar com uma casa decimal e substituir ponto por vírgula
-    valor_formatado = f"{valor:,.1f}".replace(",", "X").replace(".", ",").replace("X", ".")
-    return valor_formatado + ' PHP'
 
 df_t3['gmv_placed_customer'] = pd.to_numeric(df_t3['gmv_placed_customer'], errors='coerce').fillna(0)
 df_t3['gmv_placed_force'] = pd.to_numeric(df_t3['gmv_placed_force'], errors='coerce').fillna(0)
@@ -714,7 +708,6 @@ df_t3_sales_notnull.dropna(subset=['TOTAL_SALES'], inplace=True)
 df_t3_sales_notnull_sort = df_t3_sales_notnull.sort_values(by='TOTAL_SALES', ascending=False)
 
 df_t3_sales_notnull_sort['TOTAL_SALES'] = df_t3_sales_notnull_sort['TOTAL_SALES'].fillna(0)
-df_t3_sales_notnull_sort['TOTAL_SALES'] = df_t3_sales_notnull_sort['TOTAL_SALES'].apply(formata_numero)
 
 kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
 
