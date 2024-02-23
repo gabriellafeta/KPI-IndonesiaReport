@@ -655,15 +655,14 @@ df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3 = df_t3.sort_values(by='DAY')
 
 df_t3_gb_day = df_t3.groupby('DAY')['TOTAL_ORDERS'].cumsum().reset_index()
-df_t3_gb_day_sort  = df_t3_gb_day.sort_values(by='DAY')
 
 max_date_cum_t3 = df_t3['DAY'].max()
 start_date_t3_cum = max_date_cum_t3 - pd.Timedelta(days=29)
 
 # Filter the DataFrame to include only the last 30 days
-df_t3_gb_day_sort = df_t3_gb_day_sort[(df_t3_gb_day_sort['DAY'] >= start_date_t3_cum) & (df_t3_gb_day_sort['DAY'] <= max_date_cum_t3)]
+df_t3_gb_day_sort = df_t3_gb_day[(df_t3_gb_day['DAY'] >= start_date_t3_cum) & (df_t3_gb_day['DAY'] <= max_date_cum_t3)]
 
-kpi3_barplot_dateagg_cum = px.bar(df_t3_gb_day_sort, x= 'DAY', y='Cummulative Orders', color_discrete_sequence=['lightblue'])
+kpi3_barplot_dateagg_cum = px.bar(df_t3_gb_day, x= 'DAY', y='Cummulative Orders', color_discrete_sequence=['lightblue'])
 
 kpi3_barplot_dateagg_cum.update_layout(
     title='Cummulative BEES Orders per day for ALL BDRs',
