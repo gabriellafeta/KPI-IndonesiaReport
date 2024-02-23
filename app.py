@@ -159,6 +159,10 @@ kpi1_all_barplot.update_traces(
     textposition='outside'  # Place the text above the bars
 )
 
+kpi1_all_barplot.update_layout(
+    width=400,  # Adjust the width to fit within the column
+    height=300  # You can also adjust the height if necessary
+)
 ###### BRAM
 
 
