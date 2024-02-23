@@ -433,7 +433,7 @@ kpi1_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 df_tf_mtd = df_t1[df_t1['VISIT_DATE'] == max_date]
 df_tf_mtd_agg = df_tf_mtd.groupby('BDR_ID')['VISITED_STORES'].sum().reset_index()
 df_tf_mtd_agg = df_tf_mtd_agg.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr_mtd = px.bar(df_aggregated_t1_BDR, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 formatted_max_date = max_date.strftime('%Y-%m-%d')
 
 kpi1_all_barplot_bdr_mtd.update_layout(
