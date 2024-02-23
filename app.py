@@ -514,6 +514,31 @@ kpi2_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
+# KPI 2 in the latest day
+
+df_tf2_mtd = df_t2[df_t2['VISIT_DATE'] == max_date_t2]
+df_tf2_mtd['BDR_TEMP'] = df_tf2_mtd.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
+df_tf2_mtd_agg = df_tf2_mtd.groupby('BDR_TEMP')['count_registered_stores'].sum().reset_index()
+df_tf2_mtd_agg = df_tf_mtd_agg.sort_values(by='count_registered_stores', ascending=False)
+kpi2_all_barplot_bdr_mtd = px.bar(df_tf2_mtd_agg, x='BDR_TEMP', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
+
+kpi2_all_barplot_bdr_mtd.update_layout(
+    title=f'Visited Stores on {formatted_max_date_t2} per BDR',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+kpi2_all_barplot_bdr_mtd.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi2_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -538,6 +563,7 @@ with aba0:
     colH = st.columns(1)
     colH_2 = st.columns(1)
     colH_1 = st.columns(1)
+    colH_3 = st.columns(1)
     colI = st.columns(1)
 
 # Colunas
@@ -638,6 +664,8 @@ with colH_2[0]:
 with colH_1[0]:
     st.plotly_chart(kpi2_all_barplot_bdr, use_container_width=True)
 
+with colH_3[0]:
+    st.plotly_chart(kpi2_all_barplot_bdr_mtd, use_container_width=True)
 
 with colI[0]:
     st.plotly_chart(kpi2_barplot_dateagg, use_container_width=True)
