@@ -67,7 +67,7 @@ upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
 ##### Tables
 # Tabela teste
                 
-blob_name = 'export.csv'
+blob_name = 't1.csv'
 blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
 blob_content = blob_client.download_blob().content_as_text()
 data = StringIO(blob_content)
