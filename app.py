@@ -651,7 +651,7 @@ kpi3_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 
 # Cumulative
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
-max_date_t3 = df_t3['DATE'].max()
+max_date_t3 = df_t3['DAY'].max()
 
 df_t3 = df_t3.sort_values(by="DAY")
 df_t3["Cummulative Orders"] = df_t3["TOTAL_ORDERS"].cumsum()
