@@ -142,8 +142,8 @@ df_t1_sorted = df_t1.sort_values(by='VISIT_DATE')
 start_date = df_t1_sorted['VISIT_DATE'].min()
 end_date = start_date + pd.Timedelta(days=29)
 df_t1_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
-
-kpi1_all_barplot = px.bar(df_t1_30_days, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+df_aggregated_t1 = df_t1_30_days.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
+kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
 # Layout
 kpi1_all_barplot.update_layout(
