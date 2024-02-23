@@ -5,6 +5,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient
 from azure.core.exceptions import ResourceExistsError
 from io import StringIO
 import os
+import plotly.express as px
 
 #------------------------------------------------------------------------------------------------------
 st.set_page_config(layout="wide") # Configuração da página larga
@@ -64,8 +65,7 @@ def upload_files_to_blob_storage(local_file_path, container_client, overwrite=Tr
 #### Mandar arquivos na pasta DataID para o Azure Blob Storage
 upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
 
-##### Tables
-# Tabela teste
+##### Tables from Blob
                 
 blob_name = 't1.csv'
 blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
@@ -104,10 +104,55 @@ blob_client_logo = blob_service_client.get_blob_client(container=container_name,
 blob_content_logo = blob_client_logo.download_blob().readall()
 
 #------------------------------------------------------------------------------------------------------
-## Visualizações
+## Manipulando tabelas
+
+### Alias column for BDR
+
+BDR_dict = {
+    "5653270_SMC004": "Bram",
+    "6389058_BDR001": "Harris",
+    "6658562_BDR001": "Cheryl",
+    "6421535_BDR001": "Christian",
+    "6828128_BDR001": "Iwan Dwiarsono",
+    "6713130_SMC007": "Dian",
+    "6174675_BDR001": "Alvis"
+}
+
+df_t1['BDR_name'] = df_t1['BDR_ID'].map(BDR_dict)
+
+### Tabelas para KPI 1 - N de visitas
+
+df_t1_bram = df_t1[df_t1['BDR_name'] == 'Bram']
+df_t1_harris = df_t1[df_t1['BDR_name'] == 'Harris']
+df_t1_cheryl = df_t1[df_t1['BDR_name'] == 'Cheryl']
+df_t1_christian = df_t1[df_t1['BDR_name'] == 'Christian']
+df_t1_iwan = df_t1[df_t1['BDR_name'] == 'Iwan Dwiarsono']
+df_t1_dian = df_t1[df_t1['BDR_name'] == 'Dian']
+df_t1_alvis = df_t1[df_t1['BDR_name'] == 'Alvis']
 
 
+#------------------------------------------------------------------------------------------------------
+# Criando visualizações
 
+##Gráfico de barras KPI 1 - N de visitas
+### All BDR's
+df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+df_t1_sorted = df_t1.sort_values(by='VISIT_DATE')
+
+start_date = df_t1_sorted['VISIT_DATE'].min()
+end_date = start_date + pd.Timedelta(days=29)
+df_bram_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
+
+fig = px.bar(df_bram_30_days, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['lightblue'])
+
+# Customize the layout
+fig.update_layout(
+    title='Visited Stores by Bram in 30 Days',
+    xaxis_title='Visit Date',
+    yaxis_title='Visited Stores',
+    xaxis=dict(tickmode='linear'),
+    showlegend=False
+)
 
 #------------------------------------------------------------------------------------------------------
 #### app
