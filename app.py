@@ -163,7 +163,7 @@ kpi1_all_barplot.update_traces(
 
 kpi1_all_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
-    height=400  # You can also adjust the height if necessary
+    height=500  # You can also adjust the height if necessary
 )
 ### Parâmetros para graficos por BDR
 
@@ -184,7 +184,8 @@ full_data['VISIT_DATE'] = full_data['VISIT_DATE'].dt.date
 kpi1_bram_barplot = px.bar(full_data, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_bram_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for ALL BDRs',
+    color_discrete_sequence=['lightblue'],
+    title='Visited Stores in the Last 30 Days for Bram',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -193,12 +194,13 @@ kpi1_bram_barplot.update_layout(
 
 kpi1_bram_barplot.update_traces(
     texttemplate='%{y}',  # Use the Y value for the text
-    textposition='outside'  # Place the text above the bars
-)
+    textposition='outside',
+    textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_bram_barplot.data[0].y]
+))
 
 kpi1_bram_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
-    height=400  # You can also adjust the height if necessary
+    height=500  # You can also adjust the height if necessary
 )
 
 #------------------------------------------------------------------------------------------------------
