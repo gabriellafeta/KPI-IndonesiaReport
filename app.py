@@ -134,7 +134,7 @@ df_t1_alvis = df_t1[df_t1['BDR_name'] == 'Alvis']
 #------------------------------------------------------------------------------------------------------
 # Criando visualizações
 
-max_date = df_t1['VISIT_DAY'].max()
+max_date = df_t1['VISIT_DATE'].max()
 
 ##Gráfico de barras KPI 1 - N de visitas
 ###### All BDR's
