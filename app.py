@@ -709,7 +709,7 @@ df_t3_sales_notnull.dropna(subset=['gmv_placed_customer'], inplace=True)
 
 df_t3_sales_notnull_sort = df_t3_sales_notnull.sort_values(by='gmv_placed_customer', ascending=False)
 
-df_t3_sales_notnull_sort['gmv_placed_customer'] = df_t3_sales_notnull_sort['gmv_placed_customer'].fillna(0).apply(formata_numero, prefixo='')
+df_t3_sales_notnull_sort['gmv_placed_customer'] = df_t3_sales_notnull_sort['gmv_placed_customer'].fillna(0)
 
 kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='bdr_id', y='gmv_placed_customer', color_discrete_sequence=['LightSalmon'])
 
