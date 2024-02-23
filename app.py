@@ -70,9 +70,32 @@ upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
 blob_name = 't1.csv'
 blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
 blob_content = blob_client.download_blob().content_as_text()
-data = StringIO(blob_content)
-df = pd.read_csv(data)
+data_t1 = StringIO(blob_content)
+df_t1 = pd.read_csv(data_t1)
 
+blob_name = 't2.csv'
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+blob_content = blob_client.download_blob().content_as_text()
+data_t2 = StringIO(blob_content)
+df_t2 = pd.read_csv(data_t2)
+
+blob_name = 't3.csv'
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+blob_content = blob_client.download_blob().content_as_text()
+data_t3 = StringIO(blob_content)
+df_t3 = pd.read_csv(data_t3)
+
+blob_name = 't4.csv'
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+blob_content = blob_client.download_blob().content_as_text()
+data_t4 = StringIO(blob_content)
+df_t4 = pd.read_csv(data_t4)
+
+blob_name = 't5.csv'
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+blob_content = blob_client.download_blob().content_as_text()
+data_t5 = StringIO(blob_content)
+df_t5 = pd.read_csv(data_t5)
 
 ##### Imagens
 
@@ -81,11 +104,16 @@ blob_client_logo = blob_service_client.get_blob_client(container=container_name,
 blob_content_logo = blob_client_logo.download_blob().readall()
 
 #------------------------------------------------------------------------------------------------------
+## Visualizações
 
+
+
+
+#------------------------------------------------------------------------------------------------------
 #### app
 # Abas
 
-abas = st.tabs(["In scope"])
+abas = st.tabs(["In-scope"])
 aba0 = abas[0]
 
 
@@ -93,6 +121,8 @@ aba0 = abas[0]
 with aba0:
     colA = st.columns(1)
     colB = st.columns(1)
+    colC = st.columns(1)
+    colD = st.columns(2)
 
 # Colunas
 
@@ -102,7 +132,7 @@ with colB[0]:
     st.markdown("""
     <style>
     .fonte-personalizada1 {
-        font-size: 20px;
+        font-size: 30px;
         font-style: bold;
     }
     </style>
@@ -111,7 +141,20 @@ with colB[0]:
     </div>
     """, unsafe_allow_html=True)
 
-# Teste
+with colC[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada1 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada1">
+        1.	Number of stores visited per day per BDR.
+    </div>
+    """, unsafe_allow_html=True)
+
 
 
 
