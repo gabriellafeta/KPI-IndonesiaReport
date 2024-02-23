@@ -696,15 +696,15 @@ kpi3_barplot_cum.update_layout(
 def format_sales(value):
     if pd.isna(value) or value == 0:
         return None
-    value_in_millions = value / 1_000_000
+    value_in_millions = value / 1000000
     return f"{value_in_millions:,.1f} MM PHP"
 
-df_t3['gmv_placed_customer'] = df_t3['gmv_placed_customer'].astype(float)
-df_t3['gmv_placed_force'] = df_t3['gmv_placed_force'].astype(float)
-df_t3['gmv_placed_grow'] = df_t3['gmv_placed_grow'].astype(float)
+df_t3['gmv_placed_customer'] = pd.to_numeric(df_t3['gmv_placed_customer'], errors='coerce').fillna(0)
+df_t3['gmv_placed_force'] = pd.to_numeric(df_t3['gmv_placed_force'], errors='coerce').fillna(0)
+df_t3['gmv_placed_grow'] = pd.to_numeric(df_t3['gmv_placed_grow'], errors='coerce').fillna(0)
 
 df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
-df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'].astype(float)
+df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0)
 df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'].apply(formata_numero, prefixo='')
 
 df_t3_sales = df_t3.groupby('bdr_id')['TOTAL_SALES'].sum().reset_index().sort_values(by='TOTAL_SALES')
