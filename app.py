@@ -163,7 +163,7 @@ kpi1_all_barplot.update_traces(
 
 kpi1_all_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
-    height=500  # You can also adjust the height if necessary
+    height=300  # You can also adjust the height if necessary
 )
 ### Parâmetros para graficos por BDR
 
@@ -201,7 +201,7 @@ kpi1_bram_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', t
 
 kpi1_bram_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
-    height=500  # You can also adjust the height if necessary
+    height=300  # You can also adjust the height if necessary
 )
 
 #------------------------------------------------------------------------------------------------------
