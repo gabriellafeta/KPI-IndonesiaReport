@@ -466,7 +466,7 @@ start_date = max_date_t2 - pd.Timedelta(days=29)
 
 df_t2_30_days = df_t2_sorted[(df_t2_sorted['DATE'] >= start_date) & (df_t2_sorted['DATE'] <= end_date)]
 df_aggregated_t2 = df_t1_30_days.groupby('DATE')['count_registered_stores'].sum().reset_index()
-kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
 kpi2_barplot_dateagg.update_layout(
     title='Registered stores in Last 30 Days for ALL BDRs',
