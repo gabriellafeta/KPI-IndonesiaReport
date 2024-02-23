@@ -536,7 +536,7 @@ with aba0:
     colG = st.columns(2)
     colG_1 = st.columns(1)
     colH = st.columns(1)
-    colH_1 = st.column(1)
+    colH_1 = st.columns(1)
     colI = st.columns(1)
 
 # Colunas
