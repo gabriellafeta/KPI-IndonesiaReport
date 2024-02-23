@@ -625,7 +625,7 @@ kpi3_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 # KPI 3 ORDERS - Latest Day
 
 df_t3_mtd = df_t3[df_t3['DAY'] == max_date_t3]
-df_t3_mtd_agg = df_t3_mtd.df_t3_sorted.groupby('bdr_id')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_mtd_agg = df_t3_mtd.groupby('bdr_id')['TOTAL_ORDERS'].sum().reset_index()
 df_t3_mtd_agg = df_t3_mtd_agg.sort_values(by='TOTAL_ORDERS', ascending=False)
 
 
