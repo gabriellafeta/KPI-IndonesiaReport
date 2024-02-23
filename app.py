@@ -170,8 +170,7 @@ df_bram_sorted = df_t1_bram.sort_values(by='VISIT_DATE')
 start_date = df_bram_sorted['VISIT_DATE'].min()
 end_date = start_date + pd.Timedelta(days=29)
 df_bram_30_days = df_bram_sorted[(df_bram_sorted['VISIT_DATE'] >= start_date) & (df_bram_sorted['VISIT_DATE'] <= end_date)]
-df_aggregated_bram = df_bram_30_days.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
-kpi1_bram_barplot = px.bar(df_aggregated_bram, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['lightblue'])
+kpi1_bram_barplot = px.bar(df_bram_30_days, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['lightblue'])
 
 # Layout
 kpi1_bram_barplot.update_layout(
