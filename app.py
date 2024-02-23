@@ -135,7 +135,7 @@ csv_t1 = df_t1.to_csv(index=False).encode('utf-8')
 # Criando visualizações
 
 max_date = df_t1['VISIT_DATE'].max()
-
+max_date = pd.to_datetime(max_date)
 ##Gráfico de barras KPI 1 - N de visitas
 ###### All BDR's
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
@@ -455,16 +455,16 @@ kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
 
-max_date_t2 = df_t2['DATE'].max()
+# max_date_t2 = df_t2['DATE'].max()
 
-df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
-df_t2_sorted = df_t2.sort_values(by='DATE')
+# df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+# df_t2_sorted = df_t2.sort_values(by='DATE')
 
-start_date = max_date_t2 - pd.Timedelta(days=29)
+# start_date = max_date_t2 - pd.Timedelta(days=29)
 
-df_t1_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
-df_aggregated_t1 = df_t1_30_days.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
-kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+# df_t1_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
+# df_aggregated_t1 = df_t1_30_days.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
+# kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
 #------------------------------------------------------------------------------------------------------
 #### App
