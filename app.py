@@ -519,7 +519,7 @@ kpi2_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 df_tf2_mtd = df_t2[df_t2['DATE'] == max_date_t2]
 df_tf2_mtd['BDR_TEMP'] = df_tf2_mtd.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
 df_tf2_mtd_agg = df_tf2_mtd.groupby('BDR_TEMP')['count_registered_stores'].sum().reset_index()
-df_tf2_mtd_agg = df_tf_mtd_agg.sort_values(by='count_registered_stores', ascending=False)
+df_tf2_mtd_agg = df_tf2_mtd_agg.sort_values(by='count_registered_stores', ascending=False)
 kpi2_all_barplot_bdr_mtd = px.bar(df_tf2_mtd_agg, x='BDR_TEMP', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
