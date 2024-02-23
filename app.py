@@ -457,11 +457,12 @@ kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 
 
 
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
 
-abas = st.tabs(["In-scope"])
+abas = st.tabs(["1. Number of stores visited per day per BDR.", "2. Number of stores registered by day per BDR."])
 aba0 = abas[0]
 
 
