@@ -134,6 +134,8 @@ df_t1_alvis = df_t1[df_t1['BDR_name'] == 'Alvis']
 #------------------------------------------------------------------------------------------------------
 # Criando visualizações
 
+max_date = df_t1['VISIT_DAY'].max()
+
 ##Gráfico de barras KPI 1 - N de visitas
 ###### All BDR's
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
@@ -163,18 +165,25 @@ kpi1_all_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
     height=400  # You can also adjust the height if necessary
 )
+### Parâmetros para graficos por BDR
+
+max_date = df_t1['VISIT_DAY'].max()
+date_range = pd.date_range(end=max_date, periods=30)
+dates_df = pd.DataFrame(date_range, columns=['VISIT_DATE'])
+
 ###### BRAM
-df_t1_bram['VISIT_DATE'] = pd.to_datetime(df_t1_bram['VISIT_DATE'])  # Convert VISIT_DAY to datetime
-latest_day_bram = df_t1_bram['VISIT_DATE'].max()
-last_30_days_bram = latest_day_bram - pd.Timedelta(days=29)
-filtered_df_bram = df_t1_bram[df_t1_bram['VISIT_DATE'] >= last_30_days_bram]
 
-daily_visits = filtered_df_bram.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
+df_t1_bram['VISIT_DATE'] = pd.to_datetime(df_t1_bram['VISIT_DATE'])
 
-kpi1_bram_barplot = px.bar(daily_visits, x='VISIT_DATE', y='VISITED_STORES',
-             title='Daily Visits in the Last 30 Days',
-             color_discrete_sequence=['lightblue'])
+visits_per_day_bram = df_t1_bram.groupby(df_t1_bram['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_bram['VISIT_DAY'] = pd.to_datetime(visits_per_day_bram['VISIT_DATE'])
 
+full_data = pd.merge(dates_df, visits_per_day_bram, on='VISIT_DAY', how='left').fillna(0)
+full_data['VISIT_DAY'] = full_data['VISIT_DAY'].dt.date
+
+kpi1_bram_barplot = px.bar(full_data, x='VISIT_DAY', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+
+# Display the plot in Streamlit
 
 
 #------------------------------------------------------------------------------------------------------
