@@ -603,7 +603,7 @@ df_t3_agg_bees = df_t3_sorted.groupby('bdr_id')['TOTAL_ORDERS'].sum().reset_inde
 df_t3_agg_bees_sort = df_t3_agg_bees.sort_values(by='TOTAL_ORDERS', ascending=False)
 
 # KPI 3 ORDERS - ALLD per BDR
-kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='bdr_id', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
 
 kpi3_all_barplot_bdr.update_layout(
     title='BEES Orders ALLD per BDR',
