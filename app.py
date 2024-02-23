@@ -593,11 +593,11 @@ kpi2_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 df_t3["TOTAL_ORDERS"] = df_t3["count_placed_orders_customer"] + df_t3["count_placed_orders_force"] + df_t3["count_placed_orders_grow"]
 df_t3["bdr_id"] = df_t3["bdr_id"].fillna("TBD")
 
-max_date_t3 = df_t2['DAY'].max()
+max_date_t3 = df_t3['DAY'].max()
 max_date_t3 = pd.to_datetime(max_date_t3)
 
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
-df_t3_sorted = df_t2.sort_values(by='DAY')
+df_t3_sorted = df_t3.sort_values(by='DAY')
 
 df_t3_agg_bees = df_t3_sorted.groupby('bdr_id')['TOTAL_ORDERS'].sum().reset_index()
 df_t3_agg_bees_sort = df_t3_agg_bees.sort_values(by='TOTAL_ORDERS', ascending=False)
