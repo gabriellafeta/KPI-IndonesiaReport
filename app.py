@@ -131,6 +131,7 @@ df_t1_dian = df_t1[df_t1['BDR_name'] == 'Dian']
 df_t1_alvis = df_t1[df_t1['BDR_name'] == 'Alvis']
 
 csv_t1 = df_t1.to_csv(index=False).encode('utf-8')
+csv_t2 = df_t2.to_csv(index=False).encode('utf-8')
 #------------------------------------------------------------------------------------------------------
 # Criando visualizações
 
@@ -565,6 +566,7 @@ with aba0:
     colH_1 = st.columns(1)
     colH_3 = st.columns(1)
     colI = st.columns(1)
+    colI_1 = st.columns(1)
     colJ = st.columns(1)
 
 
@@ -630,7 +632,7 @@ with colG[1]:
 with colG_1[0]:
     st.download_button(
     label="Download data as CSV",
-    data=csv_t1,
+    data=csv_t2,
     file_name='data.csv',
     mime='text/csv',
 )
@@ -671,6 +673,15 @@ with colH_3[0]:
 
 with colI[0]:
     st.plotly_chart(kpi2_barplot_dateagg, use_container_width=True)
+
+with colI_1[0]:
+    st.download_button(
+    label="Download data as CSV",
+    data=csv_t1,
+    file_name='data.csv',
+    mime='text/csv',
+)
+
 
 with colJ[0]:
     st.markdown("""
