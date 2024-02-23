@@ -148,9 +148,9 @@ kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', 
 # Layout
 kpi1_all_barplot.update_layout(
     title='Visited Stores in the Last 30 Days for ALL BDRs',
-    xaxis=dict(tickmode='linear'),
+    xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
-    yaxis=dict(showgrid=False, showticklabels=False),  # Hide Y-axis grid lines and tick labels
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
 )
 
@@ -161,7 +161,7 @@ kpi1_all_barplot.update_traces(
 
 ###### BRAM
 df_t1_bram['VISIT_DATE'] = pd.to_datetime(df_t1_bram['VISIT_DATE'])
-df_t1_sorted_bram = df_t1.sort_values(by='VISIT_DATE')
+df_t1_sorted_bram = df_t1_bram.sort_values(by='VISIT_DATE')
 
 start_date = df_t1_sorted_bram['VISIT_DATE'].min()
 end_date = start_date + pd.Timedelta(days=29)
@@ -172,9 +172,9 @@ kpi1_bram_barplot = px.bar(df_aggregated_bram, x='VISIT_DATE', y='VISITED_STORES
 # Layout
 kpi1_bram_barplot.update_layout(
     title='Visited Stores in the Last 30 Days for Bram',
-    xaxis=dict(tickmode='linear'),
+    xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
-    yaxis=dict(showgrid=False, showticklabels=False),  # Hide Y-axis grid lines and tick labels
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
 )
 
