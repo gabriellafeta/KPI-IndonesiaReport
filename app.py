@@ -694,9 +694,24 @@ kpi3_barplot_cum.update_layout(
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
 
 def format_sales(value):
-    if pd.isna(value) or value == 0:
+    try:
+        # Convert to float, if possible. This will convert strings that represent numbers,
+        # but will raise an error if the string does not represent a number
+        value = float(value)
+    except (TypeError, ValueError):
+        # If there's an error during conversion, return None or handle it as appropriate
         return None
-    value_in_millions = value / 1000000
+    
+    # Check if the value is NaN
+    if pd.isna(value):
+        return None
+    
+    # Assuming zero values are not desired, skip them
+    if value == 0:
+        return None
+    
+    # Convert to millions and format the string
+    value_in_millions = value / 1_000_000
     return f"{value_in_millions:,.1f} MM PHP"
 
 df_t3['gmv_placed_customer'] = pd.to_numeric(df_t3['gmv_placed_customer'], errors='coerce').fillna(0)
