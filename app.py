@@ -668,7 +668,6 @@ df_complete['TOTAL_ORDERS'] = df_complete['TOTAL_ORDERS'].fillna(0)
 df_complete['CUMULATIVE_ORDERS'] = df_complete['TOTAL_ORDERS'].cumsum()
 df_t3_last_30_days = df_complete[(df_complete['DAY'] >= start_date_cum_t3) & (df_complete['DAY'] <= max_date_cum_t3)]
 
-
 kpi3_barplot_cum = px.bar(df_t3_last_30_days, x='DAY', y='CUMULATIVE_ORDERS', color_discrete_sequence=['lightblue'])
 
 kpi3_barplot_cum.update_layout(
@@ -689,6 +688,18 @@ kpi3_barplot_cum.update_layout(
     width=500,  # Adjust the width to fit within the column
     height=400  # You can also adjust the height if necessary
 )
+
+#------------------------------------------------------------------------------------------------------
+####### KPI 4.	Sales value per day per BDR and Count of orders 
+
+
+
+
+
+
+
+
+
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -721,7 +732,8 @@ with aba0:
     colK_1 = st.columns(1)
     colK_2 = st.columns(1)
     colK_3 = st.columns(1)
-
+    colK_4 = st.columns(1)
+    colL = st.columns(1)
 
 # Colunas
 
@@ -872,3 +884,25 @@ with colK_2[0]:
     
 with colK_3[0]:
     st.plotly_chart(kpi3_barplot_cum, use_container_width=True)
+
+with colK_4[0]:
+    st.download_button(
+    label="Download data as CSV",
+    data=csv_t3,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_3")
+
+with colL[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        4.	Sales value per day per BDR 
+    </div>
+    """, unsafe_allow_html=True)
