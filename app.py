@@ -154,7 +154,7 @@ kpi1_all_barplot.update_layout(
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white',
-    margin=dict(t=100)  # Set background color to white for a clean look
+    margin=dict(t=50)  # Set background color to white for a clean look
 )
 
 kpi1_all_barplot.update_traces(
@@ -164,7 +164,7 @@ kpi1_all_barplot.update_traces(
 
 kpi1_all_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
-    height=300  # You can also adjust the height if necessary
+    height=400  # You can also adjust the height if necessary
 )
 ### Parâmetros para graficos por BDR
 
@@ -190,7 +190,7 @@ kpi1_bram_barplot.update_layout(
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white',
-    margin=dict(t=100)  # Set background color to white for a clean look
+    margin=dict(t=50)  # Set background color to white for a clean look
 )
 
 kpi1_bram_barplot.update_traces(
@@ -203,7 +203,7 @@ kpi1_bram_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', t
 
 kpi1_bram_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
-    height=300  # You can also adjust the height if necessary
+    height=400  # You can also adjust the height if necessary
 )
 
 ###### Harris
