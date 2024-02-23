@@ -154,7 +154,7 @@ kpi1_all_barplot.update_layout(
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white',
-    margin=dict(t=50)  # Set background color to white for a clean look
+    margin=dict(t=100)  # Set background color to white for a clean look
 )
 
 kpi1_all_barplot.update_traces(
@@ -190,7 +190,7 @@ kpi1_bram_barplot.update_layout(
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white',
-    margin=dict(t=50)  # Set background color to white for a clean look
+    margin=dict(t=100)  # Set background color to white for a clean look
 )
 
 kpi1_bram_barplot.update_traces(
