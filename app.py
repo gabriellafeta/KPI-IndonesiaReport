@@ -164,7 +164,33 @@ kpi1_all_barplot.update_layout(
     height=400  # You can also adjust the height if necessary
 )
 ###### BRAM
+df_t1_bram['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+df_bram_sorted = df_t1_bram.sort_values(by='VISIT_DATE')
 
+start_date = df_bram_sorted['VISIT_DATE'].min()
+end_date = start_date + pd.Timedelta(days=29)
+df_bram_30_days = df_bram_sorted[(df_bram_sorted['VISIT_DATE'] >= start_date) & (df_bram_sorted['VISIT_DATE'] <= end_date)]
+df_aggregated_bram = df_bram_30_days.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
+kpi1_bram_barplot = px.bar(df_aggregated_bram, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['lightblue'])
+
+# Layout
+kpi1_bram_barplot.update_layout(
+    title='Visited Stores in the Last 30 Days for Bram',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+kpi1_bram_barplot.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi1_bram_barplot.update_layout(
+    width=500,  # Adjust the width to fit within the column
+    height=400  # You can also adjust the height if necessary
+)
 
 
 #------------------------------------------------------------------------------------------------------
@@ -216,6 +242,8 @@ with colC[0]:
 
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
+with colD[1]:
+    st.plotly_chart(kpi1_bram_barplot)
 
 
 
