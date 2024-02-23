@@ -147,11 +147,18 @@ kpi1_all_barplot = px.bar(df_t1_30_days, x='VISIT_DATE', y='VISITED_STORES', col
 
 # Layout
 kpi1_all_barplot.update_layout(
-    title='Visited Stores by All BDRs in the last 30 Days',
+    title='Visited Stores by All BDRs in the Last 30 Days',
     xaxis_title='Visit Date',
     yaxis_title='Visited Stores',
     xaxis=dict(tickmode='linear'),
-    showlegend=False
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+kpi1_all_barplot.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
 )
 
 ###### BRAM
