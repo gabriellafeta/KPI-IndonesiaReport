@@ -692,14 +692,29 @@ kpi3_barplot_cum.update_layout(
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
 
+df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
+df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'].apply(formata_numero, prefixo='')
 
+df_t3_sales = df_t3.groupby('DAY')['TOTAL_SALES'].sum().reset_index()
 
+kpi4_all_barplot_bdr = px.bar(df_t3_sales, x='bdr_id', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
 
+kpi4_all_barplot_bdr.update_layout(
+    title='BEES Sales ALLD per BDR',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
 
+kpi4_all_barplot_bdr.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
 
-
-
-
+kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -734,6 +749,7 @@ with aba0:
     colK_3 = st.columns(1)
     colK_4 = st.columns(1)
     colL = st.columns(1)
+    colM = st.columns(1)
 
 # Colunas
 
@@ -906,3 +922,6 @@ with colL[0]:
         4.	Sales value per day per BDR 
     </div>
     """, unsafe_allow_html=True)
+
+with colM[0]:
+    st.plotly_chart(kpi4_all_barplot_bdr, use_container_width=True)
