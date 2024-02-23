@@ -693,40 +693,16 @@ kpi3_barplot_cum.update_layout(
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
 
-def format_sales(value):
-    try:
-        # Convert to float, if possible. This will convert strings that represent numbers,
-        # but will raise an error if the string does not represent a number
-        value = float(value)
-    except (TypeError, ValueError):
-        # If there's an error during conversion, return None or handle it as appropriate
-        return None
-    
-    # Check if the value is NaN
-    if pd.isna(value):
-        return None
-    
-    # Assuming zero values are not desired, skip them
-    if value == 0:
-        return None
-    
-    # Convert to millions and format the string
-    value_in_millions = value / 1_000_000
-    return f"{value_in_millions:,.1f} MM PHP"
-
 df_t3['gmv_placed_customer'] = pd.to_numeric(df_t3['gmv_placed_customer'], errors='coerce').fillna(0)
 df_t3['gmv_placed_force'] = pd.to_numeric(df_t3['gmv_placed_force'], errors='coerce').fillna(0)
 df_t3['gmv_placed_grow'] = pd.to_numeric(df_t3['gmv_placed_grow'], errors='coerce').fillna(0)
 
 df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
 df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0)
-df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'].apply(format_sales)
 
 df_t3_sales = df_t3.groupby('bdr_id')['TOTAL_SALES'].sum().reset_index().sort_values(by='TOTAL_SALES')
 df_t3_sales_notnull = df_t3_sales[(df_t3_sales['TOTAL_SALES'] != 0)]
 df_t3_sales_notnull.dropna(subset=['TOTAL_SALES'], inplace=True)
-
-df_t3_sales_notnull['TOTAL_SALES'] = df_t3_sales_notnull['TOTAL_SALES'].apply(format_sales)
 
 kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
 
