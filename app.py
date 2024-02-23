@@ -146,7 +146,7 @@ start_date = max_date - pd.Timedelta(days=29)
 end_date = max_date
 df_t1_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
 df_aggregated_t1 = df_t1_30_days.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
-kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['lightblue'])
 
 # Layout
 kpi1_all_barplot.update_layout(
@@ -471,7 +471,7 @@ kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='DATE', y='count_registered_st
 
 kpi2_barplot_dateagg.update_layout(
     title='Registered stores in Last 30 Days for ALL BDRs',
-    xaxis=dict(tickmode='linear', title=''),
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white',
