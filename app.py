@@ -164,14 +164,14 @@ kpi1_all_barplot.update_layout(
     height=400  # You can also adjust the height if necessary
 )
 ###### BRAM
-df_t1_bram['VISIT_DAY'] = pd.to_datetime(df_t1_bram['VISIT_DAY'])  # Convert VISIT_DAY to datetime
-latest_day_bram = df_t1_bram['VISIT_DAY'].max()
+df_t1_bram['VISIT_DATE'] = pd.to_datetime(df_t1_bram['VISIT_DATE'])  # Convert VISIT_DAY to datetime
+latest_day_bram = df_t1_bram['VISIT_DATE'].max()
 last_30_days_bram = latest_day_bram - pd.Timedelta(days=29)
-filtered_df_bram = df_t1_bram[df_t1_bram['VISIT_DAY'] >= last_30_days_bram]
+filtered_df_bram = df_t1_bram[df_t1_bram['VISIT_DATE'] >= last_30_days_bram]
 
-daily_visits = filtered_df_bram.groupby('VISIT_DAY')['VISITED_STORES'].sum().reset_index()
+daily_visits = filtered_df_bram.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
 
-kpi1_bram_barplot = px.bar(daily_visits, x='VISIT_DAY', y='VISITED_STORES',
+kpi1_bram_barplot = px.bar(daily_visits, x='VISIT_DATE', y='VISITED_STORES',
              title='Daily Visits in the Last 30 Days',
              color_discrete_sequence=['lightblue'])
 
