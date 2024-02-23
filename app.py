@@ -632,7 +632,7 @@ with colG[1]:
 with colG_1[0]:
     st.download_button(
     label="Download data as CSV",
-    data=csv_t2,
+    data=csv_t1,
     file_name='data.csv',
     mime='text/csv',
 )
@@ -677,7 +677,7 @@ with colI[0]:
 with colI_1[0]:
     st.download_button(
     label="Download data as CSV",
-    data=csv_t1,
+    data=csv_t2,
     file_name='data.csv',
     mime='text/csv',
 )
