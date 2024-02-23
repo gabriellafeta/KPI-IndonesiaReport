@@ -651,21 +651,18 @@ kpi3_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 
 # Cumulative
 
-df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
-df_t3 = df_t3.sort_values(by='DAY')
+df_t3_byday = df_t3.groupby('DAY')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_byday_sort = df_t3_byday.sort_values(by='DAY', ascending=True)
+df_t3_byday_sort['CUMULATIVE_ORDERS'] = df_t3_byday_sort['TOTAL_ORDERS'].cumsum()
 
-# Calculate the cumulative sum for 'TOTAL_ORDERS'
-df_t3['Cummulative Orders'] = df_t3.groupby('DAY')['TOTAL_ORDERS'].cumsum()
-start_date_t3_cum = max_date_t3 - pd.Timedelta(days=29)
-max_date_t3_cum = df_t3['DAY'].max()
+max_date_cum_t3 = df_t3_byday_sort['DAY'].max()
+start_date_cum_t3 = max_date_cum_t3 - pd.Timedelta(days=29)
+df_t3_last_30_days = df_t3_byday_sort[(df_t3_byday_sort['DAY'] >= start_date_cum_t3) & (df_t3['DAY'] <= max_date_cum_t3)]
 
-df_t3_last_30_days = df_t3[(df_t3['DAY'] >= start_date_t3_cum) & (df_t3['DAY'] <= max_date_t3_cum)]
+kpi3_barplot_cum = px.bar(df_t3_last_30_days, x='DAY', y='CUMULATIVE_ORDERS', color_discrete_sequence=['lightblue'])
 
-# Create the bar plot
-kpi3_barplot_dateagg_cum = px.bar(df_t3_last_30_days, x='DAY', y='Cummulative Orders', color_discrete_sequence=['lightblue'])
-
-kpi3_barplot_dateagg_cum.update_layout(
-    title='Cummulative BEES Orders per day for ALL BDRs',
+kpi3_barplot_cum.update_layout(
+    title='BEES Orders in Last 30 Days for ALL BDRs',
     xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -673,19 +670,15 @@ kpi3_barplot_dateagg_cum.update_layout(
     margin=dict(t=50)  # Set background color to white for a clean look
 )
 
-kpi3_barplot_dateagg_cum.update_traces(
+kpi3_barplot_cum.update_traces(
     texttemplate='%{y}',  # Use the Y value for the text
     textposition='outside'  # Place the text above the bars
 )
 
-kpi3_barplot_dateagg_cum.update_layout(
+kpi3_barplot_cum.update_layout(
     width=500,  # Adjust the width to fit within the column
     height=400  # You can also adjust the height if necessary
 )
-
-
-
-
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -868,4 +861,4 @@ with colK_2[0]:
     st.plotly_chart(kpi3_all_barplot_bdr_mtd, use_container_width=True)
     
 with colK_3[0]:
-    st.plotly_chart(kpi3_barplot_dateagg_cum, use_container_width=True)
+    st.plotly_chart(kpi3_barplot_cum, use_container_width=True)
