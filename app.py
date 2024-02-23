@@ -425,7 +425,9 @@ kpi1_all_barplot_bdr.update_traces(
     textposition='outside'  # Place the text above the bars
 )
 
-
+kpi1_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
+    height=600  # You can also adjust the height if necessary
+)
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
