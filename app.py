@@ -167,7 +167,7 @@ kpi1_all_barplot.update_layout(
 )
 ### Parâmetros para graficos por BDR
 
-max_date = df_t1['VISIT_DAY'].max()
+max_date = df_t1['VISIT_DATE'].max()
 date_range = pd.date_range(end=max_date, periods=30)
 dates_df = pd.DataFrame(date_range, columns=['VISIT_DATE'])
 
@@ -176,12 +176,12 @@ dates_df = pd.DataFrame(date_range, columns=['VISIT_DATE'])
 df_t1_bram['VISIT_DATE'] = pd.to_datetime(df_t1_bram['VISIT_DATE'])
 
 visits_per_day_bram = df_t1_bram.groupby(df_t1_bram['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
-visits_per_day_bram['VISIT_DAY'] = pd.to_datetime(visits_per_day_bram['VISIT_DATE'])
+visits_per_day_bram['VISIT_DATE'] = pd.to_datetime(visits_per_day_bram['VISIT_DATE'])
 
-full_data = pd.merge(dates_df, visits_per_day_bram, on='VISIT_DAY', how='left').fillna(0)
-full_data['VISIT_DAY'] = full_data['VISIT_DAY'].dt.date
+full_data = pd.merge(dates_df, visits_per_day_bram, on='VISIT_DATE', how='left').fillna(0)
+full_data['VISIT_DATE'] = full_data['VISIT_DATE'].dt.date
 
-kpi1_bram_barplot = px.bar(full_data, x='VISIT_DAY', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+kpi1_bram_barplot = px.bar(full_data, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 # Display the plot in Streamlit
 
