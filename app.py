@@ -692,11 +692,22 @@ kpi3_barplot_cum.update_layout(
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
 
+def format_sales(value):
+    if pd.isna(value) or value == 0:
+        return None
+    value_in_millions = value / 1_000_000
+    return f"{value_in_millions:,.1f} MM PHP"
+
+
+
 df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
 df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'].apply(formata_numero, prefixo='')
 
 df_t3_sales = df_t3.groupby('bdr_id')['TOTAL_SALES'].sum().reset_index().sort_values(by='TOTAL_SALES')
-df_t3_sales_notnull = df_t3_sales[(df_t3_sales['TOTAL_SALES'] != 0) & df_t3_sales['TOTAL_SALES'].notna()]
+df_t3_sales_notnull = df_t3_sales[(df_t3_sales['TOTAL_SALES'] != 0)]
+df_t3_sales_notnull.dropna(subset=['TOTAL_SALES'], inplace=True)
+
+df_t3_sales_notnull['TOTAL_SALES'] = df_t3_sales_notnull['TOTAL_SALES'].apply(format_sales)
 
 kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
 
