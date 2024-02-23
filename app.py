@@ -741,23 +741,17 @@ kpi4_all_stacked_barplot_bdr = px.bar(
     title='BEES Sales Stacked per BDR',
     labels={'value': 'GMV', 'variable': 'Category'},
     color_discrete_map={
-        'Customer GMV': 'lightblue',
-        'Force GMV': 'lightred',
-        'Grow GMV': 'lightcoral'
+        'gmv_placed_customer': 'lightgreen',
+        'gmv_placed_force': 'lightblue',
+        'gmv_placed_grow': 'lightcoral'
     }
 )
 
 kpi4_all_stacked_barplot_bdr.update_layout(
-    xaxis=dict(tickangle=90),
-    yaxis=dict(showgrid=False, title='Total GMV'),
+    xaxis=dict(tickangle=90, title=None),  
+    yaxis=dict(showgrid=False, title=None),
     showlegend=True,
-    plot_bgcolor='white'
-)
-
-kpi4_all_stacked_barplot_bdr.update_traces(
-    texttemplate='%{value}',  # This will display the individual segment values
-    textposition='inside'
-)
+    plot_bgcolor='white')
 
 
 
