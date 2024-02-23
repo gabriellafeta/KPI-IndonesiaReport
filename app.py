@@ -656,7 +656,7 @@ max_date_t3 = df_t3['DAY'].max()
 df_t3 = df_t3.sort_values(by="DAY")
 df_t3["Cummulative Orders"] = df_t3["TOTAL_ORDERS"].cumsum()
 
-df_agg_t3_cum = df_t3.groupby('DAY')['Cummulative Orders'].cumsumsum().reset_index()
+df_agg_t3_cum = df_t3.groupby('DAY')['Cummulative Orders'].cumsum().reset_index()
 start_date_t3_cum = max_date_t3 - pd.Timedelta(days=29)
 
 kpi3_barplot_dateagg_cum = px.bar(df_agg_t3_cum, x='DAY', y='Cummulative Orders', color_discrete_sequence=['lightblue'])
