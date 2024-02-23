@@ -467,7 +467,7 @@ start_date = max_date_t2 - pd.Timedelta(days=29)
 
 df_t2_30_days = df_t2_sorted[(df_t2_sorted['DATE'] >= start_date) & (df_t2_sorted['DATE'] <= end_date)]
 df_aggregated_t2 = df_t2_30_days.groupby('DATE')['count_registered_stores'].sum().reset_index()
-kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='DATE', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='DATE', y='count_registered_stores', color_discrete_sequence=['lightblue'])
 
 kpi2_barplot_dateagg.update_layout(
     title='Registered stores in Last 30 Days for ALL BDRs',
@@ -487,6 +487,33 @@ kpi2_barplot_dateagg.update_layout(
     width=500,  # Adjust the width to fit within the column
     height=400  # You can also adjust the height if necessary
 )
+
+
+# KPI 2 per BDR
+
+df_t2_30_days['BDR_TEMP'] = df_t2_30_days.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
+df_aggregated_t2_BDR = df_t2_30_days.groupby('BDR_TEMP')['count_registered_stores'].sum().reset_index()
+df_aggregated_t2_BDR = df_aggregated_t2_BDR.sort_values(by='count_registered_stores')
+kpi2_all_barplot_bdr = px.bar(df_tf_mtd_agg, x='BDR_TEMP', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
+
+kpi2_all_barplot_bdr.update_layout(
+    title='Registered Stores in the Last 30 Days per BDR',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+kpi2_all_barplot_bdr.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi2_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -509,6 +536,7 @@ with aba0:
     colG = st.columns(2)
     colG_1 = st.columns(1)
     colH = st.columns(1)
+    colH_1 = st.column(1)
     colI = st.columns(1)
 
 # Colunas
@@ -591,6 +619,10 @@ with colH[0]:
         2.	Number of stores registered by day per BDR.
     </div>
     """, unsafe_allow_html=True)
+
+with colH_1[0]:
+    st.plotly_chart(kpi2_all_barplot_bdr, use_container_width=True)
+
 
 with colI[0]:
     st.plotly_chart(kpi2_barplot_dateagg, use_container_width=True)
