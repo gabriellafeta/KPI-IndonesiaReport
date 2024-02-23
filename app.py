@@ -411,7 +411,6 @@ df_aggregated_t1_BDR = df_t1_30_days.groupby('BDR_ID')['VISITED_STORES'].sum().r
 df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITED_STORES', ascending=False)
 kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
-# Layout
 kpi1_all_barplot_bdr.update_layout(
     title='Visited Stores in the Last 30 Days per BDR',
     xaxis=dict(tickmode='linear', title=''),
@@ -426,8 +425,34 @@ kpi1_all_barplot_bdr.update_traces(
 )
 
 kpi1_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
-    height=600  # You can also adjust the height if necessary
+    height=500  # You can also adjust the height if necessary
 )
+
+########## KPI1 per BDR in last latest DAY
+
+df_tf_mtd = df_t1[df_t1['VISIT_DATE'] == max_date]
+df_tf_mtd_agg = df_tf_mtd.groupby('BDR_ID')['VISITED_STORES'].sum().reset_index()
+df_tf_mtd_agg = df_tf_mtd_agg.sort_values(by='VISITED_STORES', ascending=False)
+kpi1_all_barplot_bdr_mtd = px.bar(df_aggregated_t1_BDR, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+formatted_max_date = max_date.strftime('%Y-%m-%d')
+
+kpi1_all_barplot_bdr_mtd.update_layout(
+    title=f'Visited Stores on {formatted_max_date} per BDR',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+kpi1_all_barplot_bdr_mtd.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -442,6 +467,7 @@ with aba0:
     colB = st.columns(1)
     colC = st.columns(1)
     colC_1 = st.columns(1)
+    colC_2 = st.columns(1)
     colD = st.columns(2)
     colE = st.columns(2)
     colF = st.columns(2)
@@ -482,6 +508,9 @@ with colC[0]:
 
 with colC_1[0]:
     st.plotly_chart(kpi1_all_barplot_bdr, use_container_width=True)
+
+with colC_2[0]:
+    st.plotly_chart(kpi1_all_barplot_bdr_mtd, use_container_width=True)
 
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
