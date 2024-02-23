@@ -694,14 +694,7 @@ kpi3_barplot_cum.update_layout(
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
 
 def formata_numero(valor, prefixo=''):
-    if valor < 1000:
-        return f'{prefixo}{valor:.2f}'
-    elif valor < 1000000:
-        return f'{prefixo}{valor / 1000:.2f} k PHP'
-    elif valor < 1000000000:
-        return f'{prefixo}{valor / 1000000:.2f} mi PHP'
-    else:
-        return f'{prefixo}{valor / 1000000000:.2f} bi PHP'
+    return f'{prefixo}{valor / 1000000:.2f} mi PHP'
 
 
 df_t3['gmv_placed_customer'] = pd.to_numeric(df_t3['gmv_placed_customer'], errors='coerce').fillna(0)
@@ -716,7 +709,6 @@ df_t3_sales_notnull = df_t3_sales[(df_t3_sales['TOTAL_SALES'] != 0)]
 df_t3_sales_notnull.dropna(subset=['TOTAL_SALES'], inplace=True)
 
 df_t3_sales_notnull['TOTAL_SALES'] = df_t3_sales_notnull['TOTAL_SALES'].fillna(0).apply(formata_numero, prefixo='')
-
 
 kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
 
