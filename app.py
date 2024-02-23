@@ -406,13 +406,25 @@ kpi1_alvis_barplot.update_layout(
     height=400  # You can also adjust the height if necessary
 )
 
+########## KPI1 per BDR in last 30 days
+df_aggregated_t1_BDR = df_t1_30_days.groupby('BDR_ID')['VISITED_STORES'].sum().reset_index()
+df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITED_STORES', ascending=False)
+kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
+# Layout
+kpi1_all_barplot_bdr.update_layout(
+    title='Visited Stores in the Last 30 Days per BDR',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white',
+    margin=dict(t=50)  # Set background color to white for a clean look
+)
 
-
-
-
-
-
+kpi1_all_barplot_bdr.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
 
 
 #------------------------------------------------------------------------------------------------------
@@ -428,6 +440,7 @@ with aba0:
     colA = st.columns(1)
     colB = st.columns(1)
     colC = st.columns(1)
+    colC_1 = st.columns(1)
     colD = st.columns(2)
     colE = st.columns(2)
     colF = st.columns(2)
@@ -464,6 +477,10 @@ with colC[0]:
         1.	Number of stores visited per day per BDR.
     </div>
     """, unsafe_allow_html=True)
+
+
+with colC_1[0]:
+    st.plotly_chart(kpi1_all_barplot_bdr, use_container_width=True)
 
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
