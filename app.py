@@ -169,7 +169,8 @@ kpi1_all_barplot.update_layout(
 ### Parâmetros para graficos por BDR
 
 max_date = df_t1['VISIT_DATE'].max()
-date_range = pd.date_range(end=max_date, periods=30)
+min_date = df_t1['VISIT_DATE'].min()
+date_range = pd.date_range(start=min_date, end=max_date)
 dates_df = pd.DataFrame(date_range, columns=['VISIT_DATE'])
 
 ###### BRAM
@@ -202,7 +203,7 @@ kpi1_bram_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', t
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_bram_barplot.data[0].y]))
 
 kpi1_bram_barplot.update_layout(
-    width=550,  # Adjust the width to fit within the column
+    width=500,  # Adjust the width to fit within the column
     height=400  # You can also adjust the height if necessary
 )
 
