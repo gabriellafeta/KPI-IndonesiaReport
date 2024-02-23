@@ -184,7 +184,6 @@ full_data['VISIT_DATE'] = full_data['VISIT_DATE'].dt.date
 kpi1_bram_barplot = px.bar(full_data, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_bram_barplot.update_layout(
-    color_discrete_sequence=['lightblue'],
     title='Visited Stores in the Last 30 Days for Bram',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
@@ -195,8 +194,10 @@ kpi1_bram_barplot.update_layout(
 kpi1_bram_barplot.update_traces(
     texttemplate='%{y}',  # Use the Y value for the text
     textposition='outside',
-    textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_bram_barplot.data[0].y]
-))
+)
+
+kpi1_bram_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+    textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_bram_barplot.data[0].y]))
 
 kpi1_bram_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
