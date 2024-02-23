@@ -135,27 +135,32 @@ df_t1_alvis = df_t1[df_t1['BDR_name'] == 'Alvis']
 # Criando visualizações
 
 ##Gráfico de barras KPI 1 - N de visitas
-### All BDR's
+###### All BDR's
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
 df_t1_sorted = df_t1.sort_values(by='VISIT_DATE')
 
 start_date = df_t1_sorted['VISIT_DATE'].min()
 end_date = start_date + pd.Timedelta(days=29)
-df_bram_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
+df_t1_30_days = df_t1_sorted[(df_t1_sorted['VISIT_DATE'] >= start_date) & (df_t1_sorted['VISIT_DATE'] <= end_date)]
 
-fig = px.bar(df_bram_30_days, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['lightblue'])
+kpi1_all_barplot = px.bar(df_t1_30_days, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
-# Customize the layout
-fig.update_layout(
-    title='Visited Stores by Bram in 30 Days',
+# Layout
+kpi1_all_barplot.update_layout(
+    title='Visited Stores by All BDRs in the last 30 Days',
     xaxis_title='Visit Date',
     yaxis_title='Visited Stores',
     xaxis=dict(tickmode='linear'),
     showlegend=False
 )
 
+###### BRAM
+
+
+
+
 #------------------------------------------------------------------------------------------------------
-#### app
+#### App
 # Abas
 
 abas = st.tabs(["In-scope"])
@@ -200,6 +205,10 @@ with colC[0]:
         1.	Number of stores visited per day per BDR.
     </div>
     """, unsafe_allow_html=True)
+
+with colD[0]:
+    st.plotly_chart(kpi1_all_barplot)
+
 
 
 
