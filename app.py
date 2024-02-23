@@ -218,7 +218,7 @@ full_data_harris['VISIT_DATE'] = full_data_harris['VISIT_DATE'].dt.date
 kpi1_harris_barplot = px.bar(full_data_harris, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_harris_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for Bram',
+    title='Visited Stores in the Last 30 Days for Harris',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -232,7 +232,7 @@ kpi1_harris_barplot.update_traces(
 )
 
 kpi1_harris_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
-    textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_bram_barplot.data[0].y]))
+    textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_harris_barplot.data[0].y]))
 
 kpi1_harris_barplot.update_layout(
     width=500,  # Adjust the width to fit within the column
