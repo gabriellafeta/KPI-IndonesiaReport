@@ -652,10 +652,10 @@ kpi3_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 # Cumulative
 
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
-df_t3 = df_t3.sort_values(by="DAY")
+df_t3 = df_t3.sort_values(by='DAY')
 
 df_t3_gb_day = df_t3.groupby('DAY')['TOTAL_ORDERS'].cumsum().reset_index()
-df_t3_gb_day_sort  = df_t3_gb_day.sort_values(by="DAY")
+df_t3_gb_day_sort  = df_t3_gb_day.sort_values(by='DAY')
 
 max_date_cum_t3 = df_t3['DAY'].max()
 start_date_t3_cum = max_date_cum_t3 - pd.Timedelta(days=29)
