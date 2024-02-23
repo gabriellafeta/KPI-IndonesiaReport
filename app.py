@@ -698,7 +698,7 @@ df_t3['gmv_placed_force'] = pd.to_numeric(df_t3['gmv_placed_force'], errors='coe
 df_t3['gmv_placed_grow'] = pd.to_numeric(df_t3['gmv_placed_grow'], errors='coerce').fillna(0)
 
 df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
-df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0).round(1)
+df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0)
 
 df_t3_sales = df_t3.groupby('bdr_id')['TOTAL_SALES'].sum().reset_index()
 df_t3_sales_notnull = df_t3_sales[(df_t3_sales['TOTAL_SALES'] != 0)]
@@ -706,7 +706,7 @@ df_t3_sales_notnull.dropna(subset=['TOTAL_SALES'], inplace=True)
 
 df_t3_sales_notnull_sort = df_t3_sales_notnull.sort_values(by='TOTAL_SALES', ascending=False)
 
-df_t3_sales_notnull_sort['TOTAL_SALES'] = df_t3_sales_notnull_sort['TOTAL_SALES'].fillna(0)
+df_t3_sales_notnull_sort['TOTAL_SALES'] = df_t3_sales_notnull_sort['TOTAL_SALES'].fillna(0).round(1)
 
 kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
 
