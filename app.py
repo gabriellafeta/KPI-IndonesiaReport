@@ -727,6 +727,30 @@ kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
+# Grafico empilhado
+df_t3_sales_empilhado = df_t3.groupby('bdr_id')[['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow']].sum().reset_index()
+
+kpi4_all_stacked_barplot_bdr = px.bar(
+    df_t3_sales_empilhado, 
+    x='bdr_id', 
+    y=['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow'],
+    title='BEES Sales Stacked per BDR',
+    labels={'value': 'GMV', 'variable': 'Category'},  # variável 'variable' automaticamente criada pelo Plotly
+    color_discrete_map={  # Mapa de cores personalizado para cada categoria
+        'gmv_placed_customer': 'lightgreen',  # Substitua pelas cores que preferir
+        'gmv_placed_force': 'lightblue',
+        'gmv_placed_grow': 'lightcoral'
+    }
+)
+
+kpi4_all_stacked_barplot_bdr.update_layout(
+    xaxis=dict(tickangle=90),
+    yaxis=dict(showgrid=False, title='Total GMV'),
+    showlegend=True,  # Certifique-se de que a legenda está visível
+    plot_bgcolor='white'
+)
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -761,6 +785,7 @@ with aba0:
     colK_4 = st.columns(1)
     colL = st.columns(1)
     colM = st.columns(1)
+    colN = st.columns(1)
 
 # Colunas
 
@@ -936,3 +961,6 @@ with colL[0]:
 
 with colM[0]:
     st.plotly_chart(kpi4_all_barplot_bdr, use_container_width=True)
+
+with colN[0]:
+    st.plotly_chart(kpi4_all_stacked_barplot_bdr, use_container_width=True)
