@@ -536,6 +536,7 @@ with aba0:
     colG = st.columns(2)
     colG_1 = st.columns(1)
     colH = st.columns(1)
+    colH_2 = st.columns(1)
     colH_1 = st.columns(1)
     colI = st.columns(1)
 
@@ -617,6 +618,20 @@ with colH[0]:
     </style>
     <div class="fonte-personalizada2">
         2.	Number of stores registered by day per BDR.
+    </div>
+    """, unsafe_allow_html=True)
+
+with colH_2[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada3 {
+        font-size: 10px;
+        font-style: italic
+    }
+    </style>
+    <div class="fonte-personalizada3">
+        Up to 23/02/2024 There were a considerable amount of null values in BDR columns.
+        For Those Values delivery_center_id was considered instead.
     </div>
     """, unsafe_allow_html=True)
 
