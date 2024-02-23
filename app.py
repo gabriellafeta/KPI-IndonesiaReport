@@ -183,8 +183,23 @@ full_data['VISIT_DATE'] = full_data['VISIT_DATE'].dt.date
 
 kpi1_bram_barplot = px.bar(full_data, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
-# Display the plot in Streamlit
+kpi1_bram_barplot.update_layout(
+    title='Visited Stores in the Last 30 Days for ALL BDRs',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
 
+kpi1_bram_barplot.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi1_bram_barplot.update_layout(
+    width=500,  # Adjust the width to fit within the column
+    height=400  # You can also adjust the height if necessary
+)
 
 #------------------------------------------------------------------------------------------------------
 #### App
