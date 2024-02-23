@@ -472,11 +472,11 @@ with aba0:
     colC = st.columns(1)
     colC_1 = st.columns(1)
     colC_2 = st.columns(1)
-    colC_3 = st.columns(1)
     colD = st.columns(2)
     colE = st.columns(2)
     colF = st.columns(2)
     colG = st.columns(2)
+    colG_1 = st.columns(1)
     colH = st.columns(1)
 
 # Colunas
@@ -518,14 +518,6 @@ with colC_1[0]:
 with colC_2[0]:
     st.plotly_chart(kpi1_all_barplot_bdr_mtd, use_container_width=True)
 
-with colC_3[0]:
-    st.download_button(
-    label="Download data as CSV",
-    data=csv_t1,
-    file_name='data.csv',
-    mime='text/csv',
-)
-
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
 with colD[1]:
@@ -545,6 +537,14 @@ with colG[0]:
     st.plotly_chart(kpi1_dian_barplot)
 with colG[1]:
     st.plotly_chart(kpi1_alvis_barplot)
+
+with colG_1[0]:
+    st.download_button(
+    label="Download data as CSV",
+    data=csv_t1,
+    file_name='data.csv',
+    mime='text/csv',
+)
 
 with colH[0]:
     st.markdown("""
