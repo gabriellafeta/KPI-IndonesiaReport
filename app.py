@@ -134,11 +134,13 @@ csv_t1 = df_t1.to_csv(index=False).encode('utf-8')
 #------------------------------------------------------------------------------------------------------
 # Criando visualizações
 
+df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
 max_date = df_t1['VISIT_DATE'].max()
 max_date = pd.to_datetime(max_date)
+
 ##Gráfico de barras KPI 1 - N de visitas
 ###### All BDR's
-df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+
 df_t1_sorted = df_t1.sort_values(by='VISIT_DATE')
 
 start_date = max_date - pd.Timedelta(days=29)
@@ -465,7 +467,7 @@ df_t2_sorted = df_t2.sort_values(by='DATE')
 start_date = max_date_t2 - pd.Timedelta(days=29)
 
 df_t2_30_days = df_t2_sorted[(df_t2_sorted['DATE'] >= start_date) & (df_t2_sorted['DATE'] <= end_date)]
-df_aggregated_t2 = df_t1_30_days.groupby('DATE')['count_registered_stores'].sum().reset_index()
+df_aggregated_t2 = df_t2_30_days.groupby('DATE')['count_registered_stores'].sum().reset_index()
 kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='DATE', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
 kpi2_barplot_dateagg.update_layout(
