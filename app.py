@@ -417,8 +417,7 @@ kpi1_all_barplot_bdr.update_layout(
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
-    plot_bgcolor='white',
-    margin=dict(t=50)  # Set background color to white for a clean look
+    plot_bgcolor='white'  # Set background color to white for a clean look
 )
 
 kpi1_all_barplot_bdr.update_traces(
