@@ -635,6 +635,7 @@ with colG_1[0]:
     data=csv_t1,
     file_name='data.csv',
     mime='text/csv',
+    key="download_button_1"
 )
 
 with colH[0]:
@@ -680,8 +681,7 @@ with colI_1[0]:
     data=csv_t2,
     file_name='data.csv',
     mime='text/csv',
-)
-
+    key="download_button_2")
 
 with colJ[0]:
     st.markdown("""
