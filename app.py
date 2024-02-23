@@ -160,8 +160,8 @@ kpi1_all_barplot.update_traces(
 )
 
 kpi1_all_barplot.update_layout(
-    width=400,  # Adjust the width to fit within the column
-    height=300  # You can also adjust the height if necessary
+    width=500,  # Adjust the width to fit within the column
+    height=400  # You can also adjust the height if necessary
 )
 ###### BRAM
 
