@@ -770,18 +770,24 @@ kpi4_all_stacked_barplot_bdr.update_layout(
 
 
 ### SOMA SALES POR DIA
-max_date_t3 = df_t3['DAY'].max()
-max_date_t3 = pd.to_datetime(max_date_t3)
+df_t3['gmv_placed_customer'] = pd.to_numeric(df_t3['gmv_placed_customer'], errors='coerce').fillna(0)
+df_t3['gmv_placed_force'] = pd.to_numeric(df_t3['gmv_placed_force'], errors='coerce').fillna(0)
+df_t3['gmv_placed_grow'] = pd.to_numeric(df_t3['gmv_placed_grow'], errors='coerce').fillna(0)
 
-df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
-df_t3_sorted = df_t3.sort_values(by='DAY')
+df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
+df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0)
 
-start_date = max_date_t3 - pd.Timedelta(days=29)
-df_t3_sales_byday = df_t3.groupby('DAY')['TOTAL_SALES'].sum().reset_index()
-formatted_sales_byday = df_t3_sales_byday['TOTAL_SALES'].apply(custom_format)
-df_t3_sales_byday_sort = df_t3_byday.sort_values(by='DAY', ascending=True)
+df_t3_sales_bd = df_t3.groupby('DAY')['TOTAL_SALES'].sum().reset_index()
+df_t3_sales_notnull_bd = df_t3_sales_bd[(df_t3_sales_bd['TOTAL_SALES'] != 0)]
+df_t3_sales_notnull_bd.dropna(subset=['TOTAL_SALES'], inplace=True)
 
-kpi4_barplot_dateagg = px.bar(df_t3_sales_byday_sort, x='DAY', y='TOTAL_SALES', color_discrete_sequence=['lightblue'], text=formatted_sales_byday)
+df_t3_sales_notnull_sort_bd = df_t3_sales_notnull.sort_values(by='DAY', ascending=False)
+
+df_t3_sales_notnull_sort_bd['TOTAL_SALES'] = df_t3_sales_notnull_sort_bd['TOTAL_SALES'].fillna(0).round(1)
+
+formatted_sales_bd = df_t3_sales_notnull_sort_bd['TOTAL_SALES'].apply(custom_format)
+
+kpi4_barplot_dateagg = px.bar(formatted_sales_bd, x='DAY', y='TOTAL_SALES', color_discrete_sequence=['lightblue'], text=formatted_sales_bd)
 
 kpi4_barplot_dateagg.update_layout(
     title='BEES GMV in Last 30 Days for ALL BDRs',
