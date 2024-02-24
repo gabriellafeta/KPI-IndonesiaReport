@@ -773,21 +773,30 @@ kpi4_all_stacked_barplot_bdr.update_layout(
 df_t4_grouped = df_t4.groupby('BDR_ID')[['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']].sum().reset_index()
 df_t4_grouped['TASK_EFFECTIVNESS'] = (df_t4_grouped['EFFECTIVE_TASKS'] / df_t4_grouped['TOTAL_TASKS']) * 100
 df_t4_grouped['TASK_EFFECTIVNESS'] = df_t4_grouped['PERCENTAGE'].apply(lambda x: f"{x:.2f}%")
+df_t4_grouped = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False)
 
-def estilizar_dataframe(df):
-    """
-    Aplica estilo ao DataFrame:
-    - Cabeçalho em negrito e com fundo amarelo
-    - Conteúdo das células centralizado
-    """
-    return df.style.set_table_styles(
-        [
-            {'selector': 'thead th', 'props': [('background-color', 'yellow'), ('font-weight', 'bold')]},
-            {'selector': 'td', 'props': [('text-align', 'center')]}
-        ]
-    )
+cols_t4 = ['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']
 
-df_estilizado_t4 = estilizar_dataframe(df_t4_grouped)
+def style_table(df, columns):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
+
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            {'selector': 'thead th',
+             'props': [('background-color', 'yellow'), ('color', 'black'), ('font-weight', 'bold')]},
+            {'selector': 'td',
+             'props': [('text-align', 'center')]}
+        ])
+
+    # Aplica estilos específicos para a última linha
+    styler = styler.set_properties(**{'background-color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
+
+    return styler
+
+df_estilizado_t4 = style_table(df_t4_grouped, cols_t4)
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
