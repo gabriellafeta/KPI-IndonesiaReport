@@ -719,9 +719,8 @@ kpi4_all_barplot_bdr.update_layout(
 )
 
 kpi4_all_barplot_bdr.update_traces(
-    texttemplate='%{y}',  # Use the Y value for the text
-    textposition='outside',
-    hovertemplate='%{x}: %{y:.2f}%{yaxis.suffix}'  # Place the text above the bars
+    hovertemplate="<b>%{x}</b><br>Total Sales: %{y:.2s}<extra></extra>",  # Use .2s for smart formatting
+    textposition='outside'  # This positions the text on top of the bars
 )
 
 kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
