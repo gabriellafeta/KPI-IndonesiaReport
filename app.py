@@ -711,12 +711,12 @@ df_t3_sales_notnull_sort['TOTAL_SALES'] = df_t3_sales_notnull_sort['TOTAL_SALES'
 def custom_format(value):
     if value >= 1e6:  # If the value is in millions
         value = value / 1e6
-        return f'{value:.2f}M'
+        return f'{value:.2f}M PHP'
     elif value >= 1e3:  # If the value is in thousands
         value = value / 1e3
-        return f'{value:.2f}K'
+        return f'{value:.2f}K PHP'
     else:  # If the value is less than a thousand
-        return f'{value:.2f}'
+        return f'{value:.2f} PHP'
 
 # Apply the formatting function to your sales data
 formatted_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].apply(custom_format)
@@ -760,7 +760,7 @@ kpi4_all_stacked_barplot_bdr = px.bar(
     })
 
 kpi4_all_stacked_barplot_bdr.update_traces(
-    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:$,.2s}<extra></extra>")
+    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>")
 
 kpi4_all_stacked_barplot_bdr.update_layout(
     xaxis=dict(tickangle=90, title=None),  
