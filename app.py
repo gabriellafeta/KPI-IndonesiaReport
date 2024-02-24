@@ -785,9 +785,9 @@ df_t3_sales_notnull_sort_bd = df_t3_sales_notnull.sort_values(by='DAY', ascendin
 
 df_t3_sales_notnull_sort_bd['TOTAL_SALES'] = df_t3_sales_notnull_sort_bd['TOTAL_SALES'].fillna(0).round(1)
 
-formatted_sales_bd = df_t3_sales_notnull_sort_bd['TOTAL_SALES'].apply(custom_format)
+df_t3_sales_notnull_sort_bd['FORMATTED_TOTAL_SALES'] = df_t3_sales_notnull_sort_bd['TOTAL_SALES'].apply(custom_format)
 
-kpi4_barplot_dateagg = px.bar(formatted_sales_bd, x='DAY', y='TOTAL_SALES', color_discrete_sequence=['lightblue'], text=formatted_sales_bd)
+kpi4_barplot_dateagg = px.bar(df_t3_sales_notnull_sort_bd, x='DAY', y='TOTAL_SALES', color_discrete_sequence=['lightblue'], text='FORMATTED_TOTAL_SALES')
 
 kpi4_barplot_dateagg.update_layout(
     title='BEES GMV in Last 30 Days for ALL BDRs',
@@ -799,7 +799,7 @@ kpi4_barplot_dateagg.update_layout(
 )
 
 kpi4_barplot_dateagg.update_traces(
-    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>",
+    hovertemplate="<b>%{x}</b><br>Total Sales: %{text}<extra></extra>",
     textposition='outside'  # Place the text above the bars
 )
 
