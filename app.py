@@ -714,13 +714,14 @@ kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
     xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
-    yaxis=dict(showgrid=False, showticklabels=False, title='', tickformat=".2f"),  # Hide Y-axis grid lines and tick labels
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
 )
 
 kpi4_all_barplot_bdr.update_traces(
     texttemplate='%{y}',  # Use the Y value for the text
-    textposition='outside'  # Place the text above the bars
+    textposition='outside',
+    hovertemplate='%{x}: %{y:.2f}%{yaxis.suffix}'  # Place the text above the bars
 )
 
 kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
