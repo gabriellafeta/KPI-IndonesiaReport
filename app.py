@@ -768,6 +768,41 @@ kpi4_all_stacked_barplot_bdr.update_layout(
     showlegend=True,
     plot_bgcolor='white')
 
+
+### SOMA SALES POR DIA
+max_date_t3 = df_t3['DAY'].max()
+max_date_t3 = pd.to_datetime(max_date_t3)
+
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sorted = df_t3.sort_values(by='DAY')
+
+start_date = max_date_t3 - pd.Timedelta(days=29)
+df_t3_sales_byday = df_t3.groupby('DAY')['TOTAL_SALES'].sum().reset_index()
+df_t3_sales_byday_sort = df_t3_byday.sort_values(by='DAY', ascending=True)
+formatted_sales_byday = df_t3_sales_byday_sort['TOTAL_SALES'].apply(custom_format)
+
+kpi4_barplot_dateagg = px.bar(df_t3_sales_byday_sort, x='DAY', y='TOTAL_SALES', color_discrete_sequence=['lightblue'], text=formatted_sales_byday)
+
+kpi4_barplot_dateagg.update_layout(
+    title='Registered stores in Last 30 Days for ALL BDRs',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white',
+    margin=dict(t=50)  # Set background color to white for a clean look
+)
+
+kpi4_barplot_dateagg.update_traces(
+    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>",
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi4_barplot_dateagg.update_layout(
+    width=500,  # Adjust the width to fit within the column
+    height=400  # You can also adjust the height if necessary
+)
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -803,6 +838,7 @@ with aba0:
     colL = st.columns(1)
     colM = st.columns(1)
     colN = st.columns(1)
+    colO = st.columns(1)
 
 # Colunas
 
@@ -980,6 +1016,7 @@ with colM[0]:
     st.plotly_chart(kpi4_all_barplot_bdr, use_container_width=True)
 
 with colN[0]:
+    st.plotly_chart(kpi4_all_stacked_barplot_bdr, use_container_width=True)
     st.markdown("""
     <style>
     .fonte-personalizada3 {
@@ -991,4 +1028,6 @@ with colN[0]:
         To see values hover over the bars.
     </div>
     """, unsafe_allow_html=True)
-    st.plotly_chart(kpi4_all_stacked_barplot_bdr, use_container_width=True)
+
+with colO[0]:
+    st.plotly_chart(kpi4_barplot_dateagg, use_container_width=True)
