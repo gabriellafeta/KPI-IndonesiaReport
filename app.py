@@ -771,9 +771,9 @@ kpi4_all_stacked_barplot_bdr.update_layout(
 ####### KPI - 5.	No of BDR tasks completed and task effectiveness 
 
 df_t4_grouped = df_t4.groupby('BDR_ID')[['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']].sum().reset_index()
-df_t4_grouped['TASK_EFFECTIVNESS'] = (df_t4_grouped['EFFECTIVE_TASKS'] / df_t4_grouped['TOTAL_TASKS']) * 100
+df_t4_grouped['TASK_EFFECTIVNESS'] = (df_t4_grouped['EFFECTIVED_TASKS'] / df_t4_grouped['TOTAL_TASKS']) * 100
 df_t4_grouped['TASK_EFFECTIVNESS'] = df_t4_grouped['PERCENTAGE'].apply(lambda x: f"{x:.2f}%")
-df_t4_grouped = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False)
+df_t4_grouped_sort = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False)
 
 cols_t4 = ['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']
 
@@ -795,8 +795,8 @@ def style_table(df, columns):
     styler = styler.set_properties(**{'background-color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
     return styler
-
-df_estilizado_t4 = style_table(df_t4_grouped, cols_t4)
+print(df_t4_grouped_sort.columns)
+df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4)
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
