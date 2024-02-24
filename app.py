@@ -659,7 +659,6 @@ max_date_cum_t3 = df_t3_byday_sort['DAY'].max()
 start_date_cum_t3 = max_date_cum_t3 - pd.Timedelta(days=29)
 df_t3_last_30_days = df_t3_byday_sort[(df_t3_byday_sort['DAY'] >= start_date_cum_t3) & (df_t3['DAY'] <= max_date_cum_t3)]
 
-
 date_range = pd.date_range(start=start_date_cum_t3, end=max_date_cum_t3)
 date_range_df = pd.DataFrame(date_range, columns=['DAY'])
 df_complete = date_range_df.merge(df_t3_byday_sort, on='DAY', how='left')
@@ -767,47 +766,6 @@ kpi4_all_stacked_barplot_bdr.update_layout(
     yaxis=dict(showgrid=False, title=None),
     showlegend=True,
     plot_bgcolor='white')
-
-
-### SOMA SALES POR DIA
-df_t3['gmv_placed_customer'] = pd.to_numeric(df_t3['gmv_placed_customer'], errors='coerce').fillna(0)
-df_t3['gmv_placed_force'] = pd.to_numeric(df_t3['gmv_placed_force'], errors='coerce').fillna(0)
-df_t3['gmv_placed_grow'] = pd.to_numeric(df_t3['gmv_placed_grow'], errors='coerce').fillna(0)
-
-df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
-df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0)
-
-df_t3_sales_bd = df_t3.groupby('DAY')['TOTAL_SALES'].sum().reset_index()
-df_t3_sales_notnull_bd = df_t3_sales_bd[(df_t3_sales_bd['TOTAL_SALES'] != 0)]
-df_t3_sales_notnull_bd.dropna(subset=['TOTAL_SALES'], inplace=True)
-
-df_t3_sales_notnull_sort_bd = df_t3_sales_notnull.sort_values(by='DAY', ascending=False)
-
-df_t3_sales_notnull_sort_bd['TOTAL_SALES'] = df_t3_sales_notnull_sort_bd['TOTAL_SALES'].fillna(0).round(1)
-
-df_t3_sales_notnull_sort_bd['FORMATTED_TOTAL_SALES'] = df_t3_sales_notnull_sort_bd['TOTAL_SALES'].apply(custom_format)
-
-kpi4_barplot_dateagg = px.bar(df_t3_sales_notnull_sort_bd, x='DAY', y='TOTAL_SALES', color_discrete_sequence=['lightblue'], text='FORMATTED_TOTAL_SALES')
-
-kpi4_barplot_dateagg.update_layout(
-    title='BEES GMV in Last 30 Days for ALL BDRs',
-    xaxis=dict(tickmode='linear', title='', tickangle=90),
-    showlegend=False,
-    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
-    plot_bgcolor='white',
-    margin=dict(t=50)  # Set background color to white for a clean look
-)
-
-kpi4_barplot_dateagg.update_traces(
-    hovertemplate="<b>%{x}</b><br>Total Sales: %{text}<extra></extra>",
-    textposition='outside'  # Place the text above the bars
-)
-
-kpi4_barplot_dateagg.update_layout(
-    width=500,  # Adjust the width to fit within the column
-    height=400  # You can also adjust the height if necessary
-)
-
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -1034,6 +992,3 @@ with colN[0]:
         To see values hover over the bars.
     </div>
     """, unsafe_allow_html=True)
-
-with colO[0]:
-    st.plotly_chart(kpi4_barplot_dateagg, use_container_width=True)
