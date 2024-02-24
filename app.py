@@ -980,4 +980,15 @@ with colM[0]:
     st.plotly_chart(kpi4_all_barplot_bdr, use_container_width=True)
 
 with colN[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada3 {
+        font-size: 10px;
+        font-style: italic
+    }
+    </style>
+    <div class="fonte-personalizada3">
+        To see values hover over the bars.
+    </div>
+    """, unsafe_allow_html=True)
     st.plotly_chart(kpi4_all_stacked_barplot_bdr, use_container_width=True)
