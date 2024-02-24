@@ -708,7 +708,20 @@ df_t3_sales_notnull_sort = df_t3_sales_notnull.sort_values(by='TOTAL_SALES', asc
 
 df_t3_sales_notnull_sort['TOTAL_SALES'] = df_t3_sales_notnull_sort['TOTAL_SALES'].fillna(0).round(1)
 
-kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'])
+def custom_format(value):
+    if value >= 1e6:  # If the value is in millions
+        value = value / 1e6
+        return f'{value:.2f}M'
+    elif value >= 1e3:  # If the value is in thousands
+        value = value / 1e3
+        return f'{value:.2f}K'
+    else:  # If the value is less than a thousand
+        return f'{value:.2f}'
+
+# Apply the formatting function to your sales data
+formatted_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].apply(custom_format)
+
+kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'], text=formatted_sales)
 
 kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
