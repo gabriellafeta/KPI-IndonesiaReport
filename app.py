@@ -796,8 +796,20 @@ def style_table(df, columns):
 
     return styler
 
+df_t4_grouped_sort.set_index(df_t4_grouped_sort.columns[0], inplace=True)
 df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4)
 html_t4 = df_estilizado_t4.to_html()
+#------------------------------------------------------------------------------------------------------
+###### KPI 6.	No of GPS check in and GPS quality
+df_t5_grouped = df_t5.groupby('BDR_ID')[['GPS', 'GPS_QUALITY']].mean().reset_index()
+df_t5_grouped[['GPS', 'GPS_QUALITY']] = df_t5_grouped[['GPS', 'GPS_QUALITY']].applymap(lambda x: f"{x:.2f}%")
+df_t5_grouped_sort = df_t5_grouped.sort_values(by='GPS', ascending=False)
+
+cols_t5 = ['GPS', 'GPS_QUALITY']
+
+df_t5_grouped_sort.set_index(df_t5_grouped_sort.columns[0], inplace=True)
+df_estilizado_t5 = style_table(df_t5_grouped_sort, cols_t5)
+html_t5 = df_estilizado_t5.to_html()
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -834,7 +846,9 @@ with aba0:
     colM = st.columns(1)
     colN = st.columns(1)
     colO = st.columns(1)
-    colP = st.columns(2)
+    colP = st.columns(1)
+    colQ = st.columns(2)
+    colR = st.columns(2)
 
 # Colunas
 
@@ -1035,9 +1049,26 @@ with colO[0]:
     }
     </style>
     <div class="fonte-personalizada2">
-        5.	No of BDR tasks completed and task effectiveness 
+        5.	Tasks and Task Effectivness per BDR 
     </div>
     """, unsafe_allow_html=True)
 
 with colP[0]:
     st.markdown(html_t4, unsafe_allow_html=True)
+
+with colQ[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        6.	GPS check in and GPS quality
+    </div>
+    """, unsafe_allow_html=True)
+
+with colR[0]:
+    st.markdown(html_t5, unsafe_allow_html=True)
