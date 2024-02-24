@@ -743,14 +743,8 @@ kpi4_all_stacked_barplot_bdr = px.bar(
     color_discrete_map={
         'gmv_placed_customer': 'lightblue',
         'gmv_placed_force': 'lightcoral',
-        'gmv_placed_grow': '#FAFAD2'
-    },
-    names={
-        'gmv_placed_customer': 'Customer GMV',
-        'gmv_placed_force': 'Force GMV',
-        'gmv_placed_grow': 'Grow GMV'
-    }
-)
+        'gmv_placed_grow': '#D3D3D3'
+    })
 
 
 kpi4_all_stacked_barplot_bdr.update_layout(
