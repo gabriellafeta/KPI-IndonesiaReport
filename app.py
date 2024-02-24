@@ -778,13 +778,13 @@ df_t3_sorted = df_t3.sort_values(by='DAY')
 
 start_date = max_date_t3 - pd.Timedelta(days=29)
 df_t3_sales_byday = df_t3.groupby('DAY')['TOTAL_SALES'].sum().reset_index()
+formatted_sales_byday = df_t3_sales_byday['TOTAL_SALES'].apply(custom_format)
 df_t3_sales_byday_sort = df_t3_byday.sort_values(by='DAY', ascending=True)
-formatted_sales_byday = df_t3_sales_byday_sort['TOTAL_SALES'].apply(custom_format)
 
 kpi4_barplot_dateagg = px.bar(df_t3_sales_byday_sort, x='DAY', y='TOTAL_SALES', color_discrete_sequence=['lightblue'], text=formatted_sales_byday)
 
 kpi4_barplot_dateagg.update_layout(
-    title='Registered stores in Last 30 Days for ALL BDRs',
+    title='BEES GMV in Last 30 Days for ALL BDRs',
     xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
