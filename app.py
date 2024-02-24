@@ -762,10 +762,9 @@ kpi4_all_stacked_barplot_bdr = px.bar(
 
 kpi4_all_stacked_barplot_bdr.update_layout(
     xaxis=dict(tickangle=90, title=None),  
-    yaxis=dict(showgrid=False, title=None, tickformat=".2f"),
+    yaxis=dict(showgrid=False, title=None),
     showlegend=True,
-    plot_bgcolor='white',
-    hovertemplate="<b>%{x}</b><br>Total Sales: %{y:.2s}<extra></extra>")
+    plot_bgcolor='white')
 
 #------------------------------------------------------------------------------------------------------
 #### App
