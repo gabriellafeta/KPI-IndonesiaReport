@@ -768,6 +768,27 @@ kpi4_all_stacked_barplot_bdr.update_layout(
     plot_bgcolor='white')
 
 #------------------------------------------------------------------------------------------------------
+####### KPI - 5.	No of BDR tasks completed and task effectiveness 
+
+df_t4_grouped = df_t4.groupby('BDR_ID')[['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']].sum().reset_index()
+df_t4_grouped['TASK_EFFECTIVNESS'] = (df_t4_grouped['EFFECTIVE_TASKS'] / df_t4_grouped['TOTAL_TASKS']) * 100
+df_t4_grouped['TASK_EFFECTIVNESS'] = df_t4_grouped['PERCENTAGE'].apply(lambda x: f"{x:.2f}%")
+
+def estilizar_dataframe(df):
+    """
+    Aplica estilo ao DataFrame:
+    - Cabeçalho em negrito e com fundo amarelo
+    - Conteúdo das células centralizado
+    """
+    return df.style.set_table_styles(
+        [
+            {'selector': 'thead th', 'props': [('background-color', 'yellow'), ('font-weight', 'bold')]},
+            {'selector': 'td', 'props': [('text-align', 'center')]}
+        ]
+    )
+
+df_estilizado_t4 = estilizar_dataframe(df_t4_grouped)
+#------------------------------------------------------------------------------------------------------
 #### App
 # Abas
 
@@ -803,6 +824,7 @@ with aba0:
     colM = st.columns(1)
     colN = st.columns(1)
     colO = st.columns(1)
+    colP = st.columns(2)
 
 # Colunas
 
@@ -972,7 +994,7 @@ with colL[0]:
     }
     </style>
     <div class="fonte-personalizada2">
-        4.	Sales value per day per BDR 
+        4.	Sales value per BDR 
     </div>
     """, unsafe_allow_html=True)
 
@@ -992,3 +1014,20 @@ with colN[0]:
         To see values hover over the bars.
     </div>
     """, unsafe_allow_html=True)
+
+with colO[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        5.	No of BDR tasks completed and task effectiveness 
+    </div>
+    """, unsafe_allow_html=True)
+
+with colP[0]:
+    st.markdown(df_estilizado_t4, unsafe_allow_html=True)
