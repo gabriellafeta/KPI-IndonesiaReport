@@ -739,18 +739,19 @@ kpi4_all_stacked_barplot_bdr = px.bar(
     x='bdr_id', 
     y=['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow'],
     title='BEES Sales Stacked per BDR',
-    labels={'value': 'GMV', 'variable': 'Category'},
+    labels={'value': 'GMV', 'variable': 'Category'},  # Keeps the axis labels
     color_discrete_map={
         'gmv_placed_customer': 'lightblue',
         'gmv_placed_force': 'lightcoral',
-        'gmv_placed_grow': '#D3D3D3'
+        'gmv_placed_grow': '#FAFAD2'
     },
-    names={  # Rename legends
+    names={
         'gmv_placed_customer': 'Customer GMV',
         'gmv_placed_force': 'Force GMV',
         'gmv_placed_grow': 'Grow GMV'
     }
 )
+
 
 kpi4_all_stacked_barplot_bdr.update_layout(
     xaxis=dict(tickangle=90, title=None),  
