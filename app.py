@@ -759,6 +759,8 @@ kpi4_all_stacked_barplot_bdr = px.bar(
         'gmv_placed_grow': '#D3D3D3'
     })
 
+kpi4_all_stacked_barplot_bdr.update_traces(
+    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:$,.2s}<extra></extra>")
 
 kpi4_all_stacked_barplot_bdr.update_layout(
     xaxis=dict(tickangle=90, title=None),  
