@@ -741,9 +741,9 @@ kpi4_all_stacked_barplot_bdr = px.bar(
     title='BEES Sales Stacked per BDR',
     labels={'value': 'GMV', 'variable': 'Category'},
     color_discrete_map={
-        'gmv_placed_customer': 'lightgreen',
-        'gmv_placed_force': 'lightblue',
-        'gmv_placed_grow': 'lightcoral'
+        'gmv_placed_customer': 'lightblue',
+        'gmv_placed_force': 'lightcoral',
+        'gmv_placed_grow': '#FAFAD2'
     }
 )
 
