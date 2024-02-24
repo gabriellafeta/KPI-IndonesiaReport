@@ -714,7 +714,7 @@ kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
     xaxis=dict(tickmode='linear', title='', tickangle=90),
     showlegend=False,
-    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    yaxis=dict(showgrid=False, showticklabels=False, title='', tickformat=".2f"),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
 )
 
@@ -749,11 +749,9 @@ kpi4_all_stacked_barplot_bdr = px.bar(
 
 kpi4_all_stacked_barplot_bdr.update_layout(
     xaxis=dict(tickangle=90, title=None),  
-    yaxis=dict(showgrid=False, title=None),
+    yaxis=dict(showgrid=False, title=None, tickformat=".2f"),
     showlegend=True,
     plot_bgcolor='white')
-
-
 
 #------------------------------------------------------------------------------------------------------
 #### App
