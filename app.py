@@ -795,8 +795,9 @@ def style_table(df, columns):
     styler = styler.set_properties(**{'background-color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
     return styler
-print(df_t4_grouped_sort.columns)
+
 df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4)
+html_t4 = df_estilizado_t4.to_html()
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -1039,4 +1040,4 @@ with colO[0]:
     """, unsafe_allow_html=True)
 
 with colP[0]:
-    st.markdown(df_estilizado_t4, unsafe_allow_html=True)
+    st.markdown(html_t4, unsafe_allow_html=True)
