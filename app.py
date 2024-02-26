@@ -522,10 +522,24 @@ visits_stacked = go.Figure()
 for vendor in df_t1_pivot.columns:
     visits_stacked.add_trace(go.Bar(x=df_t1_pivot.index, y=df_t1_pivot[vendor], name=vendor))
 
-# Update the layout for a stacked bar chart
 visits_stacked.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
 
+colors = px.colors.sequential.Blues
+for i, vendor in enumerate(df_t1_pivot.columns):
+    visits_stacked.add_trace(go.Bar(x=df_t1_pivot.index, y=df_t1_pivot[vendor], name=vendor,
+                         marker_color=colors[i % len(colors)]))  # Cycle through shades of blue
 
+# Customizing the figure's layout
+visits_stacked.update_layout(
+    barmode='stack',
+    title='Daily Visits by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
 #### Agregado por dia
