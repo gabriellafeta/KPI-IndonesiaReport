@@ -516,12 +516,12 @@ kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 
 df_t1['visits_format'] = df_t1['VISITED_STORES'].apply(lambda x: f'{x:.0f}')
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
-df_t1['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b')
-df_t1_stacked = df_t1.groupby(['FORMATTED_DATE', 'BDR_name'])['visits_format'].sum().reset_index()
+df_t1_sort_new = df_t1.sort_values(by='VISIT_DATE', ascending=True)
+df_t1_sort_new['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b')
+df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['visits_format'].sum().reset_index()
 df_t1_pivot = df_t1_stacked.pivot(index='FORMATTED_DATE', columns='BDR_name', values='visits_format').fillna(0)
 
-df_t1_pivot.sort_index(inplace=True)
-df_t1_pivot.index = df_t1_pivot.index.strftime('%d-%b')
+
 
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
