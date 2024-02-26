@@ -160,11 +160,11 @@ BDR_dict = {
     "6174675_BDR001": "CMP"
 }
 
-df_t1['BDR_name'] = df_t2['BDR_ID'].map(BDR_dict)
+df_t1['BDR_name'] = df_t1['BDR_ID'].map(BDR_dict)
 df_t2['BDR_name'] = df_t2['bdr_id'].map(BDR_dict)
-df_t2['BDR_name'] = df_t2['bdr_id'].map(BDR_dict)
-df_t2['BDR_name'] = df_t2['BDR_ID'].map(BDR_dict)
-df_t2['BDR_name'] = df_t2['BDR_ID'].map(BDR_dict)
+df_t3['BDR_name'] = df_t3['bdr_id'].map(BDR_dict)
+df_t4['BDR_name'] = df_t4['BDR_ID'].map(BDR_dict)
+df_t5['BDR_name'] = df_t5['BDR_ID'].map(BDR_dict)
 
 df_t1 = df_t1[df_t1['BDR_name'].notnull()]
 df_t2 = df_t2[df_t2['BDR_name'].notnull()]
