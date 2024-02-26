@@ -518,16 +518,14 @@ df_t1_stacked = df_t1.groupby(['VISIT_DATE', 'BDR_name'])['VISITED_STORES'].sum(
 df_t1_pivot = df_t1_stacked.pivot(index='VISIT_DATE', columns='BDR_name', values='VISITED_STORES').fillna(0)
 
 visits_stacked = go.Figure()
+colors = px.colors.sequential.Blues
 
-for vendor in df_t1_pivot.columns:
-    visits_stacked.add_trace(go.Bar(x=df_t1_pivot.index, y=df_t1_pivot[vendor], name=vendor))
+for i, vendor in enumerate(df_t1_pivot.columns):
+    visits_stacked.add_trace(go.Bar(x=df_t1_pivot.index, y=df_t1_pivot[vendor], name=vendor,
+                         marker_color=colors[i % len(colors)]))
 
 visits_stacked.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
 
-colors = px.colors.sequential.Blues
-for i, vendor in enumerate(df_t1_pivot.columns):
-    visits_stacked.add_trace(go.Bar(x=df_t1_pivot.index, y=df_t1_pivot[vendor], name=vendor,
-                         marker_color=colors[i % len(colors)]))  # Cycle through shades of blue
 
 # Customizing the figure's layout
 visits_stacked.update_layout(
