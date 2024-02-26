@@ -522,7 +522,6 @@ df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['visits_f
 df_t1_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t1_stacked['FORMATTED_DATE'], format='%d-%b')
 df_t1_pivot = df_t1_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='visits_format').fillna(0)
 
-
 df_t1_pivot.index = df_t1_pivot.index.strftime('%d-%b')
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
@@ -671,12 +670,14 @@ kpi2_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 
 df_t2['register_format'] = df_t2['count_registered_stores'].apply(lambda x: f'{x:.0f}')
 df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
-df_t2['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b')
-df_t2_stacked = df_t2.groupby(['FORMATTED_DATE', 'BDR_name'])['register_format'].sum().reset_index()
-df_t2_pivot = df_t2_stacked.pivot(index='FORMATTED_DATE', columns='BDR_name', values='register_format').fillna(0)
+df_t2_sort_new = df_t2.sort_values(by='DATE', ascending=True)
+df_t2_sort_new['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b')
+df_t2_stacked = df_t2_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['register_format'].sum().reset_index()
+df_t2_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked['FORMATTED_DATE'], format='%d-%b')
+df_t2_pivot = df_t2_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='register_format').fillna(0)
 
+df_t2_pivot.index = df_t2_pivot.index.strftime('%d-%b')
 register_stacked = go.Figure()
-colors = px.colors.sequential.Blues
 
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
 
@@ -692,9 +693,9 @@ for i, vendor in enumerate(df_t2_pivot.columns):
         textposition='outside'  # Position labels outside the bars
     ))
 
-register_stacked.update_layout(barmode='stack', title='Daily Registers by BDR', xaxis_title='', yaxis_title='')
+register_stacked.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
 for i, trace in enumerate(register_stacked.data):
-    trace.text = [f'{v}' if v != 0 else '' for v in df_t1_pivot[trace.name]]
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot[trace.name]]
 
 # Customizing the figure's layout
 register_stacked.update_layout(
