@@ -685,15 +685,15 @@ for i, vendor in enumerate(df_t2_pivot.columns):
     text_labels = [f'{v}' if v != '0' else '' for v in df_t2_pivot[vendor]]
 
     register_stacked.add_trace(go.Bar(
-        x=df_t1_pivot.index, 
-        y=df_t1_pivot[vendor], 
+        x=df_t2_pivot.index, 
+        y=df_t2_pivot[vendor], 
         name=vendor,
         marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
         text=text_labels,  # Use the prepared text labels
         textposition='outside'  # Position labels outside the bars
     ))
 
-register_stacked.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
+register_stacked.update_layout(barmode='stack', title='Daily Registers by BDR', xaxis_title='', yaxis_title='')
 for i, trace in enumerate(register_stacked.data):
     trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot[trace.name]]
 
