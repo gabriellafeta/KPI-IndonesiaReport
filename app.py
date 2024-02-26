@@ -873,7 +873,6 @@ order_stacked.update_layout(barmode='stack', title='Daily Orders by BDR', xaxis_
 for i, trace in enumerate(order_stacked.data):
     trace.text = [f'{v}' if v != 0 else '' for v in df_t3_pivot[trace.name]]
 
-# Customizing the figure's layout
 order_stacked.update_layout(
     barmode='stack',
     title='Daily Orders by BDR',
@@ -952,6 +951,31 @@ order_stacked_channel.update_layout(
     margin=dict(b=100),  # Adjust the bottom margin to fit the legend
 )
 
+order_stacked_channel.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Orders by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
 
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
