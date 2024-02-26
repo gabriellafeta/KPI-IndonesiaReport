@@ -1388,8 +1388,8 @@ with aba0:
     colO = st.columns(1)
     colP = st.columns(1)
     colQ = st.columns(2)
-    colR = st.columns(2)
-    colS = st.columns(2)
+    colR = st.columns(1)
+    colS = st.columns(1)
 
 # Colunas
 
