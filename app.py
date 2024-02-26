@@ -1280,7 +1280,7 @@ pivot_df_tgps = df_t5_sort_gps.pivot_table(
 pivot_df_tgps = pivot_df_tgps.reindex(sorted(pivot_df_tgps.columns), axis=1)
 pivot_df_tgps.columns = [date.strftime('%d-%b') for date in pivot_df_tgps.columns]
 
-pivot_df_tgps_formatted = pivot_df_tgps.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "")
+pivot_df_tgps_formatted = pivot_df_tgps.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
 all_columns_B = pivot_df_tgps_formatted.columns.tolist()
 gps_table = style_table(pivot_df_tgps_formatted, all_columns_B)
 
@@ -1303,7 +1303,7 @@ pivot_df_tgpsq = df_t5_sort_gps.pivot_table(
 pivot_df_tgpsq = pivot_df_tgpsq.reindex(sorted(pivot_df_tgpsq.columns), axis=1)
 pivot_df_tgpsq.columns = [date.strftime('%d-%b') for date in pivot_df_tgpsq.columns]
 
-pivot_df_tgpsq_formatted = pivot_df_tgpsq.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "")
+pivot_df_tgpsq_formatted = pivot_df_tgpsq.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
 all_columns_C = pivot_df_tgpsq_formatted.columns.tolist()
 gpsq_table = style_table(pivot_df_tgps_formatted, all_columns_C)
 
@@ -1326,7 +1326,7 @@ pivot_df_teff = df_t4_sort_eff.pivot_table(
 pivot_df_teff = pivot_df_teff.reindex(sorted(pivot_df_teff.columns), axis=1)
 pivot_df_teff.columns = [date.strftime('%d-%b') for date in pivot_df_teff.columns]
 
-pivot_df_teff_formatted = pivot_df_teff.applymap(lambda x: f"{x:.0%}" if pd.notnull(x) else "")
+pivot_df_teff_formatted = pivot_df_teff.applymap(lambda x: f"{x:.0%}" if pd.notnull(x) else "0%")
 all_columns_A = pivot_df_teff_formatted.columns.tolist()
 taskeffect_table = style_table(pivot_df_teff_formatted, all_columns_A)
 
