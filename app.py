@@ -663,6 +663,77 @@ kpi2_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
     height=500  # You can also adjust the height if necessary
 )
 
+#### Register stacked
+
+df_t2['register_format'] = df_t2['count_registered_stores'].apply(lambda x: f'{x:.0f}')
+df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+df_t2['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b')
+df_t2_stacked = df_t2.groupby(['FORMATTED_DATE', 'BDR_name'])['register_format'].sum().reset_index()
+df_t2_pivot = df_t2_stacked.pivot(index='FORMATTED_DATE', columns='BDR_name', values='register_format').fillna(0)
+
+register_stacked = go.Figure()
+colors = px.colors.sequential.Blues
+
+blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+
+for i, vendor in enumerate(df_t2_pivot.columns):
+    text_labels = [f'{v}' if v != '0' else '' for v in df_t2_pivot[vendor]]
+
+    register_stacked.add_trace(go.Bar(
+        x=df_t1_pivot.index, 
+        y=df_t1_pivot[vendor], 
+        name=vendor,
+        marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
+        text=text_labels,  # Use the prepared text labels
+        textposition='outside'  # Position labels outside the bars
+    ))
+
+register_stacked.update_layout(barmode='stack', title='Daily Registers by BDR', xaxis_title='', yaxis_title='')
+for i, trace in enumerate(register_stacked.data):
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t1_pivot[trace.name]]
+
+# Customizing the figure's layout
+register_stacked.update_layout(
+    barmode='stack',
+    title='Daily Visits by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
+
+
+register_stacked.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Visits by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
+
+
+
+
 #------------------------------------------------------------------------------------------------------
 ##### KPI 3.	Number & list of stores adopted (place order via apps) per day per BDR.
 
@@ -1034,7 +1105,7 @@ with colH_3[0]:
     st.plotly_chart(kpi2_all_barplot_bdr_mtd, use_container_width=True)
 
 with colI[0]:
-    st.plotly_chart(kpi2_barplot_dateagg, use_container_width=True)
+    st.plotly_chart(register_stacked, use_container_width=True)
 
 with colI_1[0]:
     st.download_button(
