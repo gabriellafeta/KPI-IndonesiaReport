@@ -1013,29 +1013,60 @@ kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
-# Grafico empilhado
-df_t3_sales_empilhado = df_t3.groupby('BDR_name')[['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow']].sum().reset_index()
+# GVM Stacked per Channel
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_renamed_gmv = df_t3.rename(columns={
+    'cgmv_placed_customer': 'Customer',
+    'gmv_placed_force': 'Force',
+    'gmv_placed_grow': 'Grow'
+})
 
-df_t3_sales_empilhado['total_gmv'] = df_t3_sales_empilhado[['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow']].sum(axis=1)
-df_t3_sales_empilhado_sorted = df_t3_sales_empilhado.sort_values('total_gmv', ascending=False)
+df_t3_sorted_gmv = df_t3_renamed_gmv.sort_values(by='DAY', ascending=True)
 
-# Create the stacked bar plot
-kpi4_all_stacked_barplot_bdr = px.bar(
-    df_t3_sales_empilhado_sorted, 
-    x='BDR_name', 
-    y=['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow'],
-    title='BEES Sales Stacked per BDR',
-    labels={'value': 'GMV', 'variable': 'Category'},  # Keeps the axis labels
-    color_discrete_map={
-        'gmv_placed_customer': 'lightblue',
-        'gmv_placed_force': 'lightcoral',
-        'gmv_placed_grow': '#D3D3D3'
-    })
+df_t3_gmv_empilhado = df_t3_sorted.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
 
-kpi4_all_stacked_barplot_bdr.update_traces(
+df_t3_gmv_empilhado['FORMATTED_DATE'] = df_t3_gmv_empilhado['DAY'].dt.strftime('%d-%b')
+
+df_t3_gmv_empilhado = df_t3_gmv_empilhado.sort_values(by='DAY', ascending=True)
+
+blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
+
+gmv_stacked_channel = px.bar(
+    df_t3_gmv_empilhado, 
+    x='FORMATTED_DATE', 
+    y=['Customer', 'Force', 'Grow'],
+    title='BEES Order Stacked by Channel',
+    labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
+    color_discrete_sequence=blue_scale,
+    text='value'
+    )
+
+gmv_stacked_channel.update_layout(
+    xaxis=dict(tickangle=90, title=None, tickmode='linear'),  
+    yaxis=dict(showgrid=False, title=None),
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    plot_bgcolor='white',
+    height=600)
+
+for trace in order_stacked_channel.data:
+    non_zero_text = [t if t != 0 else '' for t in trace.y]
+
+    trace.update(
+        text=non_zero_text,
+        texttemplate='%{text}',  # Since we've already formatted text, we use '%{text}'
+        textposition='outside'
+    )
+gmv_stacked_channel.update_traces(
     hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>")
 
-kpi4_all_stacked_barplot_bdr.update_layout(
+gmv_stacked_channel.update_layout(
     xaxis=dict(tickangle=90, title=None),  
     yaxis=dict(showgrid=False, title=None),
     showlegend=True,
@@ -1284,7 +1315,7 @@ with colM[0]:
     st.plotly_chart(kpi4_all_barplot_bdr, use_container_width=True)
 
 with colN[0]:
-    st.plotly_chart(kpi4_all_stacked_barplot_bdr, use_container_width=True)
+    st.plotly_chart(gmv_stacked_channel, use_container_width=True)
     st.markdown("""
     <style>
     .fonte-personalizada3 {
