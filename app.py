@@ -525,7 +525,7 @@ colors = px.colors.sequential.Blues
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
 
 for i, vendor in enumerate(df_t1_pivot.columns):
-    text_labels = [f'{int(v)}' if v != 0 else '' for v in df_t1_pivot[vendor]]
+    text_labels = [f'{v:.0f}' if v != 0 else '' for v in df_t1_pivot[vendor]]
 
 
 for i, vendor in enumerate(df_t1_pivot.columns):
