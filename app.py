@@ -916,10 +916,20 @@ df_t3_nozero = df_t3[df_t3['Order_SUM'] != 0]
 df_t3_order_empilhado = df_t3_nozero.groupby('DAY')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
 blue_scale = ['#1f77b4', '#aec7e8', '#c6dbef']
 
+df_plot_t3orderstack = pd.melt(df_t3_order_empilhado, id_vars='DAY', value_vars=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'])
+
+legend_name_mapping = {
+    'count_placed_orders_customer': 'Customer',
+    'count_placed_orders_force': 'Force',
+    'count_placed_orders_grow': 'Grow'
+}
+
+df_plot_t3orderstack['Channel'] = df_plot_t3orderstack['variable'].map(legend_name_mapping)
+
 order_stacked_channel = px.bar(
-    df_t3_order_empilhado, 
+    df_plot_t3orderstack, 
     x='DAY', 
-    y=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
+    y='value',
     title='BEES Order Stacked per Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
     color_discrete_sequence=blue_scale,
