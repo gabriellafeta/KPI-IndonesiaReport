@@ -244,7 +244,7 @@ full_data['VISIT_DATE'] = full_data['VISIT_DATE'].dt.date
 kpi1_bram_barplot = px.bar(full_data, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_bram_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for Bram',
+    title='Visited Stores in the Last 30 Days for Dinamis Artha Sukses',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -277,7 +277,7 @@ full_data_harris['VISIT_DATE'] = full_data_harris['VISIT_DATE'].dt.date
 kpi1_harris_barplot = px.bar(full_data_harris, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_harris_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for Harris',
+    title='Visited Stores in the Last 30 Days for RMS Jakarta Selatan',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -310,7 +310,7 @@ full_data_cheryl['VISIT_DATE'] = full_data_cheryl['VISIT_DATE'].dt.date
 kpi1_cheryl_barplot = px.bar(full_data_cheryl, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_cheryl_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for Cheryl',
+    title='Visited Stores in the Last 30 Days for RMS Depok',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -343,7 +343,7 @@ full_data_christian['VISIT_DATE'] = full_data_christian['VISIT_DATE'].dt.date
 kpi1_christian_barplot = px.bar(full_data_christian, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_christian_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for Christian',
+    title='Visited Stores in the Last 30 Days for RMS Bogor',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -376,7 +376,7 @@ full_data_iwan['VISIT_DATE'] = full_data_iwan['VISIT_DATE'].dt.date
 kpi1_iwan_barplot = px.bar(full_data_iwan, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_iwan_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for Iwan Dwiarsono',
+    title='Visited Stores in the Last 30 Days for RMS Bekasi',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -409,7 +409,7 @@ full_data_dian['VISIT_DATE'] = full_data_dian['VISIT_DATE'].dt.date
 kpi1_dian_barplot = px.bar(full_data_dian, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_dian_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for Dian',
+    title='Visited Stores in the Last 30 Days for ASR',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -443,7 +443,7 @@ full_data_alvis['VISIT_DATE'] = full_data_alvis['VISIT_DATE'].dt.date
 kpi1_alvis_barplot = px.bar(full_data_dian, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_alvis_barplot.update_layout(
-    title='Visited Stores in the Last 30 Days for Alvis',
+    title='Visited Stores in the Last 30 Days for CMP',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -465,9 +465,9 @@ kpi1_alvis_barplot.update_layout(
 )
 
 ########## KPI1 per BDR ALLD
-df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR_ID')['VISITED_STORES'].sum().reset_index()
+df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR_name')['VISITED_STORES'].sum().reset_index()
 df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR_name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
 kpi1_all_barplot_bdr.update_layout(
     title='Visited Stores ALLD per BDR',
