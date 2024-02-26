@@ -1233,13 +1233,12 @@ def style_table(df, columns):
              'props': [('text-align', 'center')]}
         ])
 
-    # Aplica estilos específicos para a última linha
     styler = styler.set_properties(**{'background-color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
     return styler
 
 df_t4_grouped_sort.set_index(df_t4_grouped_sort.columns[0], inplace=True)
-df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4)
+df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4,font_size='12pt')
 html_t4 = df_estilizado_t4.to_html()
 #------------------------------------------------------------------------------------------------------
 ###### KPI 6.	No of GPS check in and GPS quality
