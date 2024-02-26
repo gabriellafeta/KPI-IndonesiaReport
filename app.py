@@ -489,9 +489,9 @@ kpi1_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 ########## KPI1 per BDR in last latest DAY
 
 df_tf_mtd = df_t1[df_t1['VISIT_DATE'] == max_date]
-df_tf_mtd_agg = df_tf_mtd.groupby('BDR_ID')['VISITED_STORES'].sum().reset_index()
+df_tf_mtd_agg = df_tf_mtd.groupby('BDR_name')['VISITED_STORES'].sum().reset_index()
 df_tf_mtd_agg = df_tf_mtd_agg.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR_ID', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR_name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 formatted_max_date = max_date.strftime('%Y-%m-%d')
 
 kpi1_all_barplot_bdr_mtd.update_layout(
@@ -547,10 +547,9 @@ kpi2_barplot_dateagg.update_layout(
 
 # KPI 2 per BDR
 
-df_t2_sorted['BDR_TEMP'] = df_t2_sorted.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
-df_aggregated_t2_BDR = df_t2_sorted.groupby('bdr_id')['count_registered_stores'].sum().reset_index()
+df_aggregated_t2_BDR = df_t2_sorted.groupby('bdr_name')['count_registered_stores'].sum().reset_index()
 df_aggregated_t2_BDR_sorted = df_aggregated_t2_BDR.sort_values(by='count_registered_stores', ascending = False)
-kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='bdr_id', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='bdr_name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr.update_layout(
@@ -573,10 +572,9 @@ kpi2_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 # KPI 2 in the latest day
 
 df_tf2_mtd = df_t2[df_t2['DATE'] == max_date_t2]
-df_tf2_mtd['BDR_TEMP'] = df_tf2_mtd.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
-df_tf2_mtd_agg = df_tf2_mtd.groupby('BDR_TEMP')['count_registered_stores'].sum().reset_index()
+df_tf2_mtd_agg = df_tf2_mtd.groupby('BDR_name')['count_registered_stores'].sum().reset_index()
 df_tf2_mtd_agg = df_tf2_mtd_agg.sort_values(by='count_registered_stores', ascending=False)
-kpi2_all_barplot_bdr_mtd = px.bar(df_tf2_mtd_agg, x='BDR_TEMP', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_all_barplot_bdr_mtd = px.bar(df_tf2_mtd_agg, x='BDR_name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr_mtd.update_layout(
