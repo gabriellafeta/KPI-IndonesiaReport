@@ -1291,12 +1291,12 @@ for i, vendor in enumerate(df_t4_pivot.columns):
         marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
         text=[f'{v}' if v != 0 else '' for v in df_t4_pivot[vendor]],  # Use values as text labels
         textposition='outside',  # Position labels outside the bars
-        hoverinfo='text'  # Set hover info
+        hoverinfo='text',  # Set hover info
+        # Bar plot is associated with the left y-axis by default
     ))
 
-# Add line traces for TASK_EFFECTIVENESS
+# Add line traces for TASK_EFFECTIVENESS, associated with the secondary Y-axis
 for i, vendor in enumerate(df_t4_pivot_line.columns):
-    # Generate a unique color for the line, different from the bar color
     line_color = f"rgba({255 - i*30}, {100 + i*30}, {100 + i*20}, 1)"
     tasks_stacked.add_trace(go.Scatter(
         x=df_t4_pivot_line.index,
@@ -1304,46 +1304,41 @@ for i, vendor in enumerate(df_t4_pivot_line.columns):
         name=f"{vendor} Effectiveness",
         mode='lines+markers',
         line=dict(color=line_color),
-        hoverinfo='y'
+        hoverinfo='y',
+        yaxis='y2'  # Associate this trace with the secondary y-axis
     ))
 
-# Update the layout to stack the bars
+# Update the layout to accommodate the stacked bars and secondary Y-axis for percentages
 tasks_stacked.update_layout(
     barmode='stack',
     title='Daily Tasks and Effectiveness by BDR',
-    xaxis=dict(tickangle=-90, type='category'),
-    yaxis=dict(title='Total Tasks'),
-    yaxis2=dict(title='Task Effectiveness', overlaying='y', side='right'),
-    legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
-    plot_bgcolor='rgba(0,0,0,0)'
-)
-
-
-tasks_stacked.update_layout(
     xaxis=dict(
+        tickangle=-90,
         tickmode='linear',
-        dtick=1,  # Set the interval between ticks to 1 day
-        tickangle=-90,  # Rotate labels by 90 degrees
-        type='category'  # This ensures that all categories (dates) are displayed
+        dtick=1,
+        type='category'
     ),
     yaxis=dict(
-        showticklabels=False,  # Hide Y-axis labels
-        showgrid=False,  # Hide grid lines
+        title='Total Tasks',
+        showgrid=False,  # Hide grid lines for the primary Y-axis
     ),
-    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
-    barmode='stack',
-    title='Daily Orders by BDR',
-    showlegend=True,
+    yaxis2=dict(
+        title='Task Effectiveness (%)',
+        overlaying='y',  # This specifies that yaxis2 is overlaying the primary y-axis
+        side='right',  # Position the secondary Y-axis on the right
+        showgrid=False,  # Optionally hide grid lines for the secondary Y-axis
+        range=[0, 100]  # Since it's a percentage, the range is set from 0 to 100
+    ),
     legend=dict(
         orientation='h',
-        yanchor='top',
-        y=-0.2,  # You might need to adjust this value to fit your chart
-        xanchor='center',
-        x=0.5  # Center the legend on the x-axis
+        yanchor='bottom',
+        y=1.02,
+        xanchor='right',
+        x=1
     ),
-    margin=dict(b=50),
-    height=600
-    )
+    plot_bgcolor='rgba(0,0,0,0)'  # Transparent background
+)
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
