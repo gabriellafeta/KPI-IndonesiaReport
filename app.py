@@ -1244,7 +1244,7 @@ html_t4 = df_estilizado_t4.to_html()
 #------------------------------------------------------------------------------------------------------
 ###### KPI 6.	No of GPS check in and GPS quality
 df_t5_grouped = df_t5.groupby('BDR_name')[['GPS', 'GPS_QUALITY']].mean().reset_index()
-df_t5_grouped[['GPS', 'GPS_QUALITY']] = df_t5_grouped[['GPS', 'GPS_QUALITY']].applymap(lambda x: f"{x:.2f}%")
+df_t5_grouped[['GPS', 'GPS_QUALITY']] = df_t5_grouped[['GPS', 'GPS_QUALITY']].applymap(lambda x: f"{x * 100:.2f}%")
 df_t5_grouped_sort = df_t5_grouped.sort_values(by='GPS', ascending=False)
 
 cols_t5 = ['GPS', 'GPS_QUALITY']
