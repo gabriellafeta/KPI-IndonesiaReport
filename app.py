@@ -914,14 +914,20 @@ order_stacked.update_layout(
 ################### Orders Stacked by Channel
 df_t3_nozero = df_t3[df_t3['Order_SUM'] != 0]
 df_t3_order_empilhado = df_t3_nozero.groupby('DAY')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
-blue_scale = ['#1f77b4', '#aec7e8', '#c6dbef']
+blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
 
 order_stacked_channel = px.bar(
     df_t3_order_empilhado, 
     x='DAY', 
     y=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
     title='BEES Order Stacked per Channel',
-    labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
+    labels={
+        'value': 'Orders', 
+        'variable': 'Channel',
+        'count_placed_orders_customer': 'Customer',
+        'count_placed_orders_force': 'Force',
+        'count_placed_orders_grow': 'Grow'
+    },
     color_discrete_sequence=blue_scale,
     text='value'
     )
