@@ -1026,10 +1026,6 @@ df_t3_gmv_empilhado = df_t3_sorted_gmv.groupby('DAY')[['Customer', 'Force', 'Gro
 df_t3_gmv_empilhado['FORMATTED_DATE'] = df_t3_gmv_empilhado['DAY'].dt.strftime('%d-%b')
 df_t3_gmv_empilhado = df_t3_gmv_empilhado.sort_values(by='DAY', ascending=True)
 
-df_t3_gmv_empilhado['Customer'] = df_t3_gmv_empilhado['Customer'].applymap(custom_format)
-df_t3_gmv_empilhado['Force'] = df_t3_gmv_empilhado['Force'].applymap(custom_format)
-df_t3_gmv_empilhado['Grow'] = df_t3_gmv_empilhado['Grow'].applymap(custom_format)
-
 blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
 
 gmv_stacked_channel = px.bar(
