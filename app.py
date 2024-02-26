@@ -913,21 +913,21 @@ order_stacked.update_layout(
 
 ################### Orders Stacked by Channel
 df_t3_nozero = df_t3[df_t3['Order_SUM'] != 0]
-df_t3_order_empilhado = df_t3_nozero.groupby('DAY')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
-blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
+df_t3_nozero_renamed = df_t3_nozero.rename(columns={'count_placed_orders_customer': 'Customer',
+                                                     'count_placed_orders_force': 'Force', 
+                                                     'count_placed_orders_grow': 'Grow'})
 
-df_t3_order_empilhado = df_t3_nozero.groupby('DAY')[['count_placed_orders_customer', 
-                                                      'count_placed_orders_force', 
-                                                      'count_placed_orders_grow']].sum().reset_index()
+
+df_t3_order_empilhado = df_t3_nozero_renamed.groupby('DAY')[['Customer',
+                                                    'Force',
+                                                    'Grow']].sum().reset_index()
+
+blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
 
 order_stacked_channel = px.bar(
     df_t3_order_empilhado, 
     x='DAY', 
-    y={
-        'Customer': 'count_placed_orders_customer', 
-        'Force': 'count_placed_orders_force', 
-        'Grow': 'count_placed_orders_grow'
-    },
+    y=['Customer', 'Force', 'Grow'],
     title='BEES Order Stacked per Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
     color_discrete_sequence=blue_scale,
