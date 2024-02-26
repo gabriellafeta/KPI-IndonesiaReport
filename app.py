@@ -1261,6 +1261,89 @@ df_estilizado_joined = style_table(df_joined, cols_joined)
 
 # Convert the styled DataFrame to HTML
 force_html = df_estilizado_joined.to_html()
+
+
+############### Tasks stacked
+
+df_t4['DAY'] = pd.to_datetime(df_t4['DAY'])
+df_t4_sort = df_t4.sort_values(by='DAY', ascending=True)
+df_t4_sort['FORMATTED_DATE'] = df_t4['DAY'].dt.strftime('%d-%b')
+df_t4_stacked_bar = df_t4_sort.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_TASKS'].sum().reset_index()
+df_t4_stacked_bar['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_bar['FORMATTED_DATE'], format='%d-%b')
+df_t4_pivot = df_t4_stacked_bar.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_TASKS').fillna(0)
+
+df_t4_stacked_line = df_t4_sort.groupby(['FORMATTED_DATE', 'BDR_name'])['TASK_EFFECTIVENESS'].mean().reset_index()
+df_t4_stacked_line['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_line['FORMATTED_DATE'], format='%d-%b')
+df_t4_pivot_line = df_t4_stacked_line.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TASK_EFFECTIVENESS').fillna(0)
+df_t4_pivot_line.index = df_t4_pivot_line.index.strftime('%d-%b')
+
+
+df_t4_pivot.index = df_t4_pivot.index.strftime('%d-%b')
+tasks_stacked = go.Figure()
+
+blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+
+for i, vendor in enumerate(df_t4_pivot.columns):
+    tasks_stacked.add_trace(go.Bar(
+        x=df_t4_pivot.index, 
+        y=df_t4_pivot[vendor], 
+        name=vendor,
+        marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
+        text=[f'{v}' if v != 0 else '' for v in df_t4_pivot[vendor]],  # Use values as text labels
+        textposition='outside',  # Position labels outside the bars
+        hoverinfo='text'  # Set hover info
+    ))
+
+# Add line traces for TASK_EFFECTIVENESS
+for i, vendor in enumerate(df_t4_pivot_line.columns):
+    # Generate a unique color for the line, different from the bar color
+    line_color = f"rgba({255 - i*30}, {100 + i*30}, {100 + i*20}, 1)"
+    tasks_stacked.add_trace(go.Scatter(
+        x=df_t4_pivot_line.index,
+        y=df_t4_pivot_line[vendor],
+        name=f"{vendor} Effectiveness",
+        mode='lines+markers',
+        line=dict(color=line_color),
+        hoverinfo='y'
+    ))
+
+# Update the layout to stack the bars
+tasks_stacked.update_layout(
+    barmode='stack',
+    title='Daily Tasks and Effectiveness by BDR',
+    xaxis=dict(tickangle=-90, type='category'),
+    yaxis=dict(title='Total Tasks'),
+    yaxis2=dict(title='Task Effectiveness', overlaying='y', side='right'),
+    legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+    plot_bgcolor='rgba(0,0,0,0)'
+)
+
+
+tasks_stacked.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Orders by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -1306,6 +1389,7 @@ with aba0:
     colP = st.columns(1)
     colQ = st.columns(2)
     colR = st.columns(2)
+    colS = st.columns(2)
 
 # Colunas
 
@@ -1502,3 +1586,6 @@ with colO[0]:
 
 with colP[0]:
     st.markdown(force_html, unsafe_allow_html=True)
+
+with colS[0]:
+    st.plotly_chart(tasks_stacked, use_container_width=True)
