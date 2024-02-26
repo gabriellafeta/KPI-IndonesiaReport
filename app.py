@@ -520,9 +520,17 @@ df_t1_pivot = df_t1_stacked.pivot(index='VISIT_DATE', columns='BDR_name', values
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
 
+blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5']
+
 for i, vendor in enumerate(df_t1_pivot.columns):
-    visits_stacked.add_trace(go.Bar(x=df_t1_pivot.index, y=df_t1_pivot[vendor], name=vendor,
-                         marker_color=colors[i % len(colors)]))
+    visits_stacked.add_trace(go.Bar(
+        x=df_t1_pivot.index, 
+        y=df_t1_pivot[vendor], 
+        name=vendor,
+        marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
+        text=df_t1_pivot['VISITED_STORES'],  # Add data labels
+        textposition='outside'  # Position labels outside the bars
+    ))
 
 visits_stacked.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
 
@@ -563,6 +571,14 @@ visits_stacked.update_layout(
         xanchor='left',
         x=1
     )
+)
+
+all_dates = pd.date_range(start=df_t1_pivot['VISIT_DATE'].min(), end=df_t1_pivot['VISIT_DATE'].max())
+
+visits_stacked.update_xaxes(
+    tickvals=all_dates,
+    ticktext=[date.strftime('%d-%m') for date in all_dates],
+    tickangle=-90
 )
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
