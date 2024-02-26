@@ -914,18 +914,19 @@ order_stacked.update_layout(
 ################### Orders Stacked by Channel
 
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_renamed = df_t3.rename(columns={
+    'count_placed_orders_customer': 'Customer',
+    'count_placed_orders_force': 'Force',
+    'count_placed_orders_grow': 'Grow'
+})
 
-df_t3_renamed = df_t3.rename(columns={'count_placed_orders_customer': 'Customer',
-                                                     'count_placed_orders_force': 'Force', 
-                                                     'count_placed_orders_grow': 'Grow'})
+df_t3_sorted = df_t3_renamed.sort_values(by='DAY', ascending=True)
 
+df_t3_order_empilhado = df_t3_sorted.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
 
-df_t3_sort_new_s = df_t3_renamed.sort_values(by='DAY', ascending=True)
-df_t3_sort_new_s['FORMATTED_DATE'] = df_t3_sort_new_s['DAY'].dt.strftime('%d-%b')
+df_t3_order_empilhado['FORMATTED_DATE'] = df_t3_order_empilhado['DAY'].dt.strftime('%d-%b')
 
-df_t3_order_empilhado = df_t3_sort_new_s.groupby('FORMATTED_DATE')[['Customer',
-                                                    'Force',
-                                                    'Grow']].sum().reset_index()
+df_t3_order_empilhado = df_t3_order_empilhado.sort_values(by='DAY', ascending=True)
 
 blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
 
