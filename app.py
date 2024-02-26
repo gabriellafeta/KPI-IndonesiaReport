@@ -1290,7 +1290,7 @@ for i, vendor in enumerate(df_t4_pivot.columns):
 
 tasks_stacked.update_layout(barmode='stack', title='Daily Tasks by BDR', xaxis_title='', yaxis_title='')
 for i, trace in enumerate(tasks_stacked.data):
-    trace.text = [f'{v}' if v != 0 else '' for v in df_t4_pivot[trace.name]]
+    trace.text = [f'{int(v)}' if v != 0 else '' for v in df_t4_pivot[trace.name]]
 
 # Customizing the figure's layout
 tasks_stacked.update_layout(
