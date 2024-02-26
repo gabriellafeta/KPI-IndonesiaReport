@@ -973,7 +973,7 @@ df_t3['gmv_placed_grow'] = pd.to_numeric(df_t3['gmv_placed_grow'], errors='coerc
 df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
 df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0)
 
-df_t3_sales = df_t3.groupby('bdr_id')['TOTAL_SALES'].sum().reset_index()
+df_t3_sales = df_t3.groupby('BDR_name')['TOTAL_SALES'].sum().reset_index()
 df_t3_sales_notnull = df_t3_sales[(df_t3_sales['TOTAL_SALES'] != 0)]
 df_t3_sales_notnull.dropna(subset=['TOTAL_SALES'], inplace=True)
 
@@ -994,7 +994,7 @@ def custom_format(value):
 # Apply the formatting function to your sales data
 formatted_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].apply(custom_format)
 
-kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='bdr_id', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'], text=formatted_sales)
+kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='BDR_name', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'], text=formatted_sales)
 
 kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
@@ -1014,7 +1014,7 @@ kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 )
 
 # Grafico empilhado
-df_t3_sales_empilhado = df_t3.groupby('bdr_id')[['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow']].sum().reset_index()
+df_t3_sales_empilhado = df_t3.groupby('BDR_name')[['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow']].sum().reset_index()
 
 df_t3_sales_empilhado['total_gmv'] = df_t3_sales_empilhado[['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow']].sum(axis=1)
 df_t3_sales_empilhado_sorted = df_t3_sales_empilhado.sort_values('total_gmv', ascending=False)
@@ -1022,7 +1022,7 @@ df_t3_sales_empilhado_sorted = df_t3_sales_empilhado.sort_values('total_gmv', as
 # Create the stacked bar plot
 kpi4_all_stacked_barplot_bdr = px.bar(
     df_t3_sales_empilhado_sorted, 
-    x='bdr_id', 
+    x='BDR_name', 
     y=['gmv_placed_customer', 'gmv_placed_force', 'gmv_placed_grow'],
     title='BEES Sales Stacked per BDR',
     labels={'value': 'GMV', 'variable': 'Category'},  # Keeps the axis labels
@@ -1044,7 +1044,7 @@ kpi4_all_stacked_barplot_bdr.update_layout(
 #------------------------------------------------------------------------------------------------------
 ####### KPI - 5.	No of BDR tasks completed and task effectiveness 
 
-df_t4_grouped = df_t4.groupby('BDR_ID')[['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']].sum().reset_index()
+df_t4_grouped = df_t4.groupby('BDR_name')[['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']].sum().reset_index()
 df_t4_grouped['TASK_EFFECTIVNESS'] = (df_t4_grouped['EFFECTIVED_TASKS'] / df_t4_grouped['TOTAL_TASKS']) * 100
 df_t4_grouped['TASK_EFFECTIVNESS'] = df_t4_grouped['TASK_EFFECTIVNESS'].apply(lambda x: f"{x:.2f}%")
 df_t4_grouped_sort = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False)
@@ -1075,7 +1075,7 @@ df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4)
 html_t4 = df_estilizado_t4.to_html()
 #------------------------------------------------------------------------------------------------------
 ###### KPI 6.	No of GPS check in and GPS quality
-df_t5_grouped = df_t5.groupby('BDR_ID')[['GPS', 'GPS_QUALITY']].mean().reset_index()
+df_t5_grouped = df_t5.groupby('BDR_name')[['GPS', 'GPS_QUALITY']].mean().reset_index()
 df_t5_grouped[['GPS', 'GPS_QUALITY']] = df_t5_grouped[['GPS', 'GPS_QUALITY']].applymap(lambda x: f"{x:.2f}%")
 df_t5_grouped_sort = df_t5_grouped.sort_values(by='GPS', ascending=False)
 
