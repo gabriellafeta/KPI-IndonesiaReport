@@ -845,13 +845,12 @@ kpi3_barplot_cum.update_layout(
 ####### Orders stacked
 df_t3['Order_SUM'] = df_t3['count_placed_orders_customer'] + df_t3['count_placed_orders_force'] + df_t3['count_placed_orders_grow']
 
-df_t3['order_format'] = df_t3['Order_SUM'].apply(lambda x: f'{x:.0f}')
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
 df_t3_sort_new['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
-df_t3_stacked = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['order_format'].sum().reset_index()
+df_t3_stacked = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['Order_SUM'].sum().reset_index()
 df_t3_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked['FORMATTED_DATE'], format='%d-%b')
-df_t3_pivot = df_t3_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='order_format').fillna(0)
+df_t3_pivot = df_t3_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='Order_SUM').fillna(0)
 
 df_t3_pivot.index = df_t3_pivot.index.strftime('%d-%b')
 order_stacked = go.Figure()
