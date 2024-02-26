@@ -560,7 +560,7 @@ visits_stacked.update_layout(
         orientation='h',
         yanchor='bottom',
         y=1.02,
-        xanchor='right',
+        xanchor='left',
         x=1
     )
 )
