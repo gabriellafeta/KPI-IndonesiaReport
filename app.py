@@ -1219,24 +1219,22 @@ df_t4_grouped_sort = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False
 
 cols_t4 = ['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']
 
-def style_table(df, columns, font_size='12pt'):
+def style_table(df, columns, font_size='10pt'):
     def format_with_dots(value):
-        if pd.isna(value):  # Check for NaN values
-            return '0'  # Replace NaN with '0'
-        elif isinstance(value, (int, float)):
+        if isinstance(value, (int, float)):
             return '{:,.0f}'.format(value).replace(',', '.')
         return value
 
-    styler = df.style.applymap(format_with_dots, subset=columns)\
+    styler = df.style.format(format_with_dots, subset=columns)\
         .set_table_styles([
             {'selector': 'thead th',
              'props': [('background-color', '#1f77b4'), ('color', 'black'), ('font-weight', 'bold')]},
             {'selector': 'td',
              'props': [('text-align', 'center')]},
             {'selector': 'table, th, td',
-             'props': [('font-size', font_size)]}
+             'props': [('font-size', font_size)]}  # Setting the font size for the table
         ])
-    
+
     styler = styler.set_properties(**{'background-color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
     return styler
