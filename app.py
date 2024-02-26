@@ -1073,7 +1073,7 @@ gmv_stacked_channel.update_layout(
     plot_bgcolor='white')
 
 gmv_stacked_channel.update_layout(
-    yaxis=dict(tickvals=[i for i in range(0, int(df_t3_gmv_empilhado[['Customer', 'Force', 'Grow']].max().max()), 1000000)], 
+    yaxis=dict(tickvals=[i for i in range(0, int(df_t3_gmv_empilhado[['Customer', 'Force', 'Grow']].max()), 1000000)], 
                ticktext=[millions_formatter(i) for i in range(0, int(df_t3_gmv_empilhado[['Customer', 'Force', 'Grow']].max().max()), 1000000)])
 )
 
