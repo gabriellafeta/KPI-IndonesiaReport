@@ -912,54 +912,36 @@ order_stacked.update_layout(
     )
 
 ################### Orders Stacked by Channel
-
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sorted_new3 = df_t3.sort_values(by='DAY')
 
-df_t3_sorted_new3['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
-blue_palette2 = ['#1f77b4', '#aec7e8', '#c6dbef']
-legend_names = ['Customer', 'Force', 'Grow']
+df_t3_sorted_new3['FORMATTED_DATE'] = df_t3_sorted_new3['DAY'].dt.strftime('%d-%b')
 
-df_long = df_t3_sorted_new3.melt(id_vars='FORMATTED_DATE', 
-                                  value_vars=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
-                                  var_name='Order Type', value_name='Total Orders')
+df_t3_orders_empilhado = df_t3_sorted_new3.groupby('FORMATTED_DATE')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
+df_t3_orders_empilhado['total_order_ref'] = df_t3_orders_empilhado[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum(axis=1)
+df_t3_orders_empilhado = df_t3_orders_empilhado.sort_values(by='FORMATTED_DATE', ascending=False)
 
-# Define the color sequence
-color_sequence = ['#1f77b4', '#aec7e8', '#c6dbef']
+order_stacked_chanel = px.bar(
+    df_t3_orders_empilhado, 
+    x='bdr_id', 
+    y=['count_placed_orders_customer', 'gmv_placed_force', 'gmv_placed_grow'],
+    title='BEES Sales Stacked per BDR',
+    labels={'value': 'GMV', 'variable': 'Category'},  # Keeps the axis labels
+    color_discrete_map={
+        'gmv_placed_customer': '#1f77b4',
+        'gmv_placed_force': '#aec7e8',
+        'gmv_placed_grow': '#c6dbef'
+    })
 
-# Create the bar chart
-order_stacked_channel = px.bar(
-    df_long,
-    x='FORMATTED_DATE',
-    y='Total Orders',
-    color='Order Type',  # This argument will stack the bars and color them
-    text='Total Orders',
-    color_discrete_sequence=color_sequence  # Use custom colors
-)
+order_stacked_chanel.update_traces(
+    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>")
 
-# Update the layout
-order_stacked_channel.update_layout(
-    barmode='stack',
-    title='Daily Orders by Channel',
-    xaxis=dict(
-        title='Day',
-        tickmode='linear',
-        dtick=1,
-        tickangle=-90
-    ),
-    yaxis=dict(
-        title='Total Orders',
-        showgrid=True
-    ),
-    legend_title_text='Order Type',
-    legend=dict(
-        orientation='h',
-        yanchor='bottom',
-        y=1.02,
-        xanchor='right',
-        x=1
-    )
-)
+order_stacked_chanel.update_layout(
+    xaxis=dict(tickangle=90, title=None),  
+    yaxis=dict(showgrid=False, title=None),
+    showlegend=True,
+    plot_bgcolor='white')
+
 
 
 #------------------------------------------------------------------------------------------------------
