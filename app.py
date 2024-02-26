@@ -1228,7 +1228,7 @@ def style_table(df, columns):
     styler = df.style.format(format_with_dots, subset=columns)\
         .set_table_styles([
             {'selector': 'thead th',
-             'props': [('background-color', 'yellow'), ('color', 'black'), ('font-weight', 'bold')]},
+             'props': [('background-color', '#1f77b4'), ('color', 'black'), ('font-weight', 'bold')]},
             {'selector': 'td',
              'props': [('text-align', 'center')]}
         ])
@@ -1261,6 +1261,25 @@ all_columns = cols_t4 + cols_t5
 df_estilizado_joined = style_table(df_joined_sort, all_columns)
 force_html = df_estilizado_joined.to_html()
 
+###### Task table by day
+
+df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
+df_t4_sort_eff = df_t4.sort_values(by='DATE', ascending=True)
+df_t4_sort_eff['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b')
+df_t4['TASK_EFFECTIVENESS'] = df_t4['TASK_EFFECTIVENESS'].astype(float)
+
+pivot_df_teff = df_t4_sort_eff.pivot_table(
+    index='BDR_name', 
+    columns='FORMATTED_DATE', 
+    values='TASK_EFFECTIVENESS', 
+    aggfunc='mean'
+)
+
+pivot_df_teff_formatted = pivot_df_teff.applymap(lambda x: f"{x:.2%}" if pd.notnull(x) else "")
+all_columns_A = pivot_df_teff_formatted.columns.tolist()
+taskeffect_table = style_table(pivot_df_teff_formatted, all_columns_A)
+
+taskeffect_table_html = taskeffect_table.to_html()
 
 ############### Tasks stacked
 
@@ -1375,6 +1394,7 @@ with aba0:
     colQ = st.columns(2)
     colR = st.columns(1)
     colS = st.columns(1)
+    colS_1 = st.columns(1)
 
 # Colunas
 
@@ -1574,3 +1594,6 @@ with colP[0]:
 
 with colS[0]:
     st.plotly_chart(tasks_stacked, use_container_width=True)
+
+with colS_1[0]:
+    st.markdown(taskeffect_table_html, unsafe_allow_html=True)
