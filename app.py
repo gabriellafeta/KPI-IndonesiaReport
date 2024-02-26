@@ -752,11 +752,11 @@ max_date_t3 = pd.to_datetime(max_date_t3)
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sorted = df_t3.sort_values(by='DAY')
 
-df_t3_agg_bees = df_t3_sorted.groupby('bdr_id')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_agg_bees = df_t3_sorted.groupby('BDR_name')['TOTAL_ORDERS'].sum().reset_index()
 df_t3_agg_bees_sort = df_t3_agg_bees.sort_values(by='TOTAL_ORDERS', ascending=False)
 
 # KPI 3 ORDERS - ALLD per BDR
-kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='bdr_id', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
+kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='BDR_name', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
 
 kpi3_all_barplot_bdr.update_layout(
     title='BEES Orders ALLD per BDR',
@@ -778,11 +778,11 @@ kpi3_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 # KPI 3 ORDERS - Latest Day
 
 df_t3_mtd = df_t3[df_t3['DAY'] == max_date_t3]
-df_t3_mtd_agg = df_t3_mtd.groupby('bdr_id')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_mtd_agg = df_t3_mtd.groupby('BDR_name')['TOTAL_ORDERS'].sum().reset_index()
 df_t3_mtd_agg = df_t3_mtd_agg.sort_values(by='TOTAL_ORDERS', ascending=False)
 
 
-kpi3_all_barplot_bdr_mtd = px.bar(df_t3_mtd_agg, x='bdr_id', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
+kpi3_all_barplot_bdr_mtd = px.bar(df_t3_mtd_agg, x='BDR_name', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t3 = max_date_t3.strftime('%Y-%m-%d')
 
 kpi3_all_barplot_bdr_mtd.update_layout(
