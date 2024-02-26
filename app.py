@@ -1016,7 +1016,7 @@ kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 # GVM Stacked per Channel
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_renamed_gmv = df_t3.rename(columns={
-    'cgmv_placed_customer': 'Customer',
+    'gmv_placed_customer': 'Customer',
     'gmv_placed_force': 'Force',
     'gmv_placed_grow': 'Grow'
 })
