@@ -1073,9 +1073,9 @@ gmv_stacked_channel.update_layout(
 df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
 
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
-df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
-df_t3_sort_new['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
-df_t3_stacked_gmvbdr = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_SALES'].sum().reset_index()
+df_t3_sort_new_gmv = df_t3.sort_values(by='DAY', ascending=True)
+df_t3_sort_new_gmv['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
+df_t3_stacked_gmvbdr = df_t3_sort_new_gmv.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_SALES'].sum().reset_index()
 df_t3_stacked_gmvbdr['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked_gmvbdr['FORMATTED_DATE'], format='%d-%b')
 df_t3_pivot_gmvbdr = df_t3_stacked_gmvbdr.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_SALES').fillna(0)
 
@@ -1103,7 +1103,7 @@ for i, trace in enumerate(gmvbdr_stacked.data):
 
 gmvbdr_stacked.update_layout(
     barmode='stack',
-    title='Daily Orders by BDR',
+    title='Daily GMV by BDR',
     xaxis_title='',
     yaxis_title='',
     xaxis_tickangle=-90,
@@ -1125,7 +1125,7 @@ gmvbdr_stacked.update_layout(
     ),
     plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
     barmode='stack',
-    title='Daily Orders by BDR',
+    title='Daily GMV by BDR',
     showlegend=True,
     legend=dict(
         orientation='h',
