@@ -1056,6 +1056,12 @@ gmv_stacked_channel.update_layout(
     height=600)
 
 for trace in gmv_stacked_channel.data:
+    trace.update(
+        text=[millions_formatter(value) for value in trace.y],
+        textposition='outside'
+    )
+
+for trace in gmv_stacked_channel.data:
     non_zero_text = [t if t != 0 else '' for t in trace.y]
 
     trace.update(
@@ -1071,11 +1077,6 @@ gmv_stacked_channel.update_layout(
     yaxis=dict(showgrid=False, title=None),
     showlegend=True,
     plot_bgcolor='white')
-
-gmv_stacked_channel.update_layout(
-    yaxis=dict(tickvals=[i for i in range(0, int(df_t3_gmv_empilhado[['Customer', 'Force', 'Grow']].max()), 1000000)], 
-               ticktext=[millions_formatter(i) for i in range(0, int(df_t3_gmv_empilhado[['Customer', 'Force', 'Grow']].max().max()), 1000000)])
-)
 
 #------------------------------------------------------------------------------------------------------
 ####### KPI - 5.	No of BDR tasks completed and task effectiveness 
