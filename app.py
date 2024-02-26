@@ -1326,7 +1326,7 @@ tasks_stacked.update_layout(
         overlaying='y',  # This specifies that yaxis2 is overlaying the primary y-axis
         side='right',  # Position the secondary Y-axis on the right
         showgrid=False,  # Optionally hide grid lines for the secondary Y-axis
-        range=[0, 100]  # Since it's a percentage, the range is set from 0 to 100
+        range=[0, 1]  # Since it's a percentage, the range is set from 0 to 100
     ),
     legend=dict(
         orientation='h',
