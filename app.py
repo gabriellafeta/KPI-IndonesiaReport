@@ -914,11 +914,12 @@ order_stacked.update_layout(
 ################### Orders Stacked by Channel
 df_t3_order_empilhado = df_t3.groupby('DAY')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
 
+
 order_stacked_channel = px.bar(
     df_t3_order_empilhado, 
     x='DAY', 
     y=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
-    title='BEES Sales Stacked per BDR',
+    title='BEES Order Stacked per Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
     color_discrete_map={
         'gmv_placed_customer': '#1f77b4',
@@ -926,13 +927,17 @@ order_stacked_channel = px.bar(
         'gmv_placed_grow': '#c6dbef'
     })
 
-order_stacked_channel.update_traces(
-    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>")
-
 order_stacked_channel.update_layout(
     xaxis=dict(tickangle=90, title=None, tickmode='linear'),  
     yaxis=dict(showgrid=False, title=None),
     showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
     plot_bgcolor='white')
 
 
