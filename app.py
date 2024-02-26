@@ -538,6 +538,32 @@ visits_stacked.update_layout(
     plot_bgcolor='rgba(0,0,0,0)',
     xaxis={'showgrid': False},
 )
+
+
+visits_stacked.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Visits by Vendor',
+    showlegend=True,
+    legend=dict(
+        title='Vendor',
+        orientation='h',
+        yanchor='bottom',
+        y=1.02,
+        xanchor='right',
+        x=1
+    )
+)
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
 #### Agregado por dia
