@@ -929,7 +929,6 @@ for i, column in enumerate(['count_placed_orders_customer', 'count_placed_orders
         y=df_t3_sorted_new3[column],
         name=legend_names[i],
         text=df_t3_sorted_new3[column],
-        texttemplate='%{text:.0f}',
         textposition='outside',
         marker_color=blue_palette[i % len(blue_palette)]  # Use the color palette
     ))
