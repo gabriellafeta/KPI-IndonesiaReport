@@ -963,6 +963,59 @@ for trace in order_stacked_channel.data:
         textposition='outside'
     )
 
+################### Buyers Stacked by Channel
+
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_renamed_buyers = df_t3.rename(columns={
+    'count_buyers_customer': 'Customer',
+    'count_buyers_force': 'Force',
+    'count_buyers_grow': 'Grow'
+})
+
+df_t3_sorted_buyer = df_t3_renamed_buyers.sort_values(by='DAY', ascending=True)
+
+df_t3_order_empilhado_buyer = df_t3_sorted_buyer.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
+
+df_t3_order_empilhado_buyer['FORMATTED_DATE'] = df_t3_order_empilhado_buyer['DAY'].dt.strftime('%d-%b')
+
+df_t3_order_empilhado_buyer = df_t3_order_empilhado_buyer.sort_values(by='DAY', ascending=True)
+
+blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
+
+buyer_stacked_channel = px.bar(
+    df_t3_order_empilhado_buyer, 
+    x='FORMATTED_DATE', 
+    y=['Customer', 'Force', 'Grow'],
+    title='BEES Order Stacked by Channel',
+    labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
+    color_discrete_sequence=blue_scale,
+    text='value'
+    )
+
+buyer_stacked_channel.update_layout(
+    xaxis=dict(tickangle=90, title=None, tickmode='linear'),  
+    yaxis=dict(showgrid=False,showticklabels=False, title=None),
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    plot_bgcolor='white',
+    height=600)
+
+for trace in buyer_stacked_channel.data:
+    non_zero_text = [t if t != 0 else '' for t in trace.y]
+
+    trace.update(
+        text=non_zero_text,
+        texttemplate='%{text}',  # Since we've already formatted text, we use '%{text}'
+        textposition='outside'
+    )
+
+
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
 
@@ -1243,10 +1296,12 @@ with aba0:
     colK_4 = st.columns(1)
     colK_5 = st.columns(1)
     colK_6 = st.columns(1)
+    colK_7 = st.columns(1)
     colL = st.columns(1)
     colM = st.columns(1)
     colN = st.columns(1)
     colN_1 = st.columns(1)
+    colN_2 = st.columns(1)
     colO = st.columns(1)
     colP = st.columns(1)
     colQ = st.columns(2)
@@ -1383,6 +1438,9 @@ with colK_5[0]:
 with colK_6[0]:
     st.plotly_chart(order_stacked_channel, use_container_width=True)
 
+with colK_7[0]:
+    st.plotly_chart(buyer_stacked_channel, use_container_width=True)
+
 with colK_4[0]:
     st.download_button(
     label="Download data as CSV",
@@ -1423,6 +1481,9 @@ with colN[0]:
     """, unsafe_allow_html=True)
 
 with colN_1[0]:
+    st.plotly_chart(gmvbdr_stacked, use_container_width=True)
+
+with colN_2[0]:
     st.plotly_chart(gmvbdr_stacked, use_container_width=True)
 
 with colO[0]:
