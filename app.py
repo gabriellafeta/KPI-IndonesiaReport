@@ -573,7 +573,7 @@ visits_stacked.update_layout(
     )
 )
 
-all_dates = pd.date_range(start=df_t1_pivot['VISIT_DATE'].min(), end=df_t1_pivot['VISIT_DATE'].max())
+all_dates = pd.date_range(start=df_t1_pivot.index.min(), end=df_t1_pivot.index.max())
 
 visits_stacked.update_xaxes(
     tickvals=all_dates,
