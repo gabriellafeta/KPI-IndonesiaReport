@@ -1199,6 +1199,15 @@ cols_t5 = ['GPS', 'GPS_QUALITY']
 df_t5_grouped_sort.set_index(df_t5_grouped_sort.columns[0], inplace=True)
 df_estilizado_t5 = style_table(df_t5_grouped_sort, cols_t5)
 html_t5 = df_estilizado_t5.to_html()
+
+###### Joined Force kpi
+
+df_joined = df_t4_grouped_sort.join(df_t5_grouped_sort, how='outer', lsuffix='_t4', rsuffix='_t5')
+cols_joined = cols_t4 + cols_t5
+df_estilizado_joined = style_table(df_joined, cols_joined)
+
+# Convert the styled DataFrame to HTML
+force_html = df_estilizado_joined.to_html()
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -1431,7 +1440,7 @@ with colO[0]:
     """, unsafe_allow_html=True)
 
 with colP[0]:
-    st.markdown(html_t4, unsafe_allow_html=True)
+    st.markdown(force_html, unsafe_allow_html=True)
 
 with colQ[0]:
     st.markdown("""
