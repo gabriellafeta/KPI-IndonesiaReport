@@ -914,7 +914,7 @@ order_stacked.update_layout(
 ################### Orders Stacked by Channel
 df_t3_nozero = df_t3[df_t3['Order_SUM'] != 0]
 df_t3_order_empilhado = df_t3_nozero.groupby('DAY')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
-
+blue_scale = ['#1f77b4', '#aec7e8', '#c6dbef']
 
 order_stacked_channel = px.bar(
     df_t3_order_empilhado, 
@@ -922,11 +922,9 @@ order_stacked_channel = px.bar(
     y=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
     title='BEES Order Stacked per Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
-    color_discrete_map={
-        'gmv_placed_customer': '#1f77b4',
-        'gmv_placed_force': '#aec7e8',
-        'gmv_placed_grow': '#c6dbef'
-    })
+    color_discrete_sequence=blue_scale,
+    text='value'
+    )
 
 order_stacked_channel.update_layout(
     xaxis=dict(tickangle=90, title=None, tickmode='linear'),  
@@ -941,7 +939,8 @@ order_stacked_channel.update_layout(
     ),
     plot_bgcolor='white')
 
-
+for trace in order_stacked_channel.data:
+    trace.update(texttemplate='%{text:.0f}', textposition='outside')
 
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
