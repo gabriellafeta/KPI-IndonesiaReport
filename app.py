@@ -912,7 +912,11 @@ order_stacked.update_layout(
     )
 
 ################### Orders Stacked by Channel
-df_t3_nozero = df_t3[df_t3['Order_SUM'] != 0]
+
+df_t3_nozero = df_t3[(df_t3['count_placed_orders_customer'] != 0) | 
+                     (df_t3['count_placed_orders_force'] != 0) | 
+                     (df_t3['count_placed_orders_grow'] != 0)]
+
 df_t3_nozero_renamed = df_t3_nozero.rename(columns={'count_placed_orders_customer': 'Customer',
                                                      'count_placed_orders_force': 'Force', 
                                                      'count_placed_orders_grow': 'Grow'})
