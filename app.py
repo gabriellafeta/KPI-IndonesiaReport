@@ -531,6 +531,7 @@ for i, vendor in enumerate(df_t1_pivot.columns):
         name=vendor,
         marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
         text=df_t1_pivot[vendor],  # Add data labels
+        text=df_t1_pivot[vendor].apply(lambda x: '{:.0f}'.format(x) if x != 0 else ''),  # Format labels with zero decimal places
         textposition='outside'  # Position labels outside the bars
     ))
 
@@ -564,7 +565,7 @@ visits_stacked.update_layout(
     ),
     plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
     barmode='stack',
-    title='Daily Visits by Vendor',
+    title='Daily Visits by BDR',
     showlegend=True,
     legend=dict(
         orientation='h',
@@ -573,7 +574,8 @@ visits_stacked.update_layout(
         xanchor='center',
         x=0.5  # Center the legend on the x-axis
     ),
-    margin=dict(b=100)
+    margin=dict(b=50),
+    height=600
     )
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
