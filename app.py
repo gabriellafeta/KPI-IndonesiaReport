@@ -1219,22 +1219,24 @@ df_t4_grouped_sort = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False
 
 cols_t4 = ['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']
 
-def style_table(df, columns, font_size='10pt'):
+def style_table(df, columns, font_size='12pt'):
     def format_with_dots(value):
-        if isinstance(value, (int, float)):
+        if pd.isna(value):  # Check for NaN values
+            return '0'  # Replace NaN with '0'
+        elif isinstance(value, (int, float)):
             return '{:,.0f}'.format(value).replace(',', '.')
         return value
 
-    styler = df.style.format(format_with_dots, subset=columns)\
+    styler = df.style.applymap(format_with_dots, subset=columns)\
         .set_table_styles([
             {'selector': 'thead th',
              'props': [('background-color', '#1f77b4'), ('color', 'black'), ('font-weight', 'bold')]},
             {'selector': 'td',
              'props': [('text-align', 'center')]},
             {'selector': 'table, th, td',
-             'props': [('font-size', font_size)]}  # Setting the font size for the table
+             'props': [('font-size', font_size)]}
         ])
-
+    
     styler = styler.set_properties(**{'background-color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
     return styler
@@ -1282,7 +1284,6 @@ pivot_df_tgps.columns = [date.strftime('%d-%b') for date in pivot_df_tgps.column
 
 pivot_df_tgps_formatted = pivot_df_tgps.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "")
 all_columns_B = pivot_df_tgps_formatted.columns.tolist()
-pivot_df_tgps_formatted.fillna(0, inplace=True)
 gps_table = style_table(pivot_df_tgps_formatted, all_columns_B)
 
 gps_table_html = gps_table.to_html()
