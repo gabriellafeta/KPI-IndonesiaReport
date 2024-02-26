@@ -865,8 +865,7 @@ for i, vendor in enumerate(df_t3_pivot.columns):
         y=df_t3_pivot[vendor], 
         name=vendor,
         marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
-        text=text_labels,
-        texttemplate='%{text:.0f}',
+        text=text_labels,  # Use the prepared text labels
         textposition='outside'  # Position labels outside the bars
     ))
 
