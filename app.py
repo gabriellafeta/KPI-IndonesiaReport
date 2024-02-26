@@ -1104,7 +1104,7 @@ gmv_stacked_channel.update_layout(
         x=0.5  # Center the legend on the x-axis
     ),
     plot_bgcolor='white',
-    height=600)
+    height=800)
 
 for trace in gmv_stacked_channel.data:
     formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
@@ -1205,7 +1205,7 @@ gmvbdr_stacked.update_layout(
         x=0.5  # Center the legend on the x-axis
     ),
     margin=dict(b=50),
-    height=600
+    height=800
     )
 
 
