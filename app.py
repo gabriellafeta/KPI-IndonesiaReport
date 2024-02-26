@@ -90,7 +90,7 @@ def style_table(df, title):
     styler_pct = df.style.format(format_as_percent) \
         .set_table_styles([
             {'selector': 'thead th',
-             'props': [('background-color', 'yellow'), ('color', 'black'), ('font-weight', 'bold')]},
+             'props': [('background-color', '#1f77b4'), ('color', 'black'), ('font-weight', 'bold')]},
             {'selector': 'td',
              'props': [('text-align', 'center')]}
         ], overwrite=False) \
@@ -1303,7 +1303,6 @@ tasks_stacked.update_layout(
     plot_bgcolor='rgba(0,0,0,0)',
     xaxis={'showgrid': False},
 )
-
 
 tasks_stacked.update_layout(
     xaxis=dict(
