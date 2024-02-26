@@ -858,7 +858,7 @@ order_stacked = go.Figure()
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
 
 for i, vendor in enumerate(df_t3_pivot.columns):
-    text_labels = [f'{v}' if v != '0' else '' for v in df_t3_pivot[vendor]]
+    text_labels = df_t3_pivot['Order_SUM'].apply(lambda x: f'{x:.0f}' if x != 0 else ''),
 
     order_stacked.add_trace(go.Bar(
         x=df_t3_pivot.index, 
