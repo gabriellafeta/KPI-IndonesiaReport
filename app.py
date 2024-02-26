@@ -1033,7 +1033,7 @@ gmv_stacked_channel = px.bar(
     df_t3_gmv_empilhado, 
     x='FORMATTED_DATE', 
     y=['Customer', 'Force', 'Grow'],
-    title='BEES Order Stacked by Channel',
+    title='BEES GMV Stacked by Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
     color_discrete_sequence=blue_scale,
     text='value'
@@ -1070,7 +1070,80 @@ gmv_stacked_channel.update_layout(
     plot_bgcolor='white')
 
 ##### GMV Stacked by BDR
+df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
 
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
+df_t3_sort_new['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
+df_t3_stacked_gmvbdr = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_SALES'].sum().reset_index()
+df_t3_stacked_gmvbdr['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked_gmvbdr['FORMATTED_DATE'], format='%d-%b')
+df_t3_pivot_gmvbdr = df_t3_stacked_gmvbdr.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_SALES').fillna(0)
+
+df_t3_pivot_gmvbdr = df_t3_pivot.index.strftime('%d-%b')
+gmvbdr_stacked = go.Figure()
+
+blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+
+for i, vendor in enumerate(df_t3_pivot_gmvbdr.columns):
+    text_labels = [f'{v}' if v != '0' else '' for v in df_t3_pivot[vendor]]
+
+    gmvbdr_stacked.add_trace(go.Bar(
+        x=df_t3_pivot_gmvbdr.index, 
+        y=df_t3_pivot_gmvbdr[vendor], 
+        name=vendor,
+        marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
+        text=text_labels,  # Use the prepared text labels
+        textposition='outside'  # Position labels outside the bars
+    ))
+
+gmvbdr_stacked.update_layout(barmode='stack', title='Daily GMV by BDR', xaxis_title='', yaxis_title='')
+
+for trace in df_t3_pivot_gmvbdr.data:
+    formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
+    trace.update(
+        hoverinfo='text',
+        hovertext=[f"<b>{x}</b><br>{trace.name}: {custom_format(y)} PHP" for x, y in zip(df_t3_gmv_empilhado['FORMATTED_DATE'], trace.y)],
+        text=formatted_text,
+        texttemplate='%{text}',  # Use the formatted text
+        textposition='outside'
+    )
+
+gmvbdr_stacked.update_layout(
+    barmode='stack',
+    title='Daily Orders by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
+
+gmvbdr_stacked.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Orders by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
 
 
 #------------------------------------------------------------------------------------------------------
@@ -1154,6 +1227,7 @@ with aba0:
     colL = st.columns(1)
     colM = st.columns(1)
     colN = st.columns(1)
+    colN_1 = st.columns(1)
     colO = st.columns(1)
     colP = st.columns(1)
     colQ = st.columns(2)
@@ -1328,6 +1402,9 @@ with colN[0]:
         To see values hover over the bars.
     </div>
     """, unsafe_allow_html=True)
+
+with colN_1[0]:
+    st.plotly_chart(gmvbdr_stacked, use_container_width=True)
 
 with colO[0]:
     st.markdown("""
