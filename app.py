@@ -925,26 +925,39 @@ df_long_channel = df_t3_sorted_new3.melt(id_vars='FORMATTED_DATE',
                                   value_vars=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
                                   var_name='Order Type', value_name='Total Orders')
 
+
+color_sequence = ['#1f77b4', '#aec7e8', '#c6dbef']
+
 order_stacked_chanel = px.bar(
-    df_long_channel, 
-    x='FORMATTED_DATE', 
-    y=['count_placed_orders_customer', 'gmv_placed_force', 'gmv_placed_grow'],
-    title='BEES Sales Stacked per BDR',
-    labels={'value': 'Order', 'variable': 'Channel'},
-    color_discrete_map={
-        'gmv_placed_customer': '#1f77b4',
-        'gmv_placed_force': '#aec7e8',
-        'gmv_placed_grow': '#c6dbef'
-    })
+    df_long_channel,
+    x='FORMATTED_DATE',
+    y='Total Orders',
+    color='Order Type',  # This argument will stack the bars and color them
+    text='Total Orders',
+    color_discrete_sequence=color_sequence)  # Use custom colors
 
-order_stacked_chanel.update_traces(
-    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>")
-
-order_stacked_chanel.update_layout(
-    xaxis=dict(tickangle=90, title=None),  
-    yaxis=dict(showgrid=False, title=None),
-    showlegend=True,
-    plot_bgcolor='white')
+fig.update_layout(
+    barmode='stack',
+    title='Daily Orders by Channel',
+    xaxis=dict(
+        title='Day',
+        tickmode='linear',
+        dtick=1,
+        tickangle=-90
+    ),
+    yaxis=dict(
+        title='Total Orders',
+        showgrid=True
+    ),
+    legend_title_text='Order Type',
+    legend=dict(
+        orientation='h',
+        yanchor='bottom',
+        y=1.02,
+        xanchor='right',
+        x=1
+    )
+)
 
 
 
