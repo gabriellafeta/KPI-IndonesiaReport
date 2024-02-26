@@ -1023,7 +1023,7 @@ df_t3_renamed_gmv = df_t3.rename(columns={
 
 df_t3_sorted_gmv = df_t3_renamed_gmv.sort_values(by='DAY', ascending=True)
 
-df_t3_gmv_empilhado = df_t3_sorted.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
+df_t3_gmv_empilhado = df_t3_sorted_gmv.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
 
 df_t3_gmv_empilhado['FORMATTED_DATE'] = df_t3_gmv_empilhado['DAY'].dt.strftime('%d-%b')
 
