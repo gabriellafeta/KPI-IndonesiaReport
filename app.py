@@ -861,22 +861,22 @@ for i, vendor in enumerate(df_t3_pivot.columns):
     text_labels = [f'{v}' if v != '0' else '' for v in df_t3_pivot[vendor]]
 
     order_stacked.add_trace(go.Bar(
-        x=df_t2_pivot.index, 
-        y=df_t2_pivot[vendor], 
+        x=df_t3_pivot.index, 
+        y=df_t3_pivot[vendor], 
         name=vendor,
         marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
         text=text_labels,  # Use the prepared text labels
         textposition='outside'  # Position labels outside the bars
     ))
 
-order_stacked.update_layout(barmode='stack', title='Daily Order by BDR', xaxis_title='', yaxis_title='')
+order_stacked.update_layout(barmode='stack', title='Daily Orders by BDR', xaxis_title='', yaxis_title='')
 for i, trace in enumerate(order_stacked.data):
     trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot[trace.name]]
 
 # Customizing the figure's layout
 order_stacked.update_layout(
     barmode='stack',
-    title='Daily Visits by BDR',
+    title='Daily Orders by BDR',
     xaxis_title='',
     yaxis_title='',
     xaxis_tickangle=-90,
