@@ -912,7 +912,8 @@ order_stacked.update_layout(
     )
 
 ################### Orders Stacked by Channel
-df_t3_order_empilhado = df_t3.groupby('DAY')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
+df_t3_nozero = df_t3[df_t3['ORDER_sum'] != 0]
+df_t3_order_empilhado = df_t3_nozero.groupby('DAY')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
 
 
 order_stacked_channel = px.bar(
