@@ -526,12 +526,11 @@ blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8'
 
 for i, vendor in enumerate(df_t1_pivot.columns):
     visits_stacked.add_trace(go.Bar(
-        x=df_t1_pivot.index, 
-        y=df_t1_pivot[vendor], 
+        x=df_t1_pivot.index,
+        y=df_t1_pivot[vendor],
         name=vendor,
         marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
-        text=df_t1_pivot[vendor],  # Add data labels
-        text=df_t1_pivot[vendor].apply(lambda x: '{:.0f}'.format(x) if x != 0 else ''),  # Format labels with zero decimal places
+        text=[f'{v:.0f}' if v != 0 else '' for v in df_t1_pivot[vendor]],  # Format labels with zero decimal places
         textposition='outside'  # Position labels outside the bars
     ))
 
