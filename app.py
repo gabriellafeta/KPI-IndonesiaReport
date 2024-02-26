@@ -1275,7 +1275,7 @@ pivot_df_teff = df_t4_sort_eff.pivot_table(
     aggfunc='mean'
 )
 
-pivot_df_teff_formatted = pivot_df_teff.applymap(lambda x: f"{x:.2%}" if pd.notnull(x) else "")
+pivot_df_teff_formatted = pivot_df_teff.applymap(lambda x: f"{x:.0%}" if pd.notnull(x) else "")
 all_columns_A = pivot_df_teff_formatted.columns.tolist()
 taskeffect_table = style_table(pivot_df_teff_formatted, all_columns_A)
 
