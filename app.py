@@ -1085,7 +1085,9 @@ gmvbdr_stacked = go.Figure()
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
 
 for i, vendor in enumerate(df_t3_pivot_gmvbdr.columns):
-    text_labels = [custom_format(value) if value != 0 else '' for value in trace.y]
+    # Format the text labels with the millions_formatter function
+    text_labels = [custom_format(v) if v != 0 else '' for v in df_t3_pivot_gmvbdr[vendor]]
+    hover_texts = [f"<b>{df_t3_pivot_gmvbdr.index[j]}</b><br>{vendor}: {custom_format(v)} PHP" if v != 0 else '' for j, v in enumerate(df_t3_pivot_gmvbdr[vendor])]
 
     gmvbdr_stacked.add_trace(go.Bar(
         x=df_t3_pivot_gmvbdr.index, 
@@ -1093,8 +1095,11 @@ for i, vendor in enumerate(df_t3_pivot_gmvbdr.columns):
         name=vendor,
         marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
         text=text_labels,  # Use the prepared text labels
-        textposition='outside'  # Position labels outside the bars
+        textposition='outside',  # Position labels outside the bars
+        hoverinfo='text',  # Specify that custom text is used for hover
+        hovertext=hover_texts  # Use the prepared hover text
     ))
+
 
 gmvbdr_stacked.update_layout(barmode='stack', title='Daily GMV by BDR', xaxis_title='', yaxis_title='')
 
