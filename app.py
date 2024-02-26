@@ -1265,9 +1265,9 @@ force_html = df_estilizado_joined.to_html()
 
 ############### Tasks stacked
 
-df_t4['DAY'] = pd.to_datetime(df_t4['DAY'])
-df_t4_sort = df_t4.sort_values(by='DAY', ascending=True)
-df_t4_sort['FORMATTED_DATE'] = df_t4['DAY'].dt.strftime('%d-%b')
+df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
+df_t4_sort = df_t4.sort_values(by='DATE', ascending=True)
+df_t4_sort['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b')
 df_t4_stacked_bar = df_t4_sort.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_TASKS'].sum().reset_index()
 df_t4_stacked_bar['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_bar['FORMATTED_DATE'], format='%d-%b')
 df_t4_pivot = df_t4_stacked_bar.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_TASKS').fillna(0)
