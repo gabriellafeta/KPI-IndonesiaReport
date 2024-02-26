@@ -528,7 +528,7 @@ for i, vendor in enumerate(df_t1_pivot.columns):
         y=df_t1_pivot[vendor], 
         name=vendor,
         marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
-        text=df_t1_pivot['VISITED_STORES'],  # Add data labels
+        text=df_t1_pivot[vendor],  # Add data labels
         textposition='outside'  # Position labels outside the bars
     ))
 
@@ -578,7 +578,7 @@ all_dates = pd.date_range(start=df_t1_pivot['VISIT_DATE'].min(), end=df_t1_pivot
 visits_stacked.update_xaxes(
     tickvals=all_dates,
     ticktext=[date.strftime('%d-%m') for date in all_dates],
-    tickangle=-90
+    tickangle=90
 )
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
