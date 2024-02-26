@@ -923,7 +923,7 @@ order_stacked_channel = go.Figure()
 
 # Add a trace for each order type
 for i, column in enumerate(['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']):
-    order_stacked.add_trace(go.Bar(
+    order_stacked_channel.add_trace(go.Bar(
         x=df_t3_sorted['DAY'],
         y=df_t3_sorted[column],
         name=column,
