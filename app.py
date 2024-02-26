@@ -899,7 +899,7 @@ order_stacked.update_layout(
     ),
     plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
     barmode='stack',
-    title='Daily Visits by BDR',
+    title='Daily Orders by BDR',
     showlegend=True,
     legend=dict(
         orientation='h',
