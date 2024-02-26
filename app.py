@@ -942,7 +942,7 @@ order_stacked_channel = px.bar(
 
 order_stacked_channel.update_layout(
     xaxis=dict(tickangle=90, title=None, tickmode='linear'),  
-    yaxis=dict(showgrid=False, title=None),
+    yaxis=dict(showgrid=False,showticklabels=False, title=None),
     showlegend=True,
     legend=dict(
         orientation='h',
