@@ -156,7 +156,7 @@ BDR_dict = {
     "6658562_BDR001": "Cheryl",
     "6421535_BDR001": "Christian",
     "6828128_BDR001": "Iwan Dwiarsono",
-    "6713130_SMC007": "Dian",
+    "6713130_BDR001": "Dian",
     "6174675_BDR001": "Alvis"
 }
 
@@ -538,9 +538,9 @@ kpi2_barplot_dateagg.update_layout(
 # KPI 2 per BDR
 
 df_t2_sorted['BDR_TEMP'] = df_t2_sorted.apply(lambda row: row['delivery_center_id'].split('_')[0] if pd.isnull(row['bdr_id']) else row['bdr_id'], axis=1)
-df_aggregated_t2_BDR = df_t2_sorted.groupby('BDR_TEMP')['count_registered_stores'].sum().reset_index()
+df_aggregated_t2_BDR = df_t2_sorted.groupby('bdr_id')['count_registered_stores'].sum().reset_index()
 df_aggregated_t2_BDR_sorted = df_aggregated_t2_BDR.sort_values(by='count_registered_stores', ascending = False)
-kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='BDR_TEMP', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='bdr_id', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr.update_layout(
