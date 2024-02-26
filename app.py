@@ -923,7 +923,7 @@ df_t3_orders_empilhado = df_t3_orders_empilhado.sort_values(by='FORMATTED_DATE',
 
 order_stacked_chanel = px.bar(
     df_t3_orders_empilhado, 
-    x='bdr_id', 
+    x='FORMATTED_DATE', 
     y=['count_placed_orders_customer', 'gmv_placed_force', 'gmv_placed_grow'],
     title='BEES Sales Stacked per BDR',
     labels={'value': 'GMV', 'variable': 'Category'},  # Keeps the axis labels
