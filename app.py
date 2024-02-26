@@ -526,13 +526,15 @@ colors = px.colors.sequential.Blues
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
 
 for i, vendor in enumerate(df_t1_pivot.columns):
+    text_labels = [f'{v}' if v != '0' else '' for v in df_t1_pivot[vendor]]
+
     visits_stacked.add_trace(go.Bar(
         x=df_t1_pivot.index, 
         y=df_t1_pivot[vendor], 
         name=vendor,
-        marker_color=blue_palette[i % len(blue_palette)],
-        text=text_labels,
-        textposition='outside'
+        marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
+        text=text_labels,  # Use the prepared text labels
+        textposition='outside'  # Position labels outside the bars
     ))
 
 visits_stacked.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
