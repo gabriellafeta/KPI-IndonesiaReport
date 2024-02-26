@@ -1219,7 +1219,7 @@ df_t4_grouped_sort = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False
 
 cols_t4 = ['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']
 
-def style_table(df, columns):
+def style_table(df, columns, font_size='12pt'):
     def format_with_dots(value):
         if isinstance(value, (int, float)):
             return '{:,.0f}'.format(value).replace(',', '.')
@@ -1230,7 +1230,9 @@ def style_table(df, columns):
             {'selector': 'thead th',
              'props': [('background-color', '#1f77b4'), ('color', 'black'), ('font-weight', 'bold')]},
             {'selector': 'td',
-             'props': [('text-align', 'center')]}
+             'props': [('text-align', 'center')]},
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]}  # Setting the font size for the table
         ])
 
     styler = styler.set_properties(**{'background-color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
@@ -1238,7 +1240,7 @@ def style_table(df, columns):
     return styler
 
 df_t4_grouped_sort.set_index(df_t4_grouped_sort.columns[0], inplace=True)
-df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4,font_size='12pt')
+df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4)
 html_t4 = df_estilizado_t4.to_html()
 #------------------------------------------------------------------------------------------------------
 ###### KPI 6.	No of GPS check in and GPS quality
