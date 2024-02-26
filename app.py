@@ -6,6 +6,7 @@ from azure.core.exceptions import ResourceExistsError
 from io import StringIO
 import os
 import plotly.express as px
+import plotly.graph_objects as go
 
 #------------------------------------------------------------------------------------------------------
 st.set_page_config(layout="wide") # Configuração da página larga
@@ -510,6 +511,21 @@ kpi1_all_barplot_bdr_mtd.update_traces(
 kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
+
+#### Visits stacked
+
+df_t1_stacked = df_t1.groupby(['VISIT_DATE', 'BDR_name'])['VISITED_STORES'].sum().reset_index()
+df_t1_pivot = df_t1_stacked.pivot(index='VISIT_DATE', columns='BDR_name', values='VISITED_STORES').fillna(0)
+
+visits_stacked = go.Figure()
+
+for vendor in df_t1_pivot.columns:
+    visits_stacked.add_trace(go.Bar(x=df_t1_pivot.index, y=df_t1_pivot[vendor], name=vendor))
+
+# Update the layout for a stacked bar chart
+visits_stacked.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
+
+
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
 #### Agregado por dia
@@ -833,6 +849,7 @@ with aba0:
     colC = st.columns(1)
     colC_1 = st.columns(1)
     colC_2 = st.columns(1)
+    colC_3 = st.columns(1)
     colD = st.columns(2)
     colE = st.columns(2)
     colF = st.columns(2)
@@ -896,6 +913,9 @@ with colC_1[0]:
 
 with colC_2[0]:
     st.plotly_chart(kpi1_all_barplot_bdr_mtd, use_container_width=True)
+
+with colC_3[0]:
+    st.plotly_chart(visits_stacked, use_container_width=True)
 
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
