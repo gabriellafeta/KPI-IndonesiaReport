@@ -936,7 +936,7 @@ order_stacked_chanel = px.bar(
     text='Total Orders',
     color_discrete_sequence=color_sequence)  # Use custom colors
 
-fig.update_layout(
+order_stacked_chanel.update_layout(
     barmode='stack',
     title='Daily Orders by Channel',
     xaxis=dict(
@@ -1282,7 +1282,7 @@ with colK_5[0]:
     st.plotly_chart(order_stacked, use_container_width=True)
 
 with colK_6[0]:
-    st.plotly_chart(order_stacked_channel, use_container_width=True)
+    st.plotly_chart(order_stacked_chanel, use_container_width=True)
 
 with colK_4[0]:
     st.download_button(
