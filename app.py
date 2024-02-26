@@ -917,7 +917,8 @@ df_t3_nozero = df_t3[(df_t3['count_placed_orders_customer'] != 0) |
                      (df_t3['count_placed_orders_force'] != 0) | 
                      (df_t3['count_placed_orders_grow'] != 0)]
 
-
+df_t3_nozero['DAY'] = pd.to_datetime(df_t3_nozero['DAY'])
+df_t3_nozero = df_t3_nozero.sort_values(by='DAY', ascending=True)
 df_t3_nozero['FORMATTED_DATE'] = df_t3_nozero['DAY'].dt.strftime('%d-%b')
 
 df_t3_nozero_renamed = df_t3_nozero.rename(columns={'count_placed_orders_customer': 'Customer',
