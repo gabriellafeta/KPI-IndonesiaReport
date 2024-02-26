@@ -912,6 +912,54 @@ order_stacked.update_layout(
     height=600
     )
 
+##### Orders Stacked by Channel
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
+
+# Create a column for each order type with the day as the index
+df_t3_pivot_channel = df_t3_sort_new.pivot(index='DAY', values=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']).fillna(0)
+
+# Convert the index back to the formatted date string for display
+df_t3_pivot_channel.index = df_t3_pivot_channel.index.strftime('%d-%b')
+
+order_stacked_channel = go.Figure()
+
+# Define the order types and corresponding colors
+order_types = ['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']
+colors = ['#1f77b4', '#aec7e8', '#c6dbef']
+
+# Add a trace for each order type
+for order_type, color in zip(order_types, colors):
+    order_stacked_channel.add_trace(go.Bar(
+        x=df_t3_pivot_channel.index, 
+        y=df_t3_pivot_channel[order_type], 
+        name=order_type,
+        marker_color=color,
+        text=df_t3_pivot_channel[order_type].apply(lambda x: f'{x:.0f}' if x != 0 else ''),
+        textposition='outside'
+    ))
+
+# Update the layout
+order_stacked_channel.update_layout(
+    barmode='stack',
+    title='Daily Orders by Order Channel',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': True, 'showticklabels': True},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,
+        xanchor='center',
+        x=0.5
+    ),
+    margin=dict(b=50),
+    height=600
+)
+
 
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
@@ -1068,6 +1116,7 @@ with aba0:
     colK_3 = st.columns(1)
     colK_4 = st.columns(1)
     colK_5 = st.columns(1)
+    colK_6 = st.columns(1)
     colL = st.columns(1)
     colM = st.columns(1)
     colN = st.columns(1)
@@ -1229,9 +1278,11 @@ with colK_2[0]:
 with colK_3[0]:
     st.plotly_chart(kpi3_barplot_cum, use_container_width=True)
 
-with colK_4[0]:
+with colK_5[0]:
     st.plotly_chart(order_stacked, use_container_width=True)
 
+with colK_6[0]:
+    st.plotly_chart(order_stacked_channel, use_container_width=True)
 
 with colK_4[0]:
     st.download_button(
