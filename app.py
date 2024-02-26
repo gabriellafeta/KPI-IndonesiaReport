@@ -522,7 +522,7 @@ df_t1_pivot = df_t1_stacked.pivot(index='FORMATTED_DATE', columns='BDR_name', va
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
 
-blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+blue_palette = ['#92a8d1', '#034f84', '#f7cac9', '#f7786b', '#eea29a', '#c94c4c', '#deeaee']
 
 for i, vendor in enumerate(df_t1_pivot.columns):
     visits_stacked.add_trace(go.Bar(
