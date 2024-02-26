@@ -924,13 +924,16 @@ legend_names = ['Customer', 'Force', 'Grow']
 
 # Add a trace for each order type
 for i, column in enumerate(['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']):
+    text = [value if value != 0 else '' for value in df_t3_sorted_new3[column]]
+    
     order_stacked_channel.add_trace(go.Bar(
         x=df_t3_sorted_new3['FORMATTED_DATE'],
         y=df_t3_sorted_new3[column],
         name=legend_names[i],
-        text=df_t3_sorted_new3[column],
-        textposition='outside',
-        marker_color=blue_palette2[i % len(blue_palette2)]  # Use the color palette
+        text=text,
+        textposition='inside',  # Change to 'inside' to ensure text fits inside the bar
+        texttemplate='%{text:.0f}',  # Use this to format the numbers with 0 decimal places
+        marker_color=blue_palette2[i % len(blue_palette2)]  # Use the light red palette
     ))
 
 # Update the layout of the figure to stack the bars
