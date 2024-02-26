@@ -1022,16 +1022,11 @@ df_t3_renamed_gmv = df_t3.rename(columns={
 })
 
 df_t3_sorted_gmv = df_t3_renamed_gmv.sort_values(by='DAY', ascending=True)
-
 df_t3_gmv_empilhado = df_t3_sorted_gmv.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
-
 df_t3_gmv_empilhado['FORMATTED_DATE'] = df_t3_gmv_empilhado['DAY'].dt.strftime('%d-%b')
-
 df_t3_gmv_empilhado = df_t3_gmv_empilhado.sort_values(by='DAY', ascending=True)
 
-df_t3_gmv_empilhado = df_t3_gmv_empilhado['Customer'].apply(custom_format)
-df_t3_gmv_empilhado = df_t3_gmv_empilhado['Force'].apply(custom_format)
-df_t3_gmv_empilhado = df_t3_gmv_empilhado['Grow'].apply(custom_format)
+df_t3_gmv_empilhado[['Customer', 'Force', 'Grow']] = df_t3_gmv_empilhado[['Customer', 'Force', 'Grow']].applymap(custom_format)
 
 blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
 
