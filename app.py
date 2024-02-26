@@ -1256,7 +1256,7 @@ html_t5 = df_estilizado_t5.to_html()
 ###### Joined Force kpi
 
 df_joined = df_t4_grouped_sort.join(df_t5_grouped_sort, how='outer', lsuffix='_t4', rsuffix='_t5')
-df_joined_sort = df_joined.sort_values(by='TOTAL_TASKS_t4', ascending=False)
+df_joined_sort = df_joined.sort_values(by='TOTAL_TASKS', ascending=False)
 all_columns = cols_t4 + cols_t5
 df_estilizado_joined = style_table(df_joined_sort, all_columns)
 force_html = df_estilizado_joined.to_html()
@@ -1264,6 +1264,79 @@ force_html = df_estilizado_joined.to_html()
 
 ############### Tasks stacked
 
+df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
+df_t4_sort = df_t4.sort_values(by='DATE', ascending=True)
+df_t4_sort['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b')
+df_t4_stacked_bar = df_t4_sort.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_TASKS'].sum().reset_index()
+df_t4_stacked_bar['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_bar['FORMATTED_DATE'], format='%d-%b')
+df_t4_pivot = df_t4_stacked_bar.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_TASKS').fillna(0)
+
+df_t4_stacked_line = df_t4_sort.groupby(['FORMATTED_DATE', 'BDR_name'])['TASK_EFFECTIVENESS'].mean().reset_index()
+df_t4_stacked_line['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_line['FORMATTED_DATE'], format='%d-%b')
+df_t4_pivot_line = df_t4_stacked_line.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TASK_EFFECTIVENESS').fillna(0)
+df_t4_pivot_line.index = df_t4_pivot_line.index.strftime('%d-%b')
+
+
+df_t4_pivot.index = df_t4_pivot.index.strftime('%d-%b')
+tasks_stacked = go.Figure()
+
+blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+
+for i, vendor in enumerate(df_t4_pivot.columns):
+    tasks_stacked.add_trace(go.Bar(
+        x=df_t4_pivot.index, 
+        y=df_t4_pivot[vendor], 
+        name=vendor,
+        marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
+        text=[f'{v}' if v != 0 else '' for v in df_t4_pivot[vendor]],  # Use values as text labels
+        textposition='outside',  # Position labels outside the bars
+        hoverinfo='text',  # Set hover info
+        # Bar plot is associated with the left y-axis by default
+    ))
+
+# Add line traces for TASK_EFFECTIVENESS, associated with the secondary Y-axis
+for i, vendor in enumerate(df_t4_pivot_line.columns):
+    line_color = f"rgba({255 - i*30}, {100 + i*30}, {100 + i*20}, 1)"
+    tasks_stacked.add_trace(go.Scatter(
+        x=df_t4_pivot_line.index,
+        y=df_t4_pivot_line[vendor],
+        name=f"{vendor} Effectiveness",
+        mode='lines+markers',
+        line=dict(color=line_color),
+        hoverinfo='y',
+        yaxis='y2'  # Associate this trace with the secondary y-axis
+    ))
+
+# Update the layout to accommodate the stacked bars and secondary Y-axis for percentages
+tasks_stacked.update_layout(
+    barmode='stack',
+    title='Daily Tasks and Effectiveness by BDR',
+    xaxis=dict(
+        tickangle=-90,
+        tickmode='linear',
+        dtick=1,
+        type='category'
+    ),
+    yaxis=dict(
+        title='Total Tasks',
+        showgrid=False,  # Hide grid lines for the primary Y-axis
+    ),
+    yaxis2=dict(
+        title='Task Effectiveness (%)',
+        overlaying='y',  # This specifies that yaxis2 is overlaying the primary y-axis
+        side='right',  # Position the secondary Y-axis on the right
+        showgrid=False,  # Optionally hide grid lines for the secondary Y-axis
+        range=[0, 100]  # Since it's a percentage, the range is set from 0 to 100
+    ),
+    legend=dict(
+        orientation='h',
+        yanchor='bottom',
+        y=1.02,
+        xanchor='right',
+        x=1
+    ),
+    plot_bgcolor='rgba(0,0,0,0)'
+)
 
 #------------------------------------------------------------------------------------------------------
 #### App
