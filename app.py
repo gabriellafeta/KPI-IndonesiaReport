@@ -520,7 +520,7 @@ df_t1_pivot = df_t1_stacked.pivot(index='VISIT_DATE', columns='BDR_name', values
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
 
-blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5']
+blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
 
 for i, vendor in enumerate(df_t1_pivot.columns):
     visits_stacked.add_trace(go.Bar(
@@ -564,14 +564,14 @@ visits_stacked.update_layout(
     title='Daily Visits by Vendor',
     showlegend=True,
     legend=dict(
-        title='Vendor',
         orientation='h',
-        yanchor='bottom',
-        y=1.02,
-        xanchor='left',
-        x=1
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=100)
     )
-)
 
 all_dates = pd.date_range(start=df_t1_pivot.index.min(), end=df_t1_pivot.index.max())
 
