@@ -1029,8 +1029,6 @@ df_t3_gmv_empilhado = df_t3_gmv_empilhado.sort_values(by='DAY', ascending=True)
 blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
 
 df_t3_gmv_empilhado['Customer'] = df_t3_gmv_empilhado['Customer'].apply(custom_format)
-df_t3_gmv_empilhado['Force'] = df_t3_gmv_empilhado['Force'].apply(custom_format)
-df_t3_gmv_empilhado['Grow'] = df_t3_gmv_empilhado['Grow'].apply(custom_format)
 
 gmv_stacked_channel = px.bar(
     df_t3_gmv_empilhado, 
