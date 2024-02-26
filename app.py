@@ -1108,8 +1108,15 @@ for trace in gmvbdr_stacked.data:
 
 gmvbdr_stacked.update_layout(barmode='stack', title='Daily GMV by BDR', xaxis_title='', yaxis_title='')
 
-for i, trace in enumerate(gmvbdr_stacked.data):
-    trace.text = [f'{v}' if v != 0 else '' for v in df_t3_pivot_gmvbdr[trace.name]]
+for trace in gmvbdr_stacked.data:
+    formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
+    trace.update(
+        hoverinfo='text',
+        hovertext=[f"<b>{trace.name}</b><br>{custom_format(y)} PHP" for y in trace.y],
+        text=formatted_text,
+        texttemplate='%{text}',
+        textposition='outside'
+    )
 
 gmvbdr_stacked.update_layout(
     barmode='stack',
