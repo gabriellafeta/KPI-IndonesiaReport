@@ -917,12 +917,15 @@ df_t3_nozero = df_t3[(df_t3['count_placed_orders_customer'] != 0) |
                      (df_t3['count_placed_orders_force'] != 0) | 
                      (df_t3['count_placed_orders_grow'] != 0)]
 
+
+df_t3_nozero['FORMATTED_DATE'] = df_t3_nozero['DAY'].dt.strftime('%d-%b')
+
 df_t3_nozero_renamed = df_t3_nozero.rename(columns={'count_placed_orders_customer': 'Customer',
                                                      'count_placed_orders_force': 'Force', 
                                                      'count_placed_orders_grow': 'Grow'})
 
 
-df_t3_order_empilhado = df_t3_nozero_renamed.groupby('DAY')[['Customer',
+df_t3_order_empilhado = df_t3_nozero_renamed.groupby('FORMATTED_DATE')[['Customer',
                                                     'Force',
                                                     'Grow']].sum().reset_index()
 
@@ -930,7 +933,7 @@ blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
 
 order_stacked_channel = px.bar(
     df_t3_order_empilhado, 
-    x='DAY', 
+    x='FORMATTED_DATE', 
     y=['Customer', 'Force', 'Grow'],
     title='BEES Order Stacked per Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
