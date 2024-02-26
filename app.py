@@ -911,20 +911,20 @@ order_stacked.update_layout(
     height=600
     )
 
-##### Orders Stacked by Channel
+################### Orders Stacked by Channel
+
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sorted_new2 = df_t3.sort_values(by='DAY')
 
-# Sort the DataFrame by 'DAY'
-df_t3_sorted = df_t3.sort_values(by='DAY')
+df_t3_sorted_new2['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
 
-# Create the figure for the stacked bar chart
 order_stacked_channel = go.Figure()
 
 # Add a trace for each order type
 for i, column in enumerate(['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']):
     order_stacked_channel.add_trace(go.Bar(
-        x=df_t3_sorted['DAY'],
-        y=df_t3_sorted[column],
+        x=df_t3_sorted_new2['FORMATTED_DATE'],
+        y=df_t3_sorted_new2[column],
         name=column,
         marker_color=blue_palette[i % len(blue_palette)]  # Use the color palette
     ))
@@ -964,7 +964,7 @@ order_stacked_channel.update_layout(
     ),
     plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
     barmode='stack',
-    title='Daily Orders by BDR',
+    title='Daily Orders by Channel',
     showlegend=True,
     legend=dict(
         orientation='h',
