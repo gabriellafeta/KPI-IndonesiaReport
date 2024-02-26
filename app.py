@@ -1261,6 +1261,52 @@ all_columns = cols_t4 + cols_t5
 df_estilizado_joined = style_table(df_joined_sort, all_columns)
 force_html = df_estilizado_joined.to_html()
 
+###### GPS table by day
+
+df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
+df_t5_sort_gps = df_t5.sort_values(by='DATE', ascending=True)
+df_t5_sort_gps['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b')
+df_t5['GPS'] = df_t5['GPS'].astype(float)
+
+pivot_df_tgps = df_t5_sort_gps.pivot_table(
+    index='BDR_name', 
+    columns='DATE', 
+    values='GPS', 
+    aggfunc='mean'
+)
+
+pivot_df_tgps = pivot_df_tgps.reindex(sorted(pivot_df_tgps.columns), axis=1)
+pivot_df_tgps.columns = [date.strftime('%d-%b') for date in pivot_df_tgps.columns]
+
+pivot_df_tgps_formatted = pivot_df_tgps.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "")
+all_columns_B = pivot_df_tgps_formatted.columns.tolist()
+gps_table = style_table(pivot_df_tgps_formatted, all_columns_B)
+
+gps_table_html = gps_table.to_html()
+
+###### GPS Quality table by day
+
+df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
+df_t5_sort_gpsq = df_t5.sort_values(by='DATE', ascending=True)
+df_t5_sort_gpsq['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b')
+df_t5['GPS_QUALITY'] = df_t5['GPS_QUALITY'].astype(float)
+
+pivot_df_tgpsq = df_t5_sort_gps.pivot_table(
+    index='BDR_name', 
+    columns='DATE', 
+    values='GPS_QUALITY', 
+    aggfunc='mean'
+)
+
+pivot_df_tgpsq = pivot_df_tgpsq.reindex(sorted(pivot_df_tgpsq.columns), axis=1)
+pivot_df_tgpsq.columns = [date.strftime('%d-%b') for date in pivot_df_tgpsq.columns]
+
+pivot_df_tgpsq_formatted = pivot_df_tgpsq.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "")
+all_columns_C = pivot_df_tgpsq_formatted.columns.tolist()
+gpsq_table = style_table(pivot_df_tgps_formatted, all_columns_C)
+
+gpsq_table_html = gpsq_table.to_html()
+
 ###### Task table by day
 
 df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
@@ -1398,6 +1444,9 @@ with aba0:
     colR = st.columns(1)
     colS = st.columns(1)
     colS_1 = st.columns(1)
+    colS_2 = st.columns(1)
+    colS_3 = st.columns(1)
+
 
 # Colunas
 
@@ -1611,3 +1660,31 @@ with colS_1[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(taskeffect_table_html, unsafe_allow_html=True)
+
+with colS_2[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada4 {
+        font-size: 20px;
+        font-style: bold
+    }
+    </style>
+    <div class="fonte-personalizada4">
+        GPS by day
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown(gps_table_html, unsafe_allow_html=True)
+
+with colS_3[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada4 {
+        font-size: 20px;
+        font-style: bold
+    }
+    </style>
+    <div class="fonte-personalizada4">
+        GPS Quality by day
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown(gpsq_table_html, unsafe_allow_html=True)
