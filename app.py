@@ -1110,7 +1110,7 @@ for trace in gmv_stacked_channel.data:
     formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
     trace.update(
         hoverinfo='text',
-        hovertext=[f"<b>{x}</b><br>{trace.name}: {custom_format(y)} PHP" for x, y in zip(df_t3_gmv_empilhado['FORMATTED_DATE'], trace.y)],
+        hovertext=[f"<b>{x}</b><br>{trace.name}: {custom_format(y)}" for x, y in zip(df_t3_gmv_empilhado['FORMATTED_DATE'], trace.y)],
         text=formatted_text,
         texttemplate='%{text}',  # Use the formatted text
         textposition='outside'
@@ -1153,7 +1153,7 @@ for trace in gmvbdr_stacked.data:
     formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
     trace.update(
         hoverinfo='text',
-        hovertext=[f"<b>{trace.name}</b><br>{custom_format(y)} PHP" for y in trace.y],
+        hovertext=[f"<b>{trace.name}</b><br>{custom_format(y)}" for y in trace.y],
         text=formatted_text,
         texttemplate='%{text}',
         textposition='outside'
@@ -1165,7 +1165,7 @@ for trace in gmvbdr_stacked.data:
     formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
     trace.update(
         hoverinfo='text',
-        hovertext=[f"<b>{trace.name}</b><br>{custom_format(y)} PHP" for y in trace.y],
+        hovertext=[f"<b>{trace.name}</b><br>{custom_format(y)}" for y in trace.y],
         text=formatted_text,
         texttemplate='%{text}',
         textposition='outside'
