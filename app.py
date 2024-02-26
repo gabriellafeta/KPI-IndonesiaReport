@@ -1099,7 +1099,7 @@ for i, vendor in enumerate(df_t3_pivot_gmvbdr.columns):
 gmvbdr_stacked.update_layout(barmode='stack', title='Daily GMV by BDR', xaxis_title='', yaxis_title='')
 
 for i, trace in enumerate(gmvbdr_stacked.data):
-    trace.text = [f'{v}' if v != 0 else '' for v in df_t3_pivot[trace.name]]
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t3_pivot_gmvbdr[trace.name]]
 
 gmvbdr_stacked.update_layout(
     barmode='stack',
