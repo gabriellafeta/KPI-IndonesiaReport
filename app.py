@@ -986,7 +986,7 @@ buyer_stacked_channel = px.bar(
     df_t3_order_empilhado_buyer, 
     x='FORMATTED_DATE', 
     y=['Customer', 'Force', 'Grow'],
-    title='BEES Order Stacked by Channel',
+    title='BEES Buyers Stacked by Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
     color_discrete_sequence=blue_scale,
     text='value'
