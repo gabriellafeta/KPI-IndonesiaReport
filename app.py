@@ -1084,22 +1084,6 @@ gmvbdr_stacked = go.Figure()
 
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
 
-for i, vendor in enumerate(df_t3_pivot_gmvbdr.columns):
-    # Apply the custom format function to the text labels
-    text_labels = [custom_format(v) if v != 0 else '' for v in df_t3_pivot_gmvbdr[vendor]]
-    hover_texts = [f"<b>{df_t3_pivot_gmvbdr.index[j]}</b><br>{vendor}: {custom_format(v)} PHP" if v != 0 else '' for j, v in enumerate(df_t3_pivot_gmvbdr[vendor])]
-
-    gmvbdr_stacked.add_trace(go.Bar(
-        x=df_t3_pivot_gmvbdr.index, 
-        y=df_t3_pivot_gmvbdr[vendor],
-        name=vendor,
-        marker_color=blue_palette[i % len(blue_palette)],
-        text=text_labels,
-        textposition='outside',
-        hoverinfo='text',
-        hovertext=hover_texts
-    ))
-
 for trace in gmvbdr_stacked.data:
     formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
     trace.update(
