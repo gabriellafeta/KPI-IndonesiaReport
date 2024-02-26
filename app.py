@@ -919,7 +919,7 @@ df_t3_sorted_new3 = df_t3.sort_values(by='DAY')
 df_t3_sorted_new3['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
 
 order_stacked_channel = go.Figure()
-# light_red_palette = ['#ffcccc', '#ffb3b3', '#ff9999']
+blue_palette2 = ['#1f77b4', '#aec7e8', '#c6dbef']
 legend_names = ['Customer', 'Force', 'Grow']
 
 # Add a trace for each order type
@@ -930,7 +930,7 @@ for i, column in enumerate(['count_placed_orders_customer', 'count_placed_orders
         name=legend_names[i],
         text=df_t3_sorted_new3[column],
         textposition='outside',
-        marker_color=blue_palette[i % len(blue_palette)]  # Use the color palette
+        marker_color=blue_palette2[i % len(blue_palette2)]  # Use the color palette
     ))
 
 # Update the layout of the figure to stack the bars
