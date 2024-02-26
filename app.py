@@ -1079,7 +1079,7 @@ df_t3_stacked_gmvbdr = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['T
 df_t3_stacked_gmvbdr['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked_gmvbdr['FORMATTED_DATE'], format='%d-%b')
 df_t3_pivot_gmvbdr = df_t3_stacked_gmvbdr.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_SALES').fillna(0)
 
-df_t3_pivot_gmvbdr = df_t3_pivot.index.strftime('%d-%b')
+df_t3_pivot_gmvbdr = df_t3_pivot_gmvbdr.index.strftime('%d-%b')
 gmvbdr_stacked = go.Figure()
 
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
