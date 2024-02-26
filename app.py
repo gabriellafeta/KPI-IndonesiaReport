@@ -842,6 +842,77 @@ kpi3_barplot_cum.update_layout(
     height=400  # You can also adjust the height if necessary
 )
 
+####### Orders stacked
+
+df_t3['c'] = df_t3['TOTAL_ORDERS'].apply(lambda x: f'{x:.0f}')
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
+df_t3_sort_new['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
+df_t3_stacked = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['order_format'].sum().reset_index()
+df_t3_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked['FORMATTED_DATE'], format='%d-%b')
+df_t3_pivot = df_t3_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='order_format').fillna(0)
+
+df_t3_pivot.index = df_t3_pivot.index.strftime('%d-%b')
+order_stacked = go.Figure()
+
+blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+
+for i, vendor in enumerate(df_t3_pivot.columns):
+    text_labels = [f'{v}' if v != '0' else '' for v in df_t3_pivot[vendor]]
+
+    order_stacked.add_trace(go.Bar(
+        x=df_t2_pivot.index, 
+        y=df_t2_pivot[vendor], 
+        name=vendor,
+        marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
+        text=text_labels,  # Use the prepared text labels
+        textposition='outside'  # Position labels outside the bars
+    ))
+
+order_stacked.update_layout(barmode='stack', title='Daily Order by BDR', xaxis_title='', yaxis_title='')
+for i, trace in enumerate(order_stacked.data):
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot[trace.name]]
+
+# Customizing the figure's layout
+order_stacked.update_layout(
+    barmode='stack',
+    title='Daily Visits by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
+
+
+order_stacked.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Visits by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
+
+
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
 
@@ -996,6 +1067,7 @@ with aba0:
     colK_2 = st.columns(1)
     colK_3 = st.columns(1)
     colK_4 = st.columns(1)
+    colK_5 = st.columns(1)
     colL = st.columns(1)
     colM = st.columns(1)
     colN = st.columns(1)
@@ -1156,6 +1228,10 @@ with colK_2[0]:
     
 with colK_3[0]:
     st.plotly_chart(kpi3_barplot_cum, use_container_width=True)
+
+with colK_4[0]:
+    st.plotly_chart(order_stacked, use_container_width=True)
+
 
 with colK_4[0]:
     st.download_button(
