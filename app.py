@@ -514,8 +514,10 @@ kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 
 #### Visits stacked
 
-df_t1_stacked = df_t1.groupby(['VISIT_DATE', 'BDR_name'])['VISITED_STORES'].sum().reset_index()
-df_t1_pivot = df_t1_stacked.pivot(index='VISIT_DATE', columns='BDR_name', values='VISITED_STORES').fillna(0)
+df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+df_t1['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b')
+df_t1_stacked = df_t1.groupby(['FORMATTED_DATE', 'BDR_name'])['VISITED_STORES'].sum().reset_index()
+df_t1_pivot = df_t1_stacked.pivot(index='FORMATTED_DATE', columns='BDR_name', values='VISITED_STORES').fillna(0)
 
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
@@ -533,7 +535,8 @@ for i, vendor in enumerate(df_t1_pivot.columns):
     ))
 
 visits_stacked.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
-
+for i, trace in enumerate(visits_stacked.data):
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t1_pivot[trace.name]]
 
 # Customizing the figure's layout
 visits_stacked.update_layout(
@@ -572,14 +575,6 @@ visits_stacked.update_layout(
     ),
     margin=dict(b=100)
     )
-
-all_dates = pd.date_range(start=df_t1_pivot.index.min(), end=df_t1_pivot.index.max())
-
-visits_stacked.update_xaxes(
-    tickvals=all_dates,
-    ticktext=[date.strftime('%d-%m') for date in all_dates],
-    tickangle=90
-)
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
 #### Agregado por dia
