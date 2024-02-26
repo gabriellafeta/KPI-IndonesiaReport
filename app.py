@@ -914,50 +914,42 @@ order_stacked.update_layout(
 
 ##### Orders Stacked by Channel
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
-df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
 
-# Create a column for each order type with the day as the index
-df_t3_pivot_channel = df_t3_sort_new.pivot(index='DAY', values=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']).fillna(0)
+# Sort the DataFrame by 'DAY'
+df_t3_sorted = df_t3.sort_values(by='DAY')
 
-# Convert the index back to the formatted date string for display
-df_t3_pivot_channel.index = df_t3_pivot_channel.index.strftime('%d-%b')
-
+# Create the figure for the stacked bar chart
 order_stacked_channel = go.Figure()
 
-# Define the order types and corresponding colors
-order_types = ['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']
-colors = ['#1f77b4', '#aec7e8', '#c6dbef']
-
 # Add a trace for each order type
-for order_type, color in zip(order_types, colors):
-    order_stacked_channel.add_trace(go.Bar(
-        x=df_t3_pivot_channel.index, 
-        y=df_t3_pivot_channel[order_type], 
-        name=order_type,
-        marker_color=color,
-        text=df_t3_pivot_channel[order_type].apply(lambda x: f'{x:.0f}' if x != 0 else ''),
-        textposition='outside'
+for i, column in enumerate(['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']):
+    order_stacked.add_trace(go.Bar(
+        x=df_t3_sorted['DAY'],
+        y=df_t3_sorted[column],
+        name=column,
+        marker_color=blue_palette[i % len(blue_palette)]  # Use the color palette
     ))
 
-# Update the layout
+# Update the layout of the figure to stack the bars
 order_stacked_channel.update_layout(
     barmode='stack',
-    title='Daily Orders by Order Channel',
-    xaxis_title='',
-    yaxis_title='',
-    xaxis_tickangle=-90,
-    yaxis={'visible': True, 'showticklabels': True},
-    plot_bgcolor='rgba(0,0,0,0)',
-    xaxis={'showgrid': False},
+    title='Daily Orders',
+    xaxis=dict(
+        title='Day',
+        type='date'  # This ensures that the x-axis is treated as a date
+    ),
+    yaxis=dict(
+        title='Total Orders'
+    ),
     legend=dict(
+        title='Order Type',
         orientation='h',
-        yanchor='top',
-        y=-0.2,
+        yanchor='bottom',
+        y=-0.15,
         xanchor='center',
         x=0.5
     ),
-    margin=dict(b=50),
-    height=600
+    margin=dict(b=100),  # Adjust the bottom margin to fit the legend
 )
 
 
