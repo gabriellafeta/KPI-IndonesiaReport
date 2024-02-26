@@ -1270,10 +1270,13 @@ df_t4['TASK_EFFECTIVENESS'] = df_t4['TASK_EFFECTIVENESS'].astype(float)
 
 pivot_df_teff = df_t4_sort_eff.pivot_table(
     index='BDR_name', 
-    columns='FORMATTED_DATE', 
+    columns='DATE', 
     values='TASK_EFFECTIVENESS', 
     aggfunc='mean'
 )
+
+pivot_df_teff = pivot_df_teff.reindex(sorted(pivot_df_teff.columns), axis=1)
+pivot_df_teff.columns = [date.strftime('%d-%b') for date in pivot_df_teff.columns]
 
 pivot_df_teff_formatted = pivot_df_teff.applymap(lambda x: f"{x:.0%}" if pd.notnull(x) else "")
 all_columns_A = pivot_df_teff_formatted.columns.tolist()
@@ -1596,4 +1599,15 @@ with colS[0]:
     st.plotly_chart(tasks_stacked, use_container_width=True)
 
 with colS_1[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada4 {
+        font-size: 20px;
+        font-style: bold
+    }
+    </style>
+    <div class="fonte-personalizada4">
+        Task Effect by day
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown(taskeffect_table_html, unsafe_allow_html=True)
