@@ -1100,6 +1100,15 @@ for i, vendor in enumerate(df_t3_pivot_gmvbdr.columns):
         hovertext=hover_texts
     ))
 
+for trace in df_t3_pivot_gmvbdr.data:
+    formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
+    trace.update(
+        hoverinfo='text',
+        hovertext=[f"<b>{x}</b><br>{trace.name}: {custom_format(y)} PHP" for x, y in zip(df_t3_pivot_gmvbdr['FORMATTED_DATE'], trace.y)],
+        text=formatted_text,
+        texttemplate='%{text}',  # Use the formatted text
+        textposition='outside'
+    )
 
 gmvbdr_stacked.update_layout(barmode='stack', title='Daily GMV by BDR', xaxis_title='', yaxis_title='')
 
