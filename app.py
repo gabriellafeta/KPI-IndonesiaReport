@@ -930,11 +930,10 @@ order_stacked_channel.update_traces(
     hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>")
 
 order_stacked_channel.update_layout(
-    xaxis=dict(tickangle=90, title=None),  
+    xaxis=dict(tickangle=90, title=None, tickmode='linear'),  
     yaxis=dict(showgrid=False, title=None),
     showlegend=True,
-    plot_bgcolor='white',
-    tickmode='linear')
+    plot_bgcolor='white')
 
 
 
