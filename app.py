@@ -844,7 +844,7 @@ kpi3_barplot_cum.update_layout(
 
 ####### Orders stacked
 
-df_t3['c'] = df_t3['TOTAL_ORDERS'].apply(lambda x: f'{x:.0f}')
+df_t3['order_format'] = df_t3['TOTAL_ORDERS'].apply(lambda x: f'{x:.0f}')
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
 df_t3_sort_new['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
