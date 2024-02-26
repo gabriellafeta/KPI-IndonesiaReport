@@ -937,11 +937,12 @@ order_stacked_channel.update_layout(
         xanchor='center',
         x=0.5  # Center the legend on the x-axis
     ),
-    plot_bgcolor='white')
+    plot_bgcolor='white',
+    height=600)
 
 for trace in order_stacked_channel.data:
     non_zero_text = [t if t != 0 else '' for t in trace.y]
-    
+
     trace.update(
         text=non_zero_text,
         texttemplate='%{text}',  # Since we've already formatted text, we use '%{text}'
