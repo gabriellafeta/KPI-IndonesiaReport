@@ -933,7 +933,8 @@ order_stacked_channel.update_layout(
     xaxis=dict(tickangle=90, title=None),  
     yaxis=dict(showgrid=False, title=None),
     showlegend=True,
-    plot_bgcolor='white')
+    plot_bgcolor='white',
+    tickmode='linear')
 
 
 
