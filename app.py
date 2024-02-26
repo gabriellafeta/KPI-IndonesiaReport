@@ -151,26 +151,36 @@ blob_content_logo = blob_client_logo.download_blob().readall()
 ### Alias column for BDR
 
 BDR_dict = {
-    "5653270_SMC004": "Bram",
-    "6389058_BDR001": "Harris",
-    "6658562_BDR001": "Cheryl",
-    "6421535_BDR001": "Christian",
-    "6828128_BDR001": "Iwan Dwiarsono",
-    "6713130_BDR001": "Dian",
-    "6174675_BDR001": "Alvis"
+    "6389058_BDR001": "Dinamis Artha Sukses",
+    "6658562_BDR001": "RMS Jakarta Selatan",
+    "6421535_BDR001": "RMS Depok",
+    "6828128_BDR001": "RMS Bogor",
+    "6713130_BDR001": "RMS Bekasi",
+    "5653270_BDR001":"ASR",
+    "6174675_BDR001": "CMP"
 }
 
-df_t1['BDR_name'] = df_t1['BDR_ID'].map(BDR_dict)
+df_t1['BDR_name'] = df_t2['BDR_ID'].map(BDR_dict)
+df_t2['BDR_name'] = df_t2['bdr_id'].map(BDR_dict)
+df_t2['BDR_name'] = df_t2['bdr_id'].map(BDR_dict)
+df_t2['BDR_name'] = df_t2['BDR_ID'].map(BDR_dict)
+df_t2['BDR_name'] = df_t2['BDR_ID'].map(BDR_dict)
+
+df_t1 = df_t1[df_t1['BDR_name'].notnull()]
+df_t2 = df_t2[df_t2['BDR_name'].notnull()]
+df_t3 = df_t3[df_t3['BDR_name'].notnull()]
+df_t4 = df_t4[df_t4['BDR_name'].notnull()]
+df_t5 = df_t5[df_t5['BDR_name'].notnull()]
 
 ### Tabelas para KPI 1 - N de visitas
 
-df_t1_bram = df_t1[df_t1['BDR_name'] == 'Bram']
-df_t1_harris = df_t1[df_t1['BDR_name'] == 'Harris']
-df_t1_cheryl = df_t1[df_t1['BDR_name'] == 'Cheryl']
-df_t1_christian = df_t1[df_t1['BDR_name'] == 'Christian']
-df_t1_iwan = df_t1[df_t1['BDR_name'] == 'Iwan Dwiarsono']
-df_t1_dian = df_t1[df_t1['BDR_name'] == 'Dian']
-df_t1_alvis = df_t1[df_t1['BDR_name'] == 'Alvis']
+df_t1_bram = df_t1[df_t1['BDR_name'] == 'Dinamis Artha Sukses']
+df_t1_harris = df_t1[df_t1['BDR_name'] == 'RMS Jakarta Selatan']
+df_t1_cheryl = df_t1[df_t1['BDR_name'] == 'RMS Depok']
+df_t1_christian = df_t1[df_t1['BDR_name'] == 'RMS Bogor']
+df_t1_iwan = df_t1[df_t1['BDR_name'] == 'RMS Bekasi']
+df_t1_dian = df_t1[df_t1['BDR_name'] == 'ASR']
+df_t1_alvis = df_t1[df_t1['BDR_name'] == 'CMP']
 
 # Data to csv for downloading button
 
