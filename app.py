@@ -1056,19 +1056,13 @@ gmv_stacked_channel.update_layout(
     height=600)
 
 for trace in gmv_stacked_channel.data:
+    formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
     trace.update(
-        text=[millions_formatter(value) for value in trace.y],
+        text=formatted_text,
+        texttemplate='%{text}',  # Use the formatted text
         textposition='outside'
     )
-
-for trace in gmv_stacked_channel.data:
-    non_zero_text = [t if t != 0 else '' for t in trace.y]
-
-    trace.update(
-        text=non_zero_text,
-        texttemplate='%{text}',  # Since we've already formatted text, we use '%{text}'
-        textposition='outside'
-    )
+    
 gmv_stacked_channel.update_traces(
     hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>")
 
