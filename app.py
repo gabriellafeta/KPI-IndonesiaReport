@@ -934,7 +934,7 @@ order_stacked_channel = px.bar(
     df_t3_order_empilhado, 
     x='FORMATTED_DATE', 
     y=['Customer', 'Force', 'Grow'],
-    title='BEES Order Stacked per Channel',
+    title='BEES Order Stacked by Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
     color_discrete_sequence=blue_scale,
     text='value'
@@ -1212,20 +1212,6 @@ with colH[0]:
     </div>
     """, unsafe_allow_html=True)
 
-with colH_2[0]:
-    st.markdown("""
-    <style>
-    .fonte-personalizada3 {
-        font-size: 10px;
-        font-style: italic
-    }
-    </style>
-    <div class="fonte-personalizada3">
-        Up to 23/02/2024 There were a considerable amount of null values in BDR columns.
-        For Those Values delivery_center_id was considered instead.
-    </div>
-    """, unsafe_allow_html=True)
-
 with colH_1[0]:
     st.plotly_chart(kpi2_all_barplot_bdr, use_container_width=True)
 
@@ -1254,20 +1240,6 @@ with colJ[0]:
     </style>
     <div class="fonte-personalizada2">
         3.	Number of stores adopted (place order via apps) per day per BDR.
-    </div>
-    """, unsafe_allow_html=True)
-
-with colK[0]:
-    st.markdown("""
-    <style>
-    .fonte-personalizada3 {
-        font-size: 10px;
-        font-style: italic
-    }
-    </style>
-    <div class="fonte-personalizada3">
-        Up to 23/02/2024 There were a considerable amount of null values in BDR columns.
-        Null values treated as "TBD".
     </div>
     """, unsafe_allow_html=True)
 
