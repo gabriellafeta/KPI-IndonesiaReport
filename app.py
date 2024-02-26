@@ -549,7 +549,7 @@ kpi2_barplot_dateagg.update_layout(
 
 df_aggregated_t2_BDR = df_t2_sorted.groupby('BDR_name')['count_registered_stores'].sum().reset_index()
 df_aggregated_t2_BDR_sorted = df_aggregated_t2_BDR.sort_values(by='count_registered_stores', ascending = False)
-kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='bdr_name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='BDR_name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr.update_layout(
