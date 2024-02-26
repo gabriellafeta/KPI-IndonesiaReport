@@ -1219,7 +1219,7 @@ df_t4_grouped_sort = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False
 
 cols_t4 = ['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']
 
-def style_table(df, columns, font_size='12pt'):
+def style_table(df, columns, font_size='10pt'):
     def format_with_dots(value):
         if isinstance(value, (int, float)):
             return '{:,.0f}'.format(value).replace(',', '.')
