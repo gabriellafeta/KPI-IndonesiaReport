@@ -921,12 +921,16 @@ df_t3_orders_empilhado = df_t3_sorted_new3.groupby('FORMATTED_DATE')[['count_pla
 df_t3_orders_empilhado['total_order_ref'] = df_t3_orders_empilhado[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum(axis=1)
 df_t3_orders_empilhado = df_t3_orders_empilhado.sort_values(by='FORMATTED_DATE', ascending=False)
 
+df_long_channel = df_t3_sorted_new3.melt(id_vars='FORMATTED_DATE', 
+                                  value_vars=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
+                                  var_name='Order Type', value_name='Total Orders')
+
 order_stacked_chanel = px.bar(
-    df_t3_orders_empilhado, 
+    df_long_channel, 
     x='FORMATTED_DATE', 
     y=['count_placed_orders_customer', 'gmv_placed_force', 'gmv_placed_grow'],
     title='BEES Sales Stacked per BDR',
-    labels={'value': 'GMV', 'variable': 'Category'},  # Keeps the axis labels
+    labels={'value': 'Order', 'variable': 'Channel'},
     color_discrete_map={
         'gmv_placed_customer': '#1f77b4',
         'gmv_placed_force': '#aec7e8',
