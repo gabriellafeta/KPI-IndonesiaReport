@@ -1014,8 +1014,6 @@ kpi4_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 )
 
 # GVM Stacked per Channel
-def millions_formatter(value):
-    return '{:,.1f} M'.format(value/1000000) if value >= 1000000 else '{:,.0f} K'.format(value/1000) if value >= 1000 else str(value)
 
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_renamed_gmv = df_t3.rename(columns={
@@ -1058,19 +1056,22 @@ gmv_stacked_channel.update_layout(
 for trace in gmv_stacked_channel.data:
     formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
     trace.update(
+        hoverinfo='text',
+        hovertext=[f"<b>{x}</b><br>{trace.name}: {custom_format(y)} PHP" for x, y in zip(df_t3_gmv_empilhado['FORMATTED_DATE'], trace.y)],
         text=formatted_text,
         texttemplate='%{text}',  # Use the formatted text
         textposition='outside'
     )
-    
-gmv_stacked_channel.update_traces(
-    hovertemplate="<b>%{x}</b><br>%{data.name}: %{y:PHP,.2s}<extra></extra>")
 
 gmv_stacked_channel.update_layout(
     xaxis=dict(tickangle=90, title=None),  
     yaxis=dict(showgrid=False, title=None),
     showlegend=True,
     plot_bgcolor='white')
+
+##### GMV Stacked by BDR
+
+
 
 #------------------------------------------------------------------------------------------------------
 ####### KPI - 5.	No of BDR tasks completed and task effectiveness 
