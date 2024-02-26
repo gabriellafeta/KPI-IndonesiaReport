@@ -1435,26 +1435,9 @@ with colO[0]:
     }
     </style>
     <div class="fonte-personalizada2">
-        5.	Tasks and Task Effectivness per BDR 
+        5.	Force KPI's
     </div>
     """, unsafe_allow_html=True)
 
 with colP[0]:
     st.markdown(force_html, unsafe_allow_html=True)
-
-with colQ[0]:
-    st.markdown("""
-    <style>
-    .fonte-personalizada2 {
-        font-size: 20px;
-        font-style: bold;
-        text-decoration: underline; /* This line adds the underline */
-    }
-    </style>
-    <div class="fonte-personalizada2">
-        6.	GPS check in and GPS quality
-    </div>
-    """, unsafe_allow_html=True)
-
-with colR[0]:
-    st.markdown(html_t5, unsafe_allow_html=True)
