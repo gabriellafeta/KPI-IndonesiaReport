@@ -1290,12 +1290,12 @@ for i, vendor in enumerate(df_t4_pivot.columns):
 
 tasks_stacked.update_layout(barmode='stack', title='Daily Tasks by BDR', xaxis_title='', yaxis_title='')
 for i, trace in enumerate(tasks_stacked.data):
-    trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot[trace.name]]
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t4_pivot[trace.name]]
 
 # Customizing the figure's layout
 tasks_stacked.update_layout(
     barmode='stack',
-    title='Daily Visits by BDR',
+    title='Daily Tasks by BDR',
     xaxis_title='',
     yaxis_title='',
     xaxis_tickangle=-90,
@@ -1318,7 +1318,7 @@ tasks_stacked.update_layout(
     ),
     plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
     barmode='stack',
-    title='Daily Registers by BDR',
+    title='Daily Tasks by BDR',
     showlegend=True,
     legend=dict(
         orientation='h',
