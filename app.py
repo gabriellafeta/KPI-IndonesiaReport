@@ -1104,7 +1104,7 @@ for trace in gmvbdr_stacked.data:
     formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
     trace.update(
         hoverinfo='text',
-        hovertext=[f"<b>{x}</b><br>{trace.name}: {custom_format(y)} PHP" for x, y in zip(df_t3_pivot_gmvbdr['BDR_name'], trace.y)],
+        hovertext=[f"<b>{trace.name}</b><br>{custom_format(y)} PHP" for y in trace.y],
         text=formatted_text,
         texttemplate='%{text}',
         textposition='outside'
