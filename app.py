@@ -1336,7 +1336,7 @@ tasks_stacked.update_layout(
         xanchor='right',
         x=1
     ),
-    plot_bgcolor='rgba(0,0,0,0)'  # Transparent background
+    plot_bgcolor='rgba(0,0,0,0)'
 )
 
 #------------------------------------------------------------------------------------------------------
