@@ -916,20 +916,10 @@ df_t3_nozero = df_t3[df_t3['Order_SUM'] != 0]
 df_t3_order_empilhado = df_t3_nozero.groupby('DAY')[['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']].sum().reset_index()
 blue_scale = ['#1f77b4', '#aec7e8', '#c6dbef']
 
-df_plot_t3orderstack = pd.melt(df_t3_order_empilhado, id_vars='DAY', value_vars=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'])
-
-legend_name_mapping = {
-    'count_placed_orders_customer': 'Customer',
-    'count_placed_orders_force': 'Force',
-    'count_placed_orders_grow': 'Grow'
-}
-
-df_plot_t3orderstack['Channel'] = df_plot_t3orderstack['variable'].map(legend_name_mapping)
-
 order_stacked_channel = px.bar(
-    df_plot_t3orderstack, 
+    df_t3_order_empilhado, 
     x='DAY', 
-    y='value',
+    y=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
     title='BEES Order Stacked per Channel',
     labels={'value': 'Orders', 'variable': 'Channel'},  # Keeps the axis labels
     color_discrete_sequence=blue_scale,
@@ -950,7 +940,13 @@ order_stacked_channel.update_layout(
     plot_bgcolor='white')
 
 for trace in order_stacked_channel.data:
-    trace.update(texttemplate='%{text:.0f}', textposition='outside')
+    non_zero_text = [t if t != 0 else '' for t in trace.y]
+    
+    trace.update(
+        text=non_zero_text,
+        texttemplate='%{text}',  # Since we've already formatted text, we use '%{text}'
+        textposition='outside'
+    )
 
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
