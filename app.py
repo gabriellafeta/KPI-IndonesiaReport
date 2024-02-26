@@ -1098,7 +1098,7 @@ for i, vendor in enumerate(df_t3_pivot_gmvbdr.columns):
 
 gmvbdr_stacked.update_layout(barmode='stack', title='Daily GMV by BDR', xaxis_title='', yaxis_title='')
 
-for trace in df_t3_pivot_gmvbdr.data:
+for trace in gmvbdr_stacked.data:
     formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
     trace.update(
         hoverinfo='text',
