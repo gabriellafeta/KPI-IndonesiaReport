@@ -917,72 +917,50 @@ df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sorted_new3 = df_t3.sort_values(by='DAY')
 
 df_t3_sorted_new3['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
-
-order_stacked_channel = go.Figure()
 blue_palette2 = ['#1f77b4', '#aec7e8', '#c6dbef']
 legend_names = ['Customer', 'Force', 'Grow']
 
-# Add a trace for each order type
-for i, column in enumerate(['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow']):
-    text = [value if value != 0 else '' for value in df_t3_sorted_new3[column]]
-    
-    order_stacked_channel.add_trace(go.Bar(
-        x=df_t3_sorted_new3['FORMATTED_DATE'],
-        y=df_t3_sorted_new3[column],
-        name=legend_names[i],
-        text=text,
-        textposition='inside',  # Change to 'inside' to ensure text fits inside the bar
-        texttemplate='%{text:.0f}',  # Use this to format the numbers with 0 decimal places
-        marker_color=blue_palette2[i % len(blue_palette2)]  # Use the light red palette
-    ))
+df_long = df_t3_sorted_new3.melt(id_vars='FORMATTED_DATE', 
+                                  value_vars=['count_placed_orders_customer', 'count_placed_orders_force', 'count_placed_orders_grow'],
+                                  var_name='Order Type', value_name='Total Orders')
 
-# Update the layout of the figure to stack the bars
-order_stacked_channel.update_layout(
-    barmode='stack',
-    title='Daily Orders',
-    xaxis=dict(
-        title='Day',
-        type='date'  # This ensures that the x-axis is treated as a date
-    ),
-    yaxis=dict(
-        title='Total Orders'
-    ),
-    legend=dict(
-        title='Order Type',
-        orientation='h',
-        yanchor='bottom',
-        y=-0.15,
-        xanchor='center',
-        x=0.5
-    ),
-    margin=dict(b=100),  # Adjust the bottom margin to fit the legend
+# Define the color sequence
+color_sequence = ['#1f77b4', '#aec7e8', '#c6dbef']
+
+# Create the bar chart
+order_stacked_channel = px.bar(
+    df_long,
+    x='FORMATTED_DATE',
+    y='Total Orders',
+    color='Order Type',  # This argument will stack the bars and color them
+    text='Total Orders',
+    color_discrete_sequence=color_sequence  # Use custom colors
 )
 
+# Update the layout
 order_stacked_channel.update_layout(
-    xaxis=dict(
-        tickmode='linear',
-        dtick=1,  # Set the interval between ticks to 1 day
-        tickangle=-90,  # Rotate labels by 90 degrees
-        type='category'  # This ensures that all categories (dates) are displayed
-    ),
-    yaxis=dict(
-        showticklabels=False,  # Hide Y-axis labels
-        showgrid=False,  # Hide grid lines
-    ),
-    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
     barmode='stack',
     title='Daily Orders by Channel',
-    showlegend=True,
+    xaxis=dict(
+        title='Day',
+        tickmode='linear',
+        dtick=1,
+        tickangle=-90
+    ),
+    yaxis=dict(
+        title='Total Orders',
+        showgrid=True
+    ),
+    legend_title_text='Order Type',
     legend=dict(
         orientation='h',
-        yanchor='top',
-        y=-0.2,  # You might need to adjust this value to fit your chart
-        xanchor='center',
-        x=0.5  # Center the legend on the x-axis
-    ),
-    margin=dict(b=50),
-    height=600
+        yanchor='bottom',
+        y=1.02,
+        xanchor='right',
+        x=1
     )
+)
+
 
 #------------------------------------------------------------------------------------------------------
 ####### KPI 4.	Sales value per day per BDR and Count of orders 
