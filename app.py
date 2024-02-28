@@ -1320,7 +1320,7 @@ df_t5_sort_gpsq = df_t5.sort_values(by='DATE', ascending=True)
 df_t5_sort_gpsq['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b')
 df_t5['GPS_QUALITY'] = df_t5['GPS_QUALITY'].astype(float)
 
-pivot_df_tgpsq = df_t5_sort_gps.pivot_table(
+pivot_df_tgpsq = df_t5_sort_gpsq.pivot_table(
     index='BDR_name', 
     columns='DATE', 
     values='GPS_QUALITY', 
