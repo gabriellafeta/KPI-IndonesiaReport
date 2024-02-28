@@ -1332,7 +1332,7 @@ pivot_df_tgpsq.columns = [date.strftime('%d-%b') for date in pivot_df_tgpsq.colu
 
 pivot_df_tgpsq_formatted = pivot_df_tgpsq.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
 all_columns_C = pivot_df_tgpsq_formatted.columns.tolist()
-gpsq_table = style_table(pivot_df_tgps_formatted, all_columns_C)
+gpsq_table = style_table(pivot_df_tgpsq_formatted, all_columns_C)
 
 gpsq_table_html = gpsq_table.to_html()
 
