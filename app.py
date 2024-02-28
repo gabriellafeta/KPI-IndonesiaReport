@@ -69,11 +69,11 @@ def formata_numero(valor, prefixo=''):
     if valor < 1000:
         return f'{prefixo}{valor:.2f}'
     elif valor < 1000000:
-        return f'{prefixo}{valor / 1000:.2f} k PHP'
+        return f'{prefixo}{valor / 1000:.2f} k IDR'
     elif valor < 1000000000:
-        return f'{prefixo}{valor / 1000000:.2f} mi PHP'
+        return f'{prefixo}{valor / 1000000:.2f} mi IDR'
     else:
-        return f'{prefixo}{valor / 1000000000:.2f} bi PHP'
+        return f'{prefixo}{valor / 1000000000:.2f} bi IDR'
     
 
 def formata_percentual(valor, sufixo='%'):
@@ -1064,12 +1064,12 @@ df_t3_sales_notnull_sort['TOTAL_SALES'] = df_t3_sales_notnull_sort['TOTAL_SALES'
 def custom_format(value):
     if value >= 1e6:  # If the value is in millions
         value = value / 1e6
-        return f'{value:.2f}M PHP'
+        return f'{value:.2f}M IDR'
     elif value >= 1e3:  # If the value is in thousands
         value = value / 1e3
-        return f'{value:.2f}K PHP'
+        return f'{value:.2f}K IDR'
     else:  # If the value is less than a thousand
-        return f'{value:.2f} PHP'
+        return f'{value:.2f} IDR'
 
 # Apply the formatting function to your sales data
 formatted_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].apply(custom_format)
