@@ -1516,8 +1516,8 @@ with colC_1[0]:
 with colC_2[0]:
     st.plotly_chart(kpi1_all_barplot_bdr_mtd, use_container_width=True)
 
-with colC_3[0]:
-    st.plotly_chart(visits_stacked, use_container_width=True)
+# with colC_3[0]:
+#     st.plotly_chart(visits_stacked, use_container_width=True)
 
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
