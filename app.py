@@ -549,6 +549,8 @@ df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['visits_f
 df_t1_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t1_stacked['FORMATTED_DATE'], format='mixed', errors='coerce')
 df_t1_pivot = df_t1_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='visits_format').fillna(0)
 
+
+df_t1_pivot = df_t1_stacked.pivot_table(index='DATE_FOR_SORTING', columns='BDR_name', values='visits_format', aggfunc='sum').fillna(0)
 df_t1_pivot.index = df_t1_pivot.index.strftime('%d-%b')
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
