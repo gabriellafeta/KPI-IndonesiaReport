@@ -544,12 +544,12 @@ kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 df_t1['visits_format'] = df_t1['VISITED_STORES'].apply(lambda x: f'{x:.0f}')
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
 df_t1_sort_new = df_t1.sort_values(by='VISIT_DATE', ascending=True)
-df_t1_sort_new['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b')
+df_t1_sort_new['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b-%Y')
 df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['visits_format'].sum().reset_index()
 df_t1_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t1_stacked['FORMATTED_DATE'], format='mixed', errors='coerce')
 df_t1_pivot = df_t1_stacked.pivot_table(index='DATE_FOR_SORTING', columns='BDR_name', values='visits_format', aggfunc='sum').fillna(0)
 
-df_t1_pivot.index = df_t1_pivot.index.strftime('%d-%b')
+df_t1_pivot.index = df_t1_pivot.index.strftime('%d-%b-%Y')
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
 
@@ -698,12 +698,12 @@ kpi2_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 df_t2['register_format'] = df_t2['count_registered_stores'].apply(lambda x: f'{x:.0f}')
 df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
 df_t2_sort_new = df_t2.sort_values(by='DATE', ascending=True)
-df_t2_sort_new['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b')
+df_t2_sort_new['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b-%Y')
 df_t2_stacked = df_t2_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['register_format'].sum().reset_index()
-df_t2_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked['FORMATTED_DATE'], format='%d-%b')
+df_t2_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
 df_t2_pivot = df_t2_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='register_format').fillna(0)
 
-df_t2_pivot.index = df_t2_pivot.index.strftime('%d-%b')
+df_t2_pivot.index = df_t2_pivot.index.strftime('%d-%b-%Y')
 register_stacked = go.Figure()
 
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
@@ -879,7 +879,7 @@ df_t3_stacked = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['Order_SU
 df_t3_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
 df_t3_pivot = df_t3_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='Order_SUM').fillna(0)
 
-df_t3_pivot.index = df_t3_pivot.index.strftime('%d-%b')
+df_t3_pivot.index = df_t3_pivot.index.strftime('%d-%b-%Y')
 order_stacked = go.Figure()
 
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
@@ -951,7 +951,7 @@ df_t3_sorted = df_t3_renamed.sort_values(by='DAY', ascending=True)
 
 df_t3_order_empilhado = df_t3_sorted.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
 
-df_t3_order_empilhado['FORMATTED_DATE'] = df_t3_order_empilhado['DAY'].dt.strftime('%d-%b')
+df_t3_order_empilhado['FORMATTED_DATE'] = df_t3_order_empilhado['DAY'].dt.strftime('%d-%b-%Y')
 
 df_t3_order_empilhado = df_t3_order_empilhado.sort_values(by='DAY', ascending=True)
 
@@ -1003,7 +1003,7 @@ df_t3_sorted_buyer = df_t3_renamed_buyers.sort_values(by='DAY', ascending=True)
 
 df_t3_order_empilhado_buyer = df_t3_sorted_buyer.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
 
-df_t3_order_empilhado_buyer['FORMATTED_DATE'] = df_t3_order_empilhado_buyer['DAY'].dt.strftime('%d-%b')
+df_t3_order_empilhado_buyer['FORMATTED_DATE'] = df_t3_order_empilhado_buyer['DAY'].dt.strftime('%d-%b-%Y')
 
 df_t3_order_empilhado_buyer = df_t3_order_empilhado_buyer.sort_values(by='DAY', ascending=True)
 
@@ -1104,7 +1104,7 @@ df_t3_renamed_gmv = df_t3.rename(columns={
 
 df_t3_sorted_gmv = df_t3_renamed_gmv.sort_values(by='DAY', ascending=True)
 df_t3_gmv_empilhado = df_t3_sorted_gmv.groupby('DAY')[['Customer', 'Force', 'Grow']].sum().reset_index()
-df_t3_gmv_empilhado['FORMATTED_DATE'] = df_t3_gmv_empilhado['DAY'].dt.strftime('%d-%b')
+df_t3_gmv_empilhado['FORMATTED_DATE'] = df_t3_gmv_empilhado['DAY'].dt.strftime('%d-%b-%Y')
 df_t3_gmv_empilhado = df_t3_gmv_empilhado.sort_values(by='DAY', ascending=True)
 
 blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
@@ -1154,12 +1154,12 @@ df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_
 
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sort_new_gmv = df_t3.sort_values(by='DAY', ascending=True)
-df_t3_sort_new_gmv['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
+df_t3_sort_new_gmv['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b-%Y')
 df_t3_stacked_gmvbdr = df_t3_sort_new_gmv.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_SALES'].sum().reset_index()
 df_t3_stacked_gmvbdr['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked_gmvbdr['FORMATTED_DATE'], format='%d-%b')
 df_t3_pivot_gmvbdr = df_t3_stacked_gmvbdr.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_SALES').fillna(0)
 
-df_t3_pivot_gmvbdr.index = df_t3_pivot_gmvbdr.index.strftime('%d-%b')
+df_t3_pivot_gmvbdr.index = df_t3_pivot_gmvbdr.index.strftime('%d-%b-%Y')
 
 gmvbdr_stacked = go.Figure()
 
@@ -1294,7 +1294,7 @@ force_html = df_estilizado_joined.to_html()
 
 df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
 df_t5_sort_gps = df_t5.sort_values(by='DATE', ascending=True)
-df_t5_sort_gps['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b')
+df_t5_sort_gps['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b-%Y')
 df_t5['GPS'] = df_t5['GPS'].astype(float)
 
 pivot_df_tgps = df_t5_sort_gps.pivot_table(
@@ -1305,7 +1305,7 @@ pivot_df_tgps = df_t5_sort_gps.pivot_table(
 )
 
 pivot_df_tgps = pivot_df_tgps.reindex(sorted(pivot_df_tgps.columns), axis=1)
-pivot_df_tgps.columns = [date.strftime('%d-%b') for date in pivot_df_tgps.columns]
+pivot_df_tgps.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgps.columns]
 
 pivot_df_tgps_formatted = pivot_df_tgps.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
 all_columns_B = pivot_df_tgps_formatted.columns.tolist()
@@ -1317,7 +1317,7 @@ gps_table_html = gps_table.to_html()
 
 df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
 df_t5_sort_gpsq = df_t5.sort_values(by='DATE', ascending=True)
-df_t5_sort_gpsq['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b')
+df_t5_sort_gpsq['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b-%Y')
 df_t5['GPS_QUALITY'] = df_t5['GPS_QUALITY'].astype(float)
 
 pivot_df_tgpsq = df_t5_sort_gpsq.pivot_table(
@@ -1328,7 +1328,7 @@ pivot_df_tgpsq = df_t5_sort_gpsq.pivot_table(
 )
 
 pivot_df_tgpsq = pivot_df_tgpsq.reindex(sorted(pivot_df_tgpsq.columns), axis=1)
-pivot_df_tgpsq.columns = [date.strftime('%d-%b') for date in pivot_df_tgpsq.columns]
+pivot_df_tgpsq.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgpsq.columns]
 
 pivot_df_tgpsq_formatted = pivot_df_tgpsq.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
 all_columns_C = pivot_df_tgpsq_formatted.columns.tolist()
@@ -1340,7 +1340,7 @@ gpsq_table_html = gpsq_table.to_html()
 
 df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
 df_t4_sort_eff = df_t4.sort_values(by='DATE', ascending=True)
-df_t4_sort_eff['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b')
+df_t4_sort_eff['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b-%Y')
 df_t4['TASK_EFFECTIVENESS'] = df_t4['TASK_EFFECTIVENESS'].astype(float)
 
 pivot_df_teff = df_t4_sort_eff.pivot_table(
@@ -1351,7 +1351,7 @@ pivot_df_teff = df_t4_sort_eff.pivot_table(
 )
 
 pivot_df_teff = pivot_df_teff.reindex(sorted(pivot_df_teff.columns), axis=1)
-pivot_df_teff.columns = [date.strftime('%d-%b') for date in pivot_df_teff.columns]
+pivot_df_teff.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_teff.columns]
 
 pivot_df_teff_formatted = pivot_df_teff.applymap(lambda x: f"{x:.0%}" if pd.notnull(x) else "0%")
 all_columns_A = pivot_df_teff_formatted.columns.tolist()
@@ -1363,12 +1363,12 @@ taskeffect_table_html = taskeffect_table.to_html()
 
 df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
 df_t4_sort = df_t4.sort_values(by='DATE', ascending=True)
-df_t4_sort['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b')
+df_t4_sort['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b-%Y')
 df_t4_stacked_bar = df_t4_sort.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_TASKS'].sum().reset_index()
-df_t4_stacked_bar['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_bar['FORMATTED_DATE'], format='%d-%b')
+df_t4_stacked_bar['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_bar['FORMATTED_DATE'], format='%d-%b-%Y')
 df_t4_pivot = df_t4_stacked_bar.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_TASKS').fillna(0)
 
-df_t4_pivot.index = df_t4_pivot.index.strftime('%d-%b')
+df_t4_pivot.index = df_t4_pivot.index.strftime('%d-%b-%Y')
 tasks_stacked = go.Figure()
 
 blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
