@@ -876,7 +876,7 @@ df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
 df_t3_sort_new['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b')
 df_t3_stacked = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['Order_SUM'].sum().reset_index()
-df_t3_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked['FORMATTED_DATE'], format='%d-%b')
+df_t3_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
 df_t3_pivot = df_t3_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='Order_SUM').fillna(0)
 
 df_t3_pivot.index = df_t3_pivot.index.strftime('%d-%b')
@@ -1516,8 +1516,8 @@ with colC_1[0]:
 with colC_2[0]:
     st.plotly_chart(kpi1_all_barplot_bdr_mtd, use_container_width=True)
 
-# with colC_3[0]:
-#     st.plotly_chart(visits_stacked, use_container_width=True)
+with colC_3[0]:
+    st.plotly_chart(visits_stacked, use_container_width=True)
 
 with colD[0]:
     st.plotly_chart(kpi1_all_barplot)
