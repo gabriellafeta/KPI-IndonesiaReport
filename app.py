@@ -106,7 +106,7 @@ def style_table(df, title):
 
 #------------------------------------------------------------------------------------------------------
 #### Mandar arquivos na pasta DataID para o Azure Blob Storage
-upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
+# upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
 
 ##### Tables from Blob
                 
@@ -1288,7 +1288,8 @@ df_joined = df_t4_grouped_sort.join(df_t5_grouped_sort, how='outer', lsuffix='_t
 df_joined_sort = df_joined.sort_values(by='TOTAL_TASKS', ascending=False)
 all_columns = cols_t4 + cols_t5
 df_estilizado_joined = style_table(df_joined_sort, all_columns)
-force_html = df_estilizado_joined.to_html()
+
+force_html = df_estilizado_joined.to_html().replace('_', ' ')
 
 ###### GPS table by day
 
