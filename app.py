@@ -1286,9 +1286,8 @@ html_t5 = df_estilizado_t5.to_html()
 
 df_joined = df_t4_grouped_sort.join(df_t5_grouped_sort, how='outer', lsuffix='_t4', rsuffix='_t5')
 df_joined_sort = df_joined.sort_values(by='TOTAL_TASKS', ascending=False)
-df_joined_sort = df_joined_sort.replace('_', ' ')
-all_columns = cols_t4 + cols_t5
-df_estilizado_joined = style_table(df_joined_sort, all_columns)
+df_joined_sort.columns = df_joined_sort.columns.str.replace('_', ' ')
+df_estilizado_joined = style_table(df_joined_sort, df_joined_sort.columns, font_size='10pt')
 force_html = df_estilizado_joined.to_html()
 
 ###### GPS table by day
