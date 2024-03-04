@@ -175,30 +175,30 @@ df_t5 = df_t5[df_t5['BDR_name'].notnull()]
 
 # Mostrar apenas os últimos 30 dias
 
-df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
-latest_date_t1 = df_t1['VISIT_DATE'].max()
-date_limit_t1 = latest_date_t1 - pd.Timedelta(days=30)
-df_t1 = df_t1[df_t1['VISIT_DATE'] > date_limit_t1]
+# df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+# latest_date_t1 = df_t1['VISIT_DATE'].max()
+# date_limit_t1 = latest_date_t1 - pd.Timedelta(days=30)
+# df_t1 = df_t1[df_t1['VISIT_DATE'] > date_limit_t1]
 
-df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
-latest_date_t2 = df_t2['DATE'].max()
-date_limit_t2 = latest_date_t2 - pd.Timedelta(days=30)
-df_t2 = df_t2[df_t2['DATE'] > date_limit_t2]
+# df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+# latest_date_t2 = df_t2['DATE'].max()
+# date_limit_t2 = latest_date_t2 - pd.Timedelta(days=30)
+# df_t2 = df_t2[df_t2['DATE'] > date_limit_t2]
 
-df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
-latest_date_t3 = df_t3['DAY'].max()
-date_limit_t3 = latest_date_t3 - pd.Timedelta(days=30)
-df_t3 = df_t3[df_t3['DAY'] > date_limit_t3]
+# df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+# latest_date_t3 = df_t3['DAY'].max()
+# date_limit_t3 = latest_date_t3 - pd.Timedelta(days=30)
+# df_t3 = df_t3[df_t3['DAY'] > date_limit_t3]
 
-df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
-latest_date_t4 = df_t4['DATE'].max()
-date_limit_t4 = latest_date_t4 - pd.Timedelta(days=30)
-df_t4 = df_t4[df_t4['DATE'] > date_limit_t4]
+# df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
+# latest_date_t4 = df_t4['DATE'].max()
+# date_limit_t4 = latest_date_t4 - pd.Timedelta(days=30)
+# df_t4 = df_t4[df_t4['DATE'] > date_limit_t4]
 
-df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
-latest_date_t5 = df_t5['DATE'].max()
-date_limit_t5 = latest_date_t5 - pd.Timedelta(days=30)
-df_t5 = df_t5[df_t5['DATE'] > date_limit_t5]
+# df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
+# latest_date_t5 = df_t5['DATE'].max()
+# date_limit_t5 = latest_date_t5 - pd.Timedelta(days=30)
+# df_t5 = df_t5[df_t5['DATE'] > date_limit_t5]
 
 ### Tabelas para KPI 1 - N de visitas
 
