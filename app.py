@@ -1309,6 +1309,7 @@ pivot_df_tgps.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgps.col
 
 pivot_df_tgps_formatted = pivot_df_tgps.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
 all_columns_B = pivot_df_tgps_formatted.columns.tolist()
+all_columns_B = all_columns_B.str.replace('_', ' ')
 gps_table = style_table(pivot_df_tgps_formatted, all_columns_B)
 
 gps_table_html = gps_table.to_html()
