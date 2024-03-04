@@ -161,17 +161,17 @@ BDR_dict = {
     "6174675_BDR001": "CMP"
 }
 
-df_t1['BDR_name'] = df_t1['BDR_ID'].map(BDR_dict)
-df_t2['BDR_name'] = df_t2['bdr_id'].map(BDR_dict)
-df_t3['BDR_name'] = df_t3['bdr_id'].map(BDR_dict)
-df_t4['BDR_name'] = df_t4['BDR_ID'].map(BDR_dict)
-df_t5['BDR_name'] = df_t5['BDR_ID'].map(BDR_dict)
+df_t1['BDR Name'] = df_t1['BDR_ID'].map(BDR_dict)
+df_t2['BDR Name'] = df_t2['bdr_id'].map(BDR_dict)
+df_t3['BDR Name'] = df_t3['bdr_id'].map(BDR_dict)
+df_t4['BDR Name'] = df_t4['BDR_ID'].map(BDR_dict)
+df_t5['BDR Name'] = df_t5['BDR_ID'].map(BDR_dict)
 
-df_t1 = df_t1[df_t1['BDR_name'].notnull()]
-df_t2 = df_t2[df_t2['BDR_name'].notnull()]
-df_t3 = df_t3[df_t3['BDR_name'].notnull()]
-df_t4 = df_t4[df_t4['BDR_name'].notnull()]
-df_t5 = df_t5[df_t5['BDR_name'].notnull()]
+df_t1 = df_t1[df_t1['BDR Name'].notnull()]
+df_t2 = df_t2[df_t2['BDR Name'].notnull()]
+df_t3 = df_t3[df_t3['BDR Name'].notnull()]
+df_t4 = df_t4[df_t4['BDR Name'].notnull()]
+df_t5 = df_t5[df_t5['BDR Name'].notnull()]
 
 # Mostrar apenas os últimos 30 dias
 
@@ -202,13 +202,13 @@ df_t5 = df_t5[df_t5['DATE'] > date_limit_t5]
 
 ### Tabelas para KPI 1 - N de visitas
 
-df_t1_bram = df_t1[df_t1['BDR_name'] == 'Dinamis Artha Sukses']
-df_t1_harris = df_t1[df_t1['BDR_name'] == 'RMS Jakarta Selatan']
-df_t1_cheryl = df_t1[df_t1['BDR_name'] == 'RMS Depok']
-df_t1_christian = df_t1[df_t1['BDR_name'] == 'RMS Bogor']
-df_t1_iwan = df_t1[df_t1['BDR_name'] == 'RMS Bekasi']
-df_t1_dian = df_t1[df_t1['BDR_name'] == 'ASR']
-df_t1_alvis = df_t1[df_t1['BDR_name'] == 'CMP']
+df_t1_bram = df_t1[df_t1['BDR Name'] == 'Dinamis Artha Sukses']
+df_t1_harris = df_t1[df_t1['BDR Name'] == 'RMS Jakarta Selatan']
+df_t1_cheryl = df_t1[df_t1['BDR Name'] == 'RMS Depok']
+df_t1_christian = df_t1[df_t1['BDR Name'] == 'RMS Bogor']
+df_t1_iwan = df_t1[df_t1['BDR Name'] == 'RMS Bekasi']
+df_t1_dian = df_t1[df_t1['BDR Name'] == 'ASR']
+df_t1_alvis = df_t1[df_t1['BDR Name'] == 'CMP']
 
 # Data to csv for downloading button
 
@@ -493,9 +493,9 @@ kpi1_alvis_barplot.update_layout(
 )
 
 ########## KPI1 per BDR ALLD
-df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR_name')['VISITED_STORES'].sum().reset_index()
+df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR Name')['VISITED_STORES'].sum().reset_index()
 df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR_name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
 kpi1_all_barplot_bdr.update_layout(
     title='Visited Stores ALLD per BDR',
@@ -517,9 +517,9 @@ kpi1_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 ########## KPI1 per BDR in last latest DAY
 
 df_tf_mtd = df_t1[df_t1['VISIT_DATE'] == max_date]
-df_tf_mtd_agg = df_tf_mtd.groupby('BDR_name')['VISITED_STORES'].sum().reset_index()
+df_tf_mtd_agg = df_tf_mtd.groupby('BDR Name')['VISITED_STORES'].sum().reset_index()
 df_tf_mtd_agg = df_tf_mtd_agg.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR_name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 formatted_max_date = max_date.strftime('%Y-%m-%d')
 
 kpi1_all_barplot_bdr_mtd.update_layout(
@@ -545,9 +545,9 @@ df_t1['visits_format'] = df_t1['VISITED_STORES'].apply(lambda x: f'{x:.0f}')
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
 df_t1_sort_new = df_t1.sort_values(by='VISIT_DATE', ascending=True)
 df_t1_sort_new['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b-%Y')
-df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['visits_format'].sum().reset_index()
+df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR Name'])['visits_format'].sum().reset_index()
 df_t1_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t1_stacked['FORMATTED_DATE'], format='mixed', errors='coerce')
-df_t1_pivot = df_t1_stacked.pivot_table(index='DATE_FOR_SORTING', columns='BDR_name', values='visits_format', aggfunc='sum').fillna(0)
+df_t1_pivot = df_t1_stacked.pivot_table(index='DATE_FOR_SORTING', columns='BDR Name', values='visits_format', aggfunc='sum').fillna(0)
 
 df_t1_pivot.index = df_t1_pivot.index.strftime('%d-%b-%Y')
 visits_stacked = go.Figure()
@@ -646,9 +646,9 @@ kpi2_barplot_dateagg.update_layout(
 
 # KPI 2 per BDR
 
-df_aggregated_t2_BDR = df_t2_sorted.groupby('BDR_name')['count_registered_stores'].sum().reset_index()
+df_aggregated_t2_BDR = df_t2_sorted.groupby('BDR Name')['count_registered_stores'].sum().reset_index()
 df_aggregated_t2_BDR_sorted = df_aggregated_t2_BDR.sort_values(by='count_registered_stores', ascending = False)
-kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='BDR_name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='BDR Name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr.update_layout(
@@ -671,9 +671,9 @@ kpi2_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 # KPI 2 in the latest day
 
 df_tf2_mtd = df_t2[df_t2['DATE'] == max_date_t2]
-df_tf2_mtd_agg = df_tf2_mtd.groupby('BDR_name')['count_registered_stores'].sum().reset_index()
+df_tf2_mtd_agg = df_tf2_mtd.groupby('BDR Name')['count_registered_stores'].sum().reset_index()
 df_tf2_mtd_agg = df_tf2_mtd_agg.sort_values(by='count_registered_stores', ascending=False)
-kpi2_all_barplot_bdr_mtd = px.bar(df_tf2_mtd_agg, x='BDR_name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_all_barplot_bdr_mtd = px.bar(df_tf2_mtd_agg, x='BDR Name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr_mtd.update_layout(
@@ -699,9 +699,9 @@ df_t2['register_format'] = df_t2['count_registered_stores'].apply(lambda x: f'{x
 df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
 df_t2_sort_new = df_t2.sort_values(by='DATE', ascending=True)
 df_t2_sort_new['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b-%Y')
-df_t2_stacked = df_t2_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['register_format'].sum().reset_index()
+df_t2_stacked = df_t2_sort_new.groupby(['FORMATTED_DATE', 'BDR Name'])['register_format'].sum().reset_index()
 df_t2_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
-df_t2_pivot = df_t2_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='register_format').fillna(0)
+df_t2_pivot = df_t2_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR Name', values='register_format').fillna(0)
 
 df_t2_pivot.index = df_t2_pivot.index.strftime('%d-%b-%Y')
 register_stacked = go.Figure()
@@ -779,11 +779,11 @@ max_date_t3 = pd.to_datetime(max_date_t3)
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sorted = df_t3.sort_values(by='DAY')
 
-df_t3_agg_bees = df_t3_sorted.groupby('BDR_name')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_agg_bees = df_t3_sorted.groupby('BDR Name')['TOTAL_ORDERS'].sum().reset_index()
 df_t3_agg_bees_sort = df_t3_agg_bees.sort_values(by='TOTAL_ORDERS', ascending=False)
 
 # KPI 3 ORDERS - ALLD per BDR
-kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='BDR_name', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
+kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='BDR Name', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
 
 kpi3_all_barplot_bdr.update_layout(
     title='BEES Orders ALLD per BDR',
@@ -805,11 +805,11 @@ kpi3_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 # KPI 3 ORDERS - Latest Day
 
 df_t3_mtd = df_t3[df_t3['DAY'] == max_date_t3]
-df_t3_mtd_agg = df_t3_mtd.groupby('BDR_name')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_mtd_agg = df_t3_mtd.groupby('BDR Name')['TOTAL_ORDERS'].sum().reset_index()
 df_t3_mtd_agg = df_t3_mtd_agg.sort_values(by='TOTAL_ORDERS', ascending=False)
 
 
-kpi3_all_barplot_bdr_mtd = px.bar(df_t3_mtd_agg, x='BDR_name', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
+kpi3_all_barplot_bdr_mtd = px.bar(df_t3_mtd_agg, x='BDR Name', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
 formatted_max_date_t3 = max_date_t3.strftime('%Y-%m-%d')
 
 kpi3_all_barplot_bdr_mtd.update_layout(
@@ -875,9 +875,9 @@ df_t3['Order_SUM'] = df_t3['count_placed_orders_customer'] + df_t3['count_placed
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
 df_t3_sort_new['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b-%Y')
-df_t3_stacked = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR_name'])['Order_SUM'].sum().reset_index()
+df_t3_stacked = df_t3_sort_new.groupby(['FORMATTED_DATE', 'BDR Name'])['Order_SUM'].sum().reset_index()
 df_t3_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
-df_t3_pivot = df_t3_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='Order_SUM').fillna(0)
+df_t3_pivot = df_t3_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR Name', values='Order_SUM').fillna(0)
 
 df_t3_pivot.index = df_t3_pivot.index.strftime('%d-%b-%Y')
 order_stacked = go.Figure()
@@ -1053,7 +1053,7 @@ df_t3['gmv_placed_grow'] = pd.to_numeric(df_t3['gmv_placed_grow'], errors='coerc
 df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
 df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0)
 
-df_t3_sales = df_t3.groupby('BDR_name')['TOTAL_SALES'].sum().reset_index()
+df_t3_sales = df_t3.groupby('BDR Name')['TOTAL_SALES'].sum().reset_index()
 df_t3_sales_notnull = df_t3_sales[(df_t3_sales['TOTAL_SALES'] != 0)]
 df_t3_sales_notnull.dropna(subset=['TOTAL_SALES'], inplace=True)
 
@@ -1074,7 +1074,7 @@ def custom_format(value):
 # Apply the formatting function to your sales data
 formatted_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].apply(custom_format)
 
-kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='BDR_name', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'], text=formatted_sales)
+kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='BDR Name', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'], text=formatted_sales)
 
 kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
@@ -1155,9 +1155,9 @@ df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t3_sort_new_gmv = df_t3.sort_values(by='DAY', ascending=True)
 df_t3_sort_new_gmv['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b-%Y')
-df_t3_stacked_gmvbdr = df_t3_sort_new_gmv.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_SALES'].sum().reset_index()
+df_t3_stacked_gmvbdr = df_t3_sort_new_gmv.groupby(['FORMATTED_DATE', 'BDR Name'])['TOTAL_SALES'].sum().reset_index()
 df_t3_stacked_gmvbdr['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked_gmvbdr['FORMATTED_DATE'], format='%d-%b-%Y')
-df_t3_pivot_gmvbdr = df_t3_stacked_gmvbdr.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_SALES').fillna(0)
+df_t3_pivot_gmvbdr = df_t3_stacked_gmvbdr.pivot(index='DATE_FOR_SORTING', columns='BDR Name', values='TOTAL_SALES').fillna(0)
 
 df_t3_pivot_gmvbdr.index = df_t3_pivot_gmvbdr.index.strftime('%d-%b-%Y')
 
@@ -1239,7 +1239,7 @@ gmvbdr_stacked.update_layout(
 #------------------------------------------------------------------------------------------------------
 ####### KPI - 5.	No of BDR tasks completed and task effectiveness 
 
-df_t4_grouped = df_t4.groupby('BDR_name')[['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']].sum().reset_index()
+df_t4_grouped = df_t4.groupby('BDR Name')[['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']].sum().reset_index()
 df_t4_grouped['TASK_EFFECTIVNESS'] = (df_t4_grouped['EFFECTIVED_TASKS'] / df_t4_grouped['TOTAL_TASKS']) * 100
 df_t4_grouped['TASK_EFFECTIVNESS'] = df_t4_grouped['TASK_EFFECTIVNESS'].apply(lambda x: f"{x:.2f}%")
 df_t4_grouped_sort = df_t4_grouped.sort_values(by='TOTAL_TASKS', ascending=False)
@@ -1272,7 +1272,7 @@ df_estilizado_t4 = style_table(df_t4_grouped_sort, cols_t4)
 html_t4 = df_estilizado_t4.to_html()
 #------------------------------------------------------------------------------------------------------
 ###### KPI 6.	No of GPS check in and GPS quality
-df_t5_grouped = df_t5.groupby('BDR_name')[['GPS', 'GPS_QUALITY']].mean().reset_index()
+df_t5_grouped = df_t5.groupby('BDR Name')[['GPS', 'GPS_QUALITY']].mean().reset_index()
 df_t5_grouped[['GPS', 'GPS_QUALITY']] = df_t5_grouped[['GPS', 'GPS_QUALITY']].applymap(lambda x: f"{x * 100:.2f}%")
 df_t5_grouped_sort = df_t5_grouped.sort_values(by='GPS', ascending=False)
 
@@ -1298,7 +1298,7 @@ df_t5_sort_gps['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b-%Y')
 df_t5['GPS'] = df_t5['GPS'].astype(float)
 
 pivot_df_tgps = df_t5_sort_gps.pivot_table(
-    index='BDR_name', 
+    index='BDR Name', 
     columns='DATE', 
     values='GPS', 
     aggfunc='mean'
@@ -1321,7 +1321,7 @@ df_t5_sort_gpsq['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b-%Y')
 df_t5['GPS_QUALITY'] = df_t5['GPS_QUALITY'].astype(float)
 
 pivot_df_tgpsq = df_t5_sort_gpsq.pivot_table(
-    index='BDR_name', 
+    index='BDR Name', 
     columns='DATE', 
     values='GPS_QUALITY', 
     aggfunc='mean'
@@ -1344,7 +1344,7 @@ df_t4_sort_eff['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b-%Y')
 df_t4['TASK_EFFECTIVENESS'] = df_t4['TASK_EFFECTIVENESS'].astype(float)
 
 pivot_df_teff = df_t4_sort_eff.pivot_table(
-    index='BDR_name', 
+    index='BDR Name', 
     columns='DATE', 
     values='TASK_EFFECTIVENESS', 
     aggfunc='mean'
@@ -1364,9 +1364,9 @@ taskeffect_table_html = taskeffect_table.to_html()
 df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
 df_t4_sort = df_t4.sort_values(by='DATE', ascending=True)
 df_t4_sort['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b-%Y')
-df_t4_stacked_bar = df_t4_sort.groupby(['FORMATTED_DATE', 'BDR_name'])['TOTAL_TASKS'].sum().reset_index()
+df_t4_stacked_bar = df_t4_sort.groupby(['FORMATTED_DATE', 'BDR Name'])['TOTAL_TASKS'].sum().reset_index()
 df_t4_stacked_bar['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_bar['FORMATTED_DATE'], format='%d-%b-%Y')
-df_t4_pivot = df_t4_stacked_bar.pivot(index='DATE_FOR_SORTING', columns='BDR_name', values='TOTAL_TASKS').fillna(0)
+df_t4_pivot = df_t4_stacked_bar.pivot(index='DATE_FOR_SORTING', columns='BDR Name', values='TOTAL_TASKS').fillna(0)
 
 df_t4_pivot.index = df_t4_pivot.index.strftime('%d-%b-%Y')
 tasks_stacked = go.Figure()
