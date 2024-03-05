@@ -1574,8 +1574,8 @@ diff_orders = int(diff_orders)
 ### Sales Value
 
 sum_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].sum()
-df_t3_dm1['total_sales'] = df_t3_dm1['gmv_placed_customer'] + df_t3_dm1['gmv_placed_force'] + df_t3_dm1['gmv_placed_grow']
-sum_sales_dm1 = df_t3_dm1['total_sales'].sum()
+df_t3_dm1['total_sales_dm1'] = df_t3_dm1['gmv_placed_customer'] + df_t3_dm1['gmv_placed_force'] + df_t3_dm1['gmv_placed_grow']
+sum_sales_dm1 = df_t3_dm1['total_sales_dm1'].sum()
 diff_total_sales = sum_sales - sum_sales_dm1
 diff_total_sales = int(diff_total_sales)
 
