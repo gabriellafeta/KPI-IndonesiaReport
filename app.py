@@ -179,7 +179,7 @@ df_t2 = df_t2[df_t2['BDR Name'].notnull()]
 df_t3 = df_t3[df_t3['BDR Name'].notnull()]
 df_t4 = df_t4[df_t4['BDR Name'].notnull()]
 df_t5 = df_t5[df_t5['BDR Name'].notnull()]
-df_t6 = df_t6[df_t5['BDR Name'].notnull()]
+df_t6 = df_t6[df_t6['BDR Name'].notnull()]
 
 # Mostrar apenas os últimos 30 dias
 
