@@ -1630,9 +1630,9 @@ diff_visitsp = int(diff_visitsp)
 ##################################################### Per Segment
 
 # Visits per segment
-df_register_segment_full = df_t6.groupby('store_segment')['REGISTERED_STORES'].sum().reset_index()
+df_register_segment_full = df_t6.groupby('BDR Name')['REGISTERED_STORES'].sum().reset_index()
 df_register_segment_full_sort = df_register_segment_full.sort_values(by='REGISTERED_STORES', ascending=False)
-register_persegment = px.bar(df_register_segment_full_sort, x='store_segment', y='REGISTERED_STORES', color_discrete_sequence=['#ffcc00'])
+register_persegment = px.bar(df_register_segment_full_sort, x='BDR Name', y='REGISTERED_STORES', color_discrete_sequence=['#ffcc00'])
 
 register_persegment.update_layout(
     title='Registered Stores ALLD per Segment',
