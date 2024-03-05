@@ -1678,12 +1678,13 @@ with colP[0]:
 
 with colP_1[0]:
     st.download_button(
-    label="Raw Tasks as CSV",
+    label="This table as CSV",
     data=force_csv,
     file_name='data.csv',
     mime='text/csv',
     key="download_button_7"
 )
+with colP_1[1]:
     st.download_button(
     label="Raw Tasks as CSV",
     data=csv_t4,
@@ -1691,6 +1692,7 @@ with colP_1[0]:
     mime='text/csv',
     key="download_button_5"
 )
+with colP_1[2]:
     st.download_button(
     label="Raw GPS as CSV",
     data=csv_t5,
