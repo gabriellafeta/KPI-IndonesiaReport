@@ -1778,7 +1778,7 @@ with colL[0]:
     """, unsafe_allow_html=True)
 
 with colM[0]:
-    st.metric(label="Total Sales", value=sum_sales_format, delta=sum_sales_dm1)
+    st.metric(label="Total Sales", value=sum_sales_format, delta=diff_total_sales_format)
     st.plotly_chart(kpi4_all_barplot_bdr, use_container_width=True)
 
 with colN[0]:
