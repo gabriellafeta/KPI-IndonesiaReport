@@ -963,7 +963,7 @@ df_t3_order_empilhado['FORMATTED_DATE'] = df_t3_order_empilhado['DAY'].dt.strfti
 
 df_t3_order_empilhado = df_t3_order_empilhado.sort_values(by='DAY', ascending=True)
 
-blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
+blue_scale = ['#1a2634', '#203e5f', '#ffcc00']
 
 order_stacked_channel = px.bar(
     df_t3_order_empilhado, 
@@ -1015,7 +1015,7 @@ df_t3_order_empilhado_buyer['FORMATTED_DATE'] = df_t3_order_empilhado_buyer['DAY
 
 df_t3_order_empilhado_buyer = df_t3_order_empilhado_buyer.sort_values(by='DAY', ascending=True)
 
-blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
+blue_scale = ['#1a2634', '#203e5f', '#ffcc00']
 
 buyer_stacked_channel = px.bar(
     df_t3_order_empilhado_buyer, 
@@ -1115,7 +1115,7 @@ df_t3_gmv_empilhado = df_t3_sorted_gmv.groupby('DAY')[['Customer', 'Force', 'Gro
 df_t3_gmv_empilhado['FORMATTED_DATE'] = df_t3_gmv_empilhado['DAY'].dt.strftime('%d-%b-%Y')
 df_t3_gmv_empilhado = df_t3_gmv_empilhado.sort_values(by='DAY', ascending=True)
 
-blue_scale = ['#1f77b4', '#aec7e8', '#80ced6']
+blue_scale = ['#1a2634', '#203e5f', '#ffcc00']
 
 gmv_stacked_channel = px.bar(
     df_t3_gmv_empilhado, 
