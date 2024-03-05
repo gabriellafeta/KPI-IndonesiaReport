@@ -1710,7 +1710,7 @@ for i, vendor in enumerate(df_t2_pivot_seg.columns):
 
 register_stacked_seg.update_layout(barmode='stack', title='Daily Registers by Segment', xaxis_title='', yaxis_title='')
 for i, trace in enumerate(register_stacked_seg.data):
-    trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot[trace.name]]
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot_seg[trace.name]]
 
 # Customizing the figure's layout
 register_stacked_seg.update_layout(
