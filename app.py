@@ -1492,19 +1492,6 @@ tasks_stacked.update_layout(barmode='stack', title='Daily Tasks by BDR', xaxis_t
 for i, trace in enumerate(tasks_stacked.data):
     trace.text = [f'{int(v)}' if v != 0 else '' for v in df_t4_pivot[trace.name]]
 
-for date, total in zip(df_t4_stacked_bar['DATE_FOR_SORTING'].dt.strftime('%d-%b-%Y'), df_t4_stacked_bar['TOTAL_TASKS']):
-    tasks_stacked.add_trace(go.Scatter(
-        x=[date], 
-        y=[df_t4_stacked_bar], 
-        text=[str(df_t4_stacked_bar)],  # Set the text to the total value
-        mode='text',  # Display only text
-        textposition='top center',  # Position the text above the bars
-        showlegend=False,  # Do not include these in the legend
-        hoverinfo='none'  # Disable hover info for these texts
-    ))
-
-
-
 # Customizing the figure's layout
 tasks_stacked.update_layout(
     barmode='stack',
