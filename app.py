@@ -1674,7 +1674,11 @@ with colO[0]:
     """, unsafe_allow_html=True)
 
 with colP[0]:
-    st.markdown(force_html, unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="display: table; margin: auto;">
+        {force_html}
+    </div>
+    """, unsafe_allow_html=True)
 
 with colP_1[0]:
     st.download_button(
