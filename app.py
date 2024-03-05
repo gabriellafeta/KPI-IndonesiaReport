@@ -1675,6 +1675,76 @@ register_persegment_mtd.update_layout( # Adjust the width to fit within the colu
     height=500  # You can also adjust the height if necessary
 )
 
+# Register Daily stacked by segment
+
+df_t2['register_format'] = df_t2['count_registered_stores'].apply(lambda x: f'{x:.0f}')
+df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+df_t2_sort_new = df_t2.sort_values(by='DATE', ascending=True)
+df_t2_sort_new['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b-%Y')
+df_t2_stacked2 = df_t2_sort_new.groupby(['FORMATTED_DATE', 'segment'])['register_format'].sum().reset_index()
+df_t2_stacked2['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
+df_t2_pivot_seg = df_t2_stacked2.pivot(index='DATE_FOR_SORTING', columns='segment', values='register_format').fillna(0)
+
+df_t2_pivot_seg.index = df_t2_pivot_seg.index.strftime('%d-%b-%Y')
+register_stacked_seg = go.Figure()
+
+blue_palette_seg = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf', '#c7b198']
+
+for i, vendor in enumerate(df_t2_pivot_seg.columns):
+    text_labels = [f'{v}' if v != '0' else '' for v in df_t2_pivot_seg[vendor]]
+
+    register_stacked_seg.add_trace(go.Bar(
+        x=df_t2_pivot_seg.index, 
+        y=df_t2_pivot_seg[vendor], 
+        name=vendor,
+        marker_color=blue_palette_seg[i % len(blue_palette_seg)],  # Use the color palette
+        text=text_labels,  # Use the prepared text labels
+        textposition='outside'  # Position labels outside the bars
+    ))
+
+register_stacked_seg.update_layout(barmode='stack', title='Daily Registers by Segment', xaxis_title='', yaxis_title='')
+for i, trace in enumerate(register_stacked_seg.data):
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot[trace.name]]
+
+# Customizing the figure's layout
+register_stacked_seg.update_layout(
+    barmode='stack',
+    title='Daily Visits by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
+
+
+register_stacked_seg.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Registers by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -2073,6 +2143,7 @@ with aba1:
     colBn = st.columns(1)
     colCn = st.columns(1)
     colDn = st.columns(1)
+    colEn = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2107,3 +2178,6 @@ with colCn[0]:
 
 with colDn[0]:
     st.plotly_chart(register_persegment_mtd, use_container_width=True)
+
+with colEn[0]:
+    st.plotly_chart(register_stacked_seg, use_container_width=True)
