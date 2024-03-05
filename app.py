@@ -1875,9 +1875,6 @@ with colS_3[0]:
 
 with colT[0]:
     st.plotly_chart(visits_stacked_planned, use_container_width=True)
-
-with colG_3[0]:
-    st.plotly_chart(kpi1_all_barplot_bdr_p, use_container_width=True)
     st.markdown("""
     <style>
     .fonte-personalizada3 {
@@ -1889,3 +1886,6 @@ with colG_3[0]:
         Planned Visits: Count of visits is STATUS = "OPEN", "PENDING" or "NOT_COMPLETED".
     </div>
     """, unsafe_allow_html=True)
+
+with colG_3[0]:
+    st.plotly_chart(kpi1_all_barplot_bdr_p, use_container_width=True)
