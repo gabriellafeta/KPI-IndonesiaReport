@@ -503,7 +503,7 @@ kpi1_alvis_barplot.update_layout(
 ########## KPI1 per BDR ALLD
 df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR Name')['VISITED_STORES'].sum().reset_index()
 df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['#1a2634'])
 
 kpi1_all_barplot_bdr.update_layout(
     title='Visits ALLD per BDR',
@@ -527,7 +527,7 @@ kpi1_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 df_tf_mtd = df_t1[df_t1['VISIT_DATE'] == max_date]
 df_tf_mtd_agg = df_tf_mtd.groupby('BDR Name')['VISITED_STORES'].sum().reset_index()
 df_tf_mtd_agg = df_tf_mtd_agg.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
+kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['#1a2634'])
 formatted_max_date = max_date.strftime('%Y-%m-%d')
 
 kpi1_all_barplot_bdr_mtd.update_layout(
@@ -656,7 +656,7 @@ kpi2_barplot_dateagg.update_layout(
 
 df_aggregated_t2_BDR = df_t2_sorted.groupby('BDR Name')['count_registered_stores'].sum().reset_index()
 df_aggregated_t2_BDR_sorted = df_aggregated_t2_BDR.sort_values(by='count_registered_stores', ascending = False)
-kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='BDR Name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_all_barplot_bdr = px.bar(df_aggregated_t2_BDR_sorted, x='BDR Name', y='count_registered_stores', color_discrete_sequence=['#1a2634'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr.update_layout(
@@ -681,7 +681,7 @@ kpi2_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 df_tf2_mtd = df_t2[df_t2['DATE'] == max_date_t2]
 df_tf2_mtd_agg = df_tf2_mtd.groupby('BDR Name')['count_registered_stores'].sum().reset_index()
 df_tf2_mtd_agg = df_tf2_mtd_agg.sort_values(by='count_registered_stores', ascending=False)
-kpi2_all_barplot_bdr_mtd = px.bar(df_tf2_mtd_agg, x='BDR Name', y='count_registered_stores', color_discrete_sequence=['LightSalmon'])
+kpi2_all_barplot_bdr_mtd = px.bar(df_tf2_mtd_agg, x='BDR Name', y='count_registered_stores', color_discrete_sequence=['#1a2634'])
 formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 kpi2_all_barplot_bdr_mtd.update_layout(
@@ -791,7 +791,7 @@ df_t3_agg_bees = df_t3_sorted.groupby('BDR Name')['TOTAL_ORDERS'].sum().reset_in
 df_t3_agg_bees_sort = df_t3_agg_bees.sort_values(by='TOTAL_ORDERS', ascending=False)
 
 # KPI 3 ORDERS - ALLD per BDR
-kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='BDR Name', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
+kpi3_all_barplot_bdr = px.bar(df_t3_agg_bees_sort, x='BDR Name', y='TOTAL_ORDERS', color_discrete_sequence=['#1a2634'])
 
 kpi3_all_barplot_bdr.update_layout(
     title='BEES Orders ALLD per BDR',
@@ -817,7 +817,7 @@ df_t3_mtd_agg = df_t3_mtd.groupby('BDR Name')['TOTAL_ORDERS'].sum().reset_index(
 df_t3_mtd_agg = df_t3_mtd_agg.sort_values(by='TOTAL_ORDERS', ascending=False)
 
 
-kpi3_all_barplot_bdr_mtd = px.bar(df_t3_mtd_agg, x='BDR Name', y='TOTAL_ORDERS', color_discrete_sequence=['LightSalmon'])
+kpi3_all_barplot_bdr_mtd = px.bar(df_t3_mtd_agg, x='BDR Name', y='TOTAL_ORDERS', color_discrete_sequence=['#1a2634'])
 formatted_max_date_t3 = max_date_t3.strftime('%Y-%m-%d')
 
 kpi3_all_barplot_bdr_mtd.update_layout(
@@ -1082,7 +1082,7 @@ def custom_format(value):
 # Apply the formatting function to your sales data
 formatted_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].apply(custom_format)
 
-kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='BDR Name', y='TOTAL_SALES', color_discrete_sequence=['LightSalmon'], text=formatted_sales)
+kpi4_all_barplot_bdr = px.bar(df_t3_sales_notnull_sort, x='BDR Name', y='TOTAL_SALES', color_discrete_sequence=['#1a2634'], text=formatted_sales)
 
 kpi4_all_barplot_bdr.update_layout(
     title='BEES Sales ALLD per BDR',
