@@ -1612,6 +1612,18 @@ diff_grow_sales = sum_grow - sum_grow_dm1
 diff_grow_sales = custom_format(diff_grow_sales)
 sum_grow = custom_format(sum_grow)
 
+# Metrics Visits
+
+sum_visits = df_t1['VISITS'].sum()
+sum_visits_dm1 = df_t1_dm1['VISITS'].sum()
+diff_visits = sum_visits - sum_visits_dm1
+diff_visits = int(diff_visits)
+
+sum_visitsp = df_t1['PLANNED_VISITS'].sum()
+sum_visitsp_dm1 = df_t1_dm1['PLANNED_VISITS'].sum()
+diff_visitsp = sum_visitsp - sum_visitsp_dm1
+diff_visitsp = int(diff_visitsp)
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -1685,6 +1697,7 @@ with colB[0]:
     """, unsafe_allow_html=True)
 
 with colC_1[0]:
+    st.metric(label="Total Visits", value=sum_visits, delta=diff_visits)
     st.plotly_chart(kpi1_all_barplot_bdr, use_container_width=True)
 
 with colC_2[0]:
@@ -1970,6 +1983,7 @@ with colS_3[0]:
 )
 
 with colT[0]:
+    st.metric(label="Total Planned Visits", value=sum_visitsp, delta=diff_visitsp)
     st.plotly_chart(visits_stacked_planned, use_container_width=True)
     st.markdown("""
     <style>
@@ -1987,6 +2001,10 @@ with colG_3[0]:
     st.plotly_chart(kpi1_all_barplot_bdr_p, use_container_width=True)
 
 
+
+
+
+#---------------------------------------------------------------------------------------------------
 # Aba1
 with aba1:
     colA_n = st.columns(1)
