@@ -1263,7 +1263,7 @@ def style_table(df, columns, font_size='10pt'):
     styler = df.style.format(format_with_dots, subset=columns)\
         .set_table_styles([
             {'selector': 'thead th',
-             'props': [('background-color', '#1f77b4'), ('color', 'black'), ('font-weight', 'bold')]},
+             'props': [('background-color', '#1a2634'), ('color', 'black'), ('font-weight', 'bold')]},
             {'selector': 'td',
              'props': [('text-align', 'center')]},
             {'selector': 'table, th, td',
