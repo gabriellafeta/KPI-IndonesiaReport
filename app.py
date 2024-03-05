@@ -208,6 +208,31 @@ df_t5 = df_t5[df_t5['BDR Name'].notnull()]
 # date_limit_t5 = latest_date_t5 - pd.Timedelta(days=30)
 # df_t5 = df_t5[df_t5['DATE'] > date_limit_t5]
 
+#### DFs do dia anterior
+latest_date_t1 = df_t1['VISIT_DATE'].max()
+latest_date_t2 = df_t2['DATE'].max()
+latest_date_t3 = df_t3['DAY'].max()
+latest_date_t4 = df_t4['DATE'].max()
+latest_date_t5 = df_t5['DATE'].max()
+
+df_t1_dm1 = df_t1[df_t1['VISIT_DATE'] != latest_date_t1]
+df_t2_dm1 = df_t2[df_t2['DATE'] != latest_date_t2]
+df_t3_dm1 = df_t3[df_t3['DAY'] != latest_date_t3]
+df_t4_dm1 = df_t4[df_t4['DATE'] != latest_date_t4]
+df_t5_dm1 = df_t5[df_t5['DATE'] != latest_date_t5]
+
+df_t1_dm1['BDR Name'] = df_t1_dm1['BDR_ID'].map(BDR_dict)
+df_t2_dm1['BDR Name'] = df_t2_dm1['bdr_id'].map(BDR_dict)
+df_t3_dm1['BDR Name'] = df_t3_dm1['bdr_id'].map(BDR_dict)
+df_t4_dm1['BDR Name'] = df_t4_dm1['BDR_ID'].map(BDR_dict)
+df_t5_dm1['BDR Name'] = df_t5_dm1['BDR_ID'].map(BDR_dict)
+
+df_t1_dm1 = df_t1_dm1[df_t1_dm1['BDR Name'].notnull()]
+df_t2_dm1 = df_t2_dm1[df_t2_dm1['BDR Name'].notnull()]
+df_t3_dm1 = df_t3_dm1[df_t3_dm1['BDR Name'].notnull()]
+df_t4_dm1 = df_t4_dm1[df_t4_dm1['BDR Name'].notnull()]
+df_t5_dm1 = df_t5_dm1[df_t5_dm1['BDR Name'].notnull()]
+
 ### Tabelas para KPI 1 - N de visitas
 
 df_t1_bram = df_t1[df_t1['BDR Name'] == 'Dinamis Artha Sukses']
@@ -743,6 +768,7 @@ kpi2_barplot_dateagg.update_layout(
     width=500,  # Adjust the width to fit within the column
     height=400  # You can also adjust the height if necessary
 )
+
 
 
 # KPI 2 per BDR
@@ -1530,6 +1556,14 @@ tasks_stacked.update_layout(
     height=600
     )
 #------------------------------------------------------------------------------------------------------
+##### Metricas
+### Register
+sum_register = df_aggregated_t2_BDR['count_registered_stores'].sum()
+sum_register_dm1 = df_t1_dm1['count_registered_stores'].sum()
+diff_register = sum_register - sum_register_dm1
+
+### Orders
+#------------------------------------------------------------------------------------------------------
 #### App
 # Abas
 
@@ -1653,6 +1687,7 @@ with colH[0]:
     """, unsafe_allow_html=True)
 
 with colH_1[0]:
+    st.metric(label="Total Register", value=sum_register, delta=diff_register)
     st.plotly_chart(kpi2_all_barplot_bdr, use_container_width=True)
 
 with colH_3[0]:
