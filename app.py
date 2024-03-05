@@ -1654,7 +1654,7 @@ with colN_3[0]:
     data=csv_t3,
     file_name='data.csv',
     mime='text/csv',
-    key="download_button_3")
+    key="download_button_4")
 
 with colO[0]:
     st.markdown("""
