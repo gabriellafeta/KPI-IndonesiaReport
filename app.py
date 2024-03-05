@@ -1322,7 +1322,7 @@ all_columns_B = pivot_df_tgps_formatted.columns.tolist()
 gps_table = style_table(pivot_df_tgps_formatted, all_columns_B)
 
 gps_table_html = gps_table.to_html()
-
+gpsday_csv = pivot_df_tgps_formatted.to_csv(index=False).encode('utf-8')
 ###### GPS Quality table by day
 
 df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
@@ -1345,7 +1345,7 @@ all_columns_C = pivot_df_tgpsq_formatted.columns.tolist()
 gpsq_table = style_table(pivot_df_tgpsq_formatted, all_columns_C)
 
 gpsq_table_html = gpsq_table.to_html()
-
+gpsqday_csv = pivot_df_tgpsq_formatted.to_csv(index=False).encode('utf-8')
 ###### Task table by day
 
 df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
@@ -1368,7 +1368,7 @@ all_columns_A = pivot_df_teff_formatted.columns.tolist()
 taskeffect_table = style_table(pivot_df_teff_formatted, all_columns_A)
 
 taskeffect_table_html = taskeffect_table.to_html()
-
+taskday_csv = pivot_df_teff_formatted.to_csv(index=False).encode('utf-8')
 ############### Tasks stacked
 
 df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
@@ -1717,6 +1717,13 @@ with colS_1[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(taskeffect_table_html, unsafe_allow_html=True)
+    st.download_button(
+    label="This table as CSV",
+    data=gpsday_csv,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_8"
+)
 
 with colS_2[0]:
     st.markdown("""
