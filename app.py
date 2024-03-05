@@ -1298,6 +1298,8 @@ df_joined_sort.columns = df_joined_sort.columns.str.replace('_', ' ')
 df_estilizado_joined = style_table(df_joined_sort, df_joined_sort.columns, font_size='10pt')
 force_html = df_estilizado_joined.to_html()
 
+force_csv = df_joined_sort.to_csv(index=False).encode('utf-8')
+
 ###### GPS table by day
 
 df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
@@ -1469,6 +1471,7 @@ with aba0:
     colN_3 = st.columns(1)
     colO = st.columns(1)
     colP = st.columns(1)
+    colP_1 = st.columns(3)
     colQ = st.columns(2)
     colR = st.columns(1)
     colS = st.columns(1)
@@ -1672,6 +1675,29 @@ with colO[0]:
 
 with colP[0]:
     st.markdown(force_html, unsafe_allow_html=True)
+
+with colP_1[0]:
+    st.download_button(
+    label="Raw Tasks as CSV",
+    data=force_csv,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_7"
+)
+    st.download_button(
+    label="Raw Tasks as CSV",
+    data=csv_t4,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_5"
+)
+    st.download_button(
+    label="Raw GPS as CSV",
+    data=csv_t5,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_6"
+)
 
 with colS[0]:
     st.plotly_chart(tasks_stacked, use_container_width=True)
