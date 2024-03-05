@@ -1585,6 +1585,33 @@ diff_total_sales = int(diff_total_sales)
 
 diff_total_sales_format = custom_format(diff_total_sales)
 sum_sales_format = custom_format(sum_sales)
+
+
+### Sales Metric per channel
+#Custumer
+sum_customer = df_t3['gmv_placed_customer'].sum()
+sum_customer_dm1 = df_t3_dm1['gmv_placed_customer'].sum()
+diff_customer_sales = sum_customer - sum_customer_dm1
+
+diff_customer_sales = custom_format(diff_customer_sales)
+sum_customer = custom_format(sum_customer)
+
+#Force
+sum_force = df_t3['gmv_placed_force'].sum()
+sum_force_dm1 = df_t3_dm1['gmv_placed_force'].sum()
+diff_force_sales = sum_force - sum_force_dm1
+
+diff_force_sales = custom_format(diff_force_sales)
+sum_force = custom_format(sum_force)
+
+#Grow
+sum_grow = df_t3['gmv_placed_grow'].sum()
+sum_grow_dm1 = df_t3_dm1['gmv_placed_grow'].sum()
+diff_grow_sales = sum_grow - sum_grow_dm1
+
+diff_grow_sales = custom_format(diff_grow_sales)
+sum_grow = custom_format(sum_grow)
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -1613,6 +1640,7 @@ with aba0:
     colK_6 = st.columns(1)
     colK_7 = st.columns(1)
     colL = st.columns(1)
+    colL_1 = st.columns(4)
     colM = st.columns(1)
     colN = st.columns(1)
     colN_1 = st.columns(1)
@@ -1781,8 +1809,20 @@ with colL[0]:
     </div>
     """, unsafe_allow_html=True)
 
-with colM[0]:
+with colL_1[0]:
     st.metric(label="Total Sales", value=sum_sales_format, delta=diff_total_sales_format)
+
+with colL_1[1]:
+    st.metric(label="Total Customer", value=sum_customer, delta=diff_customer_sales)
+
+with colL_1[2]:
+    st.metric(label="Total Force", value=sum_force, delta=diff_force_sales)
+
+with colL_1[3]:
+    st.metric(label="Total Grow", value=sum_grow, delta=diff_grow_sales)
+
+
+with colM[0]:
     st.plotly_chart(kpi4_all_barplot_bdr, use_container_width=True)
 
 with colN[0]:
