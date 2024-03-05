@@ -1651,6 +1651,30 @@ register_persegment.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
+# Visits per segment latestday
+df_tf2_mtd = df_t2[df_t2['DATE'] == max_date_t2]
+df_tf2_mtd_agg2 = df_tf2_mtd.groupby('segment')['count_registered_stores'].sum().reset_index()
+df_tf2_mtd_agg2 = df_tf2_mtd_agg2.sort_values(by='count_registered_stores', ascending=False)
+register_persegment_mtd = px.bar(df_tf2_mtd_agg2, x='segment', y='count_registered_stores', color_discrete_sequence=['#ffcc00'])
+formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
+
+register_persegment_mtd.update_layout(
+    title=f'Registered Stores on {formatted_max_date_t2} per Segment',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+register_persegment_mtd.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+register_persegment_mtd.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -2048,6 +2072,7 @@ with aba1:
     colAn = st.columns(1)
     colBn = st.columns(1)
     colCn = st.columns(1)
+    colDn = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2079,3 +2104,6 @@ with colCn[0]:
     </div>
     """, unsafe_allow_html=True)
     st.plotly_chart(register_persegment, use_container_width=True)
+
+with colDn[0]:
+    st.plotly_chart(register_persegment_mtd, use_container_width=True)
