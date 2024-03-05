@@ -522,6 +522,28 @@ kpi1_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
+########## KPI1 per BDR ALLD - Planned
+df_aggregated_t1_BDR_p = df_t1_sorted.groupby('BDR Name')['PLANNED_VISITS'].sum().reset_index()
+df_aggregated_t1_BDR_p = df_aggregated_t1_BDR_p.sort_values(by='PLANNED_VISITS', ascending=False)
+kpi1_all_barplot_bdr_p = px.bar(df_aggregated_t1_BDR_p, x='BDR Name', y='PLANNED_VISITS', color_discrete_sequence=['#ffcc00'])
+
+kpi1_all_barplot_bdr_p.update_layout(
+    title='Visits Planned ALLD per BDR',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+kpi1_all_barplot_bdr_p.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+kpi1_all_barplot_bdr_p.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+
 ########## KPI1 per BDR in last latest DAY
 
 df_tf_mtd = df_t1[df_t1['VISIT_DATE'] == max_date]
@@ -1557,6 +1579,7 @@ with aba0:
     colF = st.columns(2)
     colG = st.columns(2)
     colG_1 = st.columns(1)
+    colG_3 = st.columns(1)
     colT = st.columns(1)
 
 # Colunas
@@ -1852,3 +1875,17 @@ with colS_3[0]:
 
 with colT[0]:
     st.plotly_chart(visits_stacked_planned, use_container_width=True)
+
+with colG_3[0]:
+    st.plotly_chart(kpi1_all_barplot_bdr_p, use_container_width=True)
+    st.markdown("""
+    <style>
+    .fonte-personalizada3 {
+        font-size: 10px;
+        font-style: italic
+    }
+    </style>
+    <div class="fonte-personalizada3">
+        Planned Visits: Count of visits is STATUS = "OPEN", "PENDING" or "NOT_COMPLETED".
+    </div>
+    """, unsafe_allow_html=True)
