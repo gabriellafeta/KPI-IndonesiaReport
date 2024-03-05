@@ -1559,7 +1559,7 @@ tasks_stacked.update_layout(
 ##### Metricas
 ### Register
 sum_register = df_aggregated_t2_BDR['count_registered_stores'].sum()
-sum_register_dm1 = df_t1_dm1['count_registered_stores'].sum()
+sum_register_dm1 = df_t2_dm1['count_registered_stores'].sum()
 diff_register = sum_register - sum_register_dm1
 
 ### Orders
