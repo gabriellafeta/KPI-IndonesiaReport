@@ -1556,7 +1556,8 @@ tasks_stacked.update_layout(
     height=600
     )
 #------------------------------------------------------------------------------------------------------
-##### Metricas
+##### Metricas consolidadas
+
 ### Register
 sum_register = df_aggregated_t2_BDR['count_registered_stores'].sum()
 sum_register_dm1 = df_t2_dm1['count_registered_stores'].sum()
@@ -1569,6 +1570,17 @@ df_t3_dm1['total_orders'] = df_t3_dm1['count_placed_orders_customer'] + df_t3_dm
 sum_orders_dm1 = df_t3_dm1['total_orders'].sum()
 diff_orders = sum_orders - sum_orders_dm1
 diff_orders = int(diff_orders)
+
+### Sales Value
+
+sum_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].sum()
+df_t3_dm1['total_sales'] = df_t3_dm1['gmv_placed_customer'] + df_t3_dm1['gmv_placed_force'] + df_t3_dm1['gmv_placed_grow']
+sum_sales_dm1 = df_t3_dm1['total_sales'].sum()
+diff_total_sales = sum_sales - sum_sales_dm1
+diff_total_sales = int(diff_total_sales)
+
+diff_total_sales_format = custom_format(diff_total_sales)
+sum_sales_format = custom_format(sum_sales)
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -1766,6 +1778,7 @@ with colL[0]:
     """, unsafe_allow_html=True)
 
 with colM[0]:
+    st.metric(label="Total Sales", value=sum_sales_format, delta=diff_total_sales_format)
     st.plotly_chart(kpi4_all_barplot_bdr, use_container_width=True)
 
 with colN[0]:
