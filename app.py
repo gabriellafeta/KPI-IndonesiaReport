@@ -1618,7 +1618,7 @@ sum_grow = custom_format(sum_grow)
 
 abas = st.tabs(["By BDR", "By Segment"])
 aba0 = abas[0]
-
+aba1 = abas[1]
 
 # Aba0
 with aba0:
@@ -1985,3 +1985,11 @@ with colT[0]:
 
 with colG_3[0]:
     st.plotly_chart(kpi1_all_barplot_bdr_p, use_container_width=True)
+
+
+# Aba1
+with aba1:
+    colA_n = st.columns(1)
+
+with colA_n:
+    st.image(blob_content_logo, use_column_width='always')
