@@ -617,6 +617,77 @@ visits_stacked.update_layout(
     margin=dict(b=50),
     height=600
     )
+
+#### PLANNED VISITS STACKED
+df_t1['visits_format_planned'] = df_t1['PLANNED_VISITS'].apply(lambda x: f'{x:.0f}')
+df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+df_t1_sort_new = df_t1.sort_values(by='VISIT_DATE', ascending=True)
+df_t1_sort_new['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b-%Y')
+df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR Name'])['visits_format'].sum().reset_index()
+df_t1_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t1_stacked['FORMATTED_DATE'], format='mixed', errors='coerce')
+df_t1_pivot_planned = df_t1_stacked.pivot_table(index='DATE_FOR_SORTING', columns='BDR Name', values='visits_format_planned', aggfunc='sum').fillna(0)
+
+df_t1_pivot_planned.index = df_t1_pivot_planned.index.strftime('%d-%b-%Y')
+visits_stacked_planned = go.Figure()
+colors = px.colors.sequential.Blues
+
+blue_palette = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf']
+
+for i, vendor in enumerate(df_t1_pivot_planned.columns):
+    text_labels = [f'{v}' if v != '0' else '' for v in df_t1_pivot[vendor]]
+
+    visits_stacked_planned.add_trace(go.Bar(
+        x=df_t1_pivot.index, 
+        y=df_t1_pivot[vendor], 
+        name=vendor,
+        marker_color=blue_palette[i % len(blue_palette)],  # Use the color palette
+        text=text_labels,  # Use the prepared text labels
+        textposition='outside'  # Position labels outside the bars
+    ))
+
+visits_stacked_planned.update_layout(barmode='stack', title='Daily Visits by BDR', xaxis_title='', yaxis_title='')
+for i, trace in enumerate(visits_stacked_planned.data):
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t1_pivot[trace.name]]
+
+# Customizing the figure's layout
+visits_stacked_planned.update_layout(
+    barmode='stack',
+    title='Daily Planned Visits by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
+
+
+visits_stacked_planned.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Visits by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
+
 #------------------------------------------------------------------------------------------------------
 ########## KPI 2
 #### Agregado por dia
@@ -1486,6 +1557,7 @@ with aba0:
     colF = st.columns(2)
     colG = st.columns(2)
     colG_1 = st.columns(1)
+    colT = st.columns(1)
 
 # Colunas
 
@@ -1777,3 +1849,6 @@ with colS_3[0]:
     mime='text/csv',
     key="download_button_10"
 )
+
+with colT[0]:
+    st.plotly_chart(visits_stacked_planned, use_container_width=True)
