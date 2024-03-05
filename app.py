@@ -1983,6 +1983,17 @@ with colS_3[0]:
 )
 
 with colT[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada4 {
+        font-size: 20px;
+        font-style: bold
+    }
+    </style>
+    <div class="fonte-personalizada4">
+        Planned Visits
+    </div>
+    """, unsafe_allow_html=True)
     st.plotly_chart(visits_stacked_planned, use_container_width=True)
     st.markdown("""
     <style>
