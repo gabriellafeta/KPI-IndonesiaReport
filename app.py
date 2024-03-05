@@ -238,8 +238,8 @@ df_t1_sorted = df_t1.sort_values(by='VISIT_DATE')
 
 start_date = max_date - pd.Timedelta(days=29)
 end_date = max_date
-df_aggregated_t1 = df_t1_sorted.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
-kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['#1a2634'])
+df_aggregated_t1 = df_t1_sorted.groupby('VISIT_DATE')['VISITS'].sum().reset_index()
+kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITS', color_discrete_sequence=['#1a2634'])
 
 # Layout
 kpi1_all_barplot.update_layout(
@@ -271,13 +271,13 @@ dates_df = pd.DataFrame(date_range, columns=['VISIT_DATE'])
 
 df_t1_bram['VISIT_DATE'] = pd.to_datetime(df_t1_bram['VISIT_DATE'])
 
-visits_per_day_bram = df_t1_bram.groupby(df_t1_bram['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_bram = df_t1_bram.groupby(df_t1_bram['VISIT_DATE'].dt.date)['VISITS'].sum().reset_index()
 visits_per_day_bram['VISIT_DATE'] = pd.to_datetime(visits_per_day_bram['VISIT_DATE'])
 
 full_data = pd.merge(dates_df, visits_per_day_bram, on='VISIT_DATE', how='left').fillna(0)
 full_data['VISIT_DATE'] = full_data['VISIT_DATE'].dt.date
 
-kpi1_bram_barplot = px.bar(full_data, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+kpi1_bram_barplot = px.bar(full_data, x='VISIT_DATE', y='VISITS', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_bram_barplot.update_layout(
     title='Visits in the Last 30 Days for Dinamis Artha Sukses',
@@ -304,13 +304,13 @@ kpi1_bram_barplot.update_layout(
 ###### Harris
 df_t1_harris['VISIT_DATE'] = pd.to_datetime(df_t1_harris['VISIT_DATE'])
 
-visits_per_day_harris = df_t1_harris.groupby(df_t1_harris['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_harris = df_t1_harris.groupby(df_t1_harris['VISIT_DATE'].dt.date)['VISITS'].sum().reset_index()
 visits_per_day_harris['VISIT_DATE'] = pd.to_datetime(visits_per_day_harris['VISIT_DATE'])
 
 full_data_harris = pd.merge(dates_df, visits_per_day_harris, on='VISIT_DATE', how='left').fillna(0)
 full_data_harris['VISIT_DATE'] = full_data_harris['VISIT_DATE'].dt.date
 
-kpi1_harris_barplot = px.bar(full_data_harris, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+kpi1_harris_barplot = px.bar(full_data_harris, x='VISIT_DATE', y='VISITS', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_harris_barplot.update_layout(
     title='Visits in the Last 30 Days for RMS Jakarta Selatan',
@@ -337,13 +337,13 @@ kpi1_harris_barplot.update_layout(
 ###### Cheryl
 df_t1_cheryl['VISIT_DATE'] = pd.to_datetime(df_t1_cheryl['VISIT_DATE'])
 
-visits_per_day_cheryl = df_t1_cheryl.groupby(df_t1_cheryl['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_cheryl = df_t1_cheryl.groupby(df_t1_cheryl['VISIT_DATE'].dt.date)['VISITS'].sum().reset_index()
 visits_per_day_cheryl['VISIT_DATE'] = pd.to_datetime(visits_per_day_cheryl['VISIT_DATE'])
 
 full_data_cheryl = pd.merge(dates_df, visits_per_day_cheryl, on='VISIT_DATE', how='left').fillna(0)
 full_data_cheryl['VISIT_DATE'] = full_data_cheryl['VISIT_DATE'].dt.date
 
-kpi1_cheryl_barplot = px.bar(full_data_cheryl, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+kpi1_cheryl_barplot = px.bar(full_data_cheryl, x='VISIT_DATE', y='VISITS', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_cheryl_barplot.update_layout(
     title='Visits in the Last 30 Days for RMS Depok',
@@ -370,13 +370,13 @@ kpi1_cheryl_barplot.update_layout(
 ###### Christian
 df_t1_christian['VISIT_DATE'] = pd.to_datetime(df_t1_christian['VISIT_DATE'])
 
-visits_per_day_christian = df_t1_christian.groupby(df_t1_christian['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_christian = df_t1_christian.groupby(df_t1_christian['VISIT_DATE'].dt.date)['VISITS'].sum().reset_index()
 visits_per_day_christian['VISIT_DATE'] = pd.to_datetime(visits_per_day_christian['VISIT_DATE'])
 
 full_data_christian = pd.merge(dates_df, visits_per_day_christian, on='VISIT_DATE', how='left').fillna(0)
 full_data_christian['VISIT_DATE'] = full_data_christian['VISIT_DATE'].dt.date
 
-kpi1_christian_barplot = px.bar(full_data_christian, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+kpi1_christian_barplot = px.bar(full_data_christian, x='VISIT_DATE', y='VISITS', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_christian_barplot.update_layout(
     title='Visits in the Last 30 Days for RMS Bogor',
@@ -403,13 +403,13 @@ kpi1_christian_barplot.update_layout(
 ###### Iwan Dwiarsono
 df_t1_iwan['VISIT_DATE'] = pd.to_datetime(df_t1_iwan['VISIT_DATE'])
 
-visits_per_day_iwan = df_t1_iwan.groupby(df_t1_iwan['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_iwan = df_t1_iwan.groupby(df_t1_iwan['VISIT_DATE'].dt.date)['VISITS'].sum().reset_index()
 visits_per_day_iwan['VISIT_DATE'] = pd.to_datetime(visits_per_day_iwan['VISIT_DATE'])
 
 full_data_iwan = pd.merge(dates_df, visits_per_day_iwan, on='VISIT_DATE', how='left').fillna(0)
 full_data_iwan['VISIT_DATE'] = full_data_iwan['VISIT_DATE'].dt.date
 
-kpi1_iwan_barplot = px.bar(full_data_iwan, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+kpi1_iwan_barplot = px.bar(full_data_iwan, x='VISIT_DATE', y='VISITS', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_iwan_barplot.update_layout(
     title='Visits in the Last 30 Days for RMS Bekasi',
@@ -436,13 +436,13 @@ kpi1_iwan_barplot.update_layout(
 ###### Dian
 df_t1_dian['VISIT_DATE'] = pd.to_datetime(df_t1_dian['VISIT_DATE'])
 
-visits_per_day_dian = df_t1_dian.groupby(df_t1_dian['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_dian = df_t1_dian.groupby(df_t1_dian['VISIT_DATE'].dt.date)['VISITS'].sum().reset_index()
 visits_per_day_dian['VISIT_DATE'] = pd.to_datetime(visits_per_day_dian['VISIT_DATE'])
 
 full_data_dian = pd.merge(dates_df, visits_per_day_dian, on='VISIT_DATE', how='left').fillna(0)
 full_data_dian['VISIT_DATE'] = full_data_dian['VISIT_DATE'].dt.date
 
-kpi1_dian_barplot = px.bar(full_data_dian, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+kpi1_dian_barplot = px.bar(full_data_dian, x='VISIT_DATE', y='VISITS', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_dian_barplot.update_layout(
     title='Visits in the Last 30 Days for ASR',
@@ -470,13 +470,13 @@ kpi1_dian_barplot.update_layout(
 ###### Alvis
 df_t1_alvis['VISIT_DATE'] = pd.to_datetime(df_t1_alvis['VISIT_DATE'])
 
-visits_per_day_alvis = df_t1_alvis.groupby(df_t1_alvis['VISIT_DATE'].dt.date)['VISITED_STORES'].sum().reset_index()
+visits_per_day_alvis = df_t1_alvis.groupby(df_t1_alvis['VISIT_DATE'].dt.date)['VISITS'].sum().reset_index()
 visits_per_day_alvis['VISIT_DATE'] = pd.to_datetime(visits_per_day_alvis['VISIT_DATE'])
 
 full_data_alvis = pd.merge(dates_df, visits_per_day_alvis, on='VISIT_DATE', how='left').fillna(0)
 full_data_alvis['VISIT_DATE'] = full_data_alvis['VISIT_DATE'].dt.date
 
-kpi1_alvis_barplot = px.bar(full_data_dian, x='VISIT_DATE', y='VISITED_STORES', title='Number of Visits per Day for the Last 30 Days')
+kpi1_alvis_barplot = px.bar(full_data_dian, x='VISIT_DATE', y='VISITS', title='Number of Visits per Day for the Last 30 Days')
 
 kpi1_alvis_barplot.update_layout(
     title='Visits in the Last 30 Days for CMP',
@@ -501,9 +501,9 @@ kpi1_alvis_barplot.update_layout(
 )
 
 ########## KPI1 per BDR ALLD
-df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR Name')['VISITED_STORES'].sum().reset_index()
-df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['#ffcc00'])
+df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR Name')['VISITS'].sum().reset_index()
+df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITS', ascending=False)
+kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR Name', y='VISITS', color_discrete_sequence=['#ffcc00'])
 
 kpi1_all_barplot_bdr.update_layout(
     title='Visits ALLD per BDR',
@@ -525,9 +525,9 @@ kpi1_all_barplot_bdr.update_layout( # Adjust the width to fit within the column
 ########## KPI1 per BDR in last latest DAY
 
 df_tf_mtd = df_t1[df_t1['VISIT_DATE'] == max_date]
-df_tf_mtd_agg = df_tf_mtd.groupby('BDR Name')['VISITED_STORES'].sum().reset_index()
-df_tf_mtd_agg = df_tf_mtd_agg.sort_values(by='VISITED_STORES', ascending=False)
-kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['#ffcc00'])
+df_tf_mtd_agg = df_tf_mtd.groupby('BDR Name')['VISITS'].sum().reset_index()
+df_tf_mtd_agg = df_tf_mtd_agg.sort_values(by='VISITS', ascending=False)
+kpi1_all_barplot_bdr_mtd = px.bar(df_tf_mtd_agg, x='BDR Name', y='VISITS', color_discrete_sequence=['#ffcc00'])
 formatted_max_date = max_date.strftime('%Y-%m-%d')
 
 kpi1_all_barplot_bdr_mtd.update_layout(
@@ -549,7 +549,7 @@ kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 
 #### Visits stacked
 
-df_t1['visits_format'] = df_t1['VISITED_STORES'].apply(lambda x: f'{x:.0f}')
+df_t1['visits_format'] = df_t1['VISITS'].apply(lambda x: f'{x:.0f}')
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
 df_t1_sort_new = df_t1.sort_values(by='VISIT_DATE', ascending=True)
 df_t1_sort_new['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b-%Y')
@@ -675,7 +675,7 @@ visits_stacked_planned.update_layout(
     ),
     plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
     barmode='stack',
-    title='Daily Visits by BDR',
+    title='Daily Planned Visits by BDR',
     showlegend=True,
     legend=dict(
         orientation='h',
