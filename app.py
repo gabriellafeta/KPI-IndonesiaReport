@@ -623,7 +623,7 @@ df_t1['visits_format_planned'] = df_t1['PLANNED_VISITS'].apply(lambda x: f'{x:.0
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
 df_t1_sort_new = df_t1.sort_values(by='VISIT_DATE', ascending=True)
 df_t1_sort_new['FORMATTED_DATE'] = df_t1['VISIT_DATE'].dt.strftime('%d-%b-%Y')
-df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR Name'])['visits_format'].sum().reset_index()
+df_t1_stacked = df_t1_sort_new.groupby(['FORMATTED_DATE', 'BDR Name'])['visits_format_planned'].sum().reset_index()
 df_t1_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t1_stacked['FORMATTED_DATE'], format='mixed', errors='coerce')
 df_t1_pivot_planned = df_t1_stacked.pivot_table(index='DATE_FOR_SORTING', columns='BDR Name', values='visits_format_planned', aggfunc='sum').fillna(0)
 
