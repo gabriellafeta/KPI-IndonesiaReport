@@ -239,7 +239,7 @@ df_t1_sorted = df_t1.sort_values(by='VISIT_DATE')
 start_date = max_date - pd.Timedelta(days=29)
 end_date = max_date
 df_aggregated_t1 = df_t1_sorted.groupby('VISIT_DATE')['VISITED_STORES'].sum().reset_index()
-kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['lightblue'])
+kpi1_all_barplot = px.bar(df_aggregated_t1, x='VISIT_DATE', y='VISITED_STORES', color_discrete_sequence=['#1a2634'])
 
 # Layout
 kpi1_all_barplot.update_layout(
@@ -293,7 +293,7 @@ kpi1_bram_barplot.update_traces(
     textposition='outside',
 )
 
-kpi1_bram_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+kpi1_bram_barplot.update_traces(marker_color='#1a2634', texttemplate='%{y}', textposition='outside',
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_bram_barplot.data[0].y]))
 
 kpi1_bram_barplot.update_layout(
@@ -326,7 +326,7 @@ kpi1_harris_barplot.update_traces(
     textposition='outside',
 )
 
-kpi1_harris_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+kpi1_harris_barplot.update_traces(marker_color='#1a2634', texttemplate='%{y}', textposition='outside',
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_harris_barplot.data[0].y]))
 
 kpi1_harris_barplot.update_layout(
@@ -359,7 +359,7 @@ kpi1_cheryl_barplot.update_traces(
     textposition='outside',
 )
 
-kpi1_cheryl_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+kpi1_cheryl_barplot.update_traces(marker_color='#1a2634', texttemplate='%{y}', textposition='outside',
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_cheryl_barplot.data[0].y]))
 
 kpi1_cheryl_barplot.update_layout(
@@ -392,7 +392,7 @@ kpi1_christian_barplot.update_traces(
     textposition='outside',
 )
 
-kpi1_christian_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+kpi1_christian_barplot.update_traces(marker_color='#1a2634', texttemplate='%{y}', textposition='outside',
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_christian_barplot.data[0].y]))
 
 kpi1_christian_barplot.update_layout(
@@ -425,7 +425,7 @@ kpi1_iwan_barplot.update_traces(
     textposition='outside',
 )
 
-kpi1_iwan_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+kpi1_iwan_barplot.update_traces(marker_color='#1a2634', texttemplate='%{y}', textposition='outside',
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_iwan_barplot.data[0].y]))
 
 kpi1_iwan_barplot.update_layout(
@@ -458,7 +458,7 @@ kpi1_dian_barplot.update_traces(
     textposition='outside',
 )
 
-kpi1_dian_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+kpi1_dian_barplot.update_traces(marker_color='#1a2634', texttemplate='%{y}', textposition='outside',
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_dian_barplot.data[0].y]))
 
 kpi1_dian_barplot.update_layout(
@@ -492,7 +492,7 @@ kpi1_alvis_barplot.update_traces(
     textposition='outside',
 )
 
-kpi1_alvis_barplot.update_traces(marker_color='lightblue', texttemplate='%{y}', textposition='outside',
+kpi1_alvis_barplot.update_traces(marker_color='#1a2634', texttemplate='%{y}', textposition='outside',
     textfont=dict(color=["rgba(0,0,0,0)" if y == 0 else "rgba(0,0,0,1)" for y in kpi1_alvis_barplot.data[0].y]))
 
 kpi1_alvis_barplot.update_layout(
@@ -630,7 +630,7 @@ df_t2_sorted = df_t2.sort_values(by='DATE')
 start_date = max_date_t2 - pd.Timedelta(days=29)
 
 df_aggregated_t2 = df_t2_sorted.groupby('DATE')['count_registered_stores'].sum().reset_index()
-kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='DATE', y='count_registered_stores', color_discrete_sequence=['lightblue'])
+kpi2_barplot_dateagg = px.bar(df_aggregated_t2, x='DATE', y='count_registered_stores', color_discrete_sequence=['#1a2634'])
 
 kpi2_barplot_dateagg.update_layout(
     title='Registered stores in Last 30 Days for ALL BDRs',
@@ -856,7 +856,7 @@ df_complete['TOTAL_ORDERS'] = df_complete['TOTAL_ORDERS'].fillna(0)
 df_complete['CUMULATIVE_ORDERS'] = df_complete['TOTAL_ORDERS'].cumsum()
 df_t3_last_30_days = df_complete[(df_complete['DAY'] >= start_date_cum_t3) & (df_complete['DAY'] <= max_date_cum_t3)]
 
-kpi3_barplot_cum = px.bar(df_t3_last_30_days, x='DAY', y='CUMULATIVE_ORDERS', color_discrete_sequence=['lightblue'])
+kpi3_barplot_cum = px.bar(df_t3_last_30_days, x='DAY', y='CUMULATIVE_ORDERS', color_discrete_sequence=['#1a2634'])
 
 kpi3_barplot_cum.update_layout(
     title='Cummulative BEES Orders in Last 30 Days for ALL BDRs',
