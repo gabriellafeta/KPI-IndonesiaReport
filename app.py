@@ -1681,7 +1681,7 @@ with colP[0]:
 
 with colP_1[0]:
     st.markdown(f"""
-    <div style="text-align: center;">
+    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
         <a href="data:text/csv;base64,{force_csv}" download="data.csv">
             <button>
                 This table as CSV
@@ -1692,7 +1692,7 @@ with colP_1[0]:
 
 with colP_1[1]:
     st.markdown(f"""
-    <div style="text-align: center;">
+    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
         <a href="data:text/csv;base64,{csv_t4}" download="data.csv">
             <button>
                 Raw Tasks as CSV
@@ -1703,7 +1703,7 @@ with colP_1[1]:
 
 with colP_1[2]:
     st.markdown(f"""
-    <div style="text-align: center;">
+    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
         <a href="data:text/csv;base64,{csv_t5}" download="data.csv">
             <button>
                 Raw GPS as CSV
