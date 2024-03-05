@@ -1677,7 +1677,6 @@ with colP[0]:
     st.markdown(f"""
     <div style="display: table; margin: auto;">
         {force_html}
-    </div>
     """, unsafe_allow_html=True)
 
 with colP_1[0]:
