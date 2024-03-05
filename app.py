@@ -1446,7 +1446,6 @@ aba0 = abas[0]
 with aba0:
     colA = st.columns(1)
     colB = st.columns(1)
-    colC = st.columns(1)
     colH = st.columns(1)
     colH_2 = st.columns(1)
     colH_1 = st.columns(1)
@@ -1502,21 +1501,6 @@ with colB[0]:
     </div>
     """, unsafe_allow_html=True)
 
-with colC[0]:
-    st.markdown("""
-    <style>
-    .fonte-personalizada2 {
-        font-size: 20px;
-        font-style: bold;
-        text-decoration: underline; /* This line adds the underline */
-    }
-    </style>
-    <div class="fonte-personalizada2">
-        1.	Number of stores visited per day per BDR.
-    </div>
-    """, unsafe_allow_html=True)
-
-
 with colC_1[0]:
     st.plotly_chart(kpi1_all_barplot_bdr, use_container_width=True)
 
@@ -1565,7 +1549,7 @@ with colH[0]:
     }
     </style>
     <div class="fonte-personalizada2">
-        2.	Number of stores registered by day per BDR.
+        1.	Number of stores registered by day per BDR.
     </div>
     """, unsafe_allow_html=True)
 
@@ -1596,7 +1580,7 @@ with colJ[0]:
     }
     </style>
     <div class="fonte-personalizada2">
-        3.	Number of stores adopted (place order via apps) per day per BDR.
+        2.	Number of stores adopted (place order via apps) per day per BDR.
     </div>
     """, unsafe_allow_html=True)
 
@@ -1636,7 +1620,7 @@ with colL[0]:
     }
     </style>
     <div class="fonte-personalizada2">
-        4.	Sales value per BDR 
+        3.	Sales value per BDR 
     </div>
     """, unsafe_allow_html=True)
 
@@ -1673,7 +1657,7 @@ with colO[0]:
     }
     </style>
     <div class="fonte-personalizada2">
-        5.	Force KPI's
+        4.	Force KPI's
     </div>
     """, unsafe_allow_html=True)
 
