@@ -140,6 +140,12 @@ blob_content = blob_client.download_blob().content_as_text()
 data_t5 = StringIO(blob_content)
 df_t5 = pd.read_csv(data_t5)
 
+# blob_name = 't6.csv'
+# blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+# blob_content = blob_client.download_blob().content_as_text()
+# data_t6 = StringIO(blob_content)
+# df_t6 = pd.read_csv(data_t6)
+
 ##### Imagens
 
 logo = "logo.png"
@@ -166,12 +172,14 @@ df_t2['BDR Name'] = df_t2['bdr_id'].map(BDR_dict)
 df_t3['BDR Name'] = df_t3['bdr_id'].map(BDR_dict)
 df_t4['BDR Name'] = df_t4['BDR_ID'].map(BDR_dict)
 df_t5['BDR Name'] = df_t5['BDR_ID'].map(BDR_dict)
+# df_t6['BDR Name'] = df_t6['BDR_ID'].map(BDR_dict)
 
 df_t1 = df_t1[df_t1['BDR Name'].notnull()]
 df_t2 = df_t2[df_t2['BDR Name'].notnull()]
 df_t3 = df_t3[df_t3['BDR Name'].notnull()]
 df_t4 = df_t4[df_t4['BDR Name'].notnull()]
 df_t5 = df_t5[df_t5['BDR Name'].notnull()]
+# df_t6 = df_t6[df_t5['BDR Name'].notnull()]
 
 # Mostrar apenas os últimos 30 dias
 
@@ -498,7 +506,7 @@ df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITED_STORES', asc
 kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR Name', y='VISITED_STORES', color_discrete_sequence=['LightSalmon'])
 
 kpi1_all_barplot_bdr.update_layout(
-    title='Visited Stores ALLD per BDR',
+    title='Visits ALLD per BDR',
     xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
@@ -553,7 +561,7 @@ df_t1_pivot.index = df_t1_pivot.index.strftime('%d-%b-%Y')
 visits_stacked = go.Figure()
 colors = px.colors.sequential.Blues
 
-blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+blue_palette = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf']
 
 for i, vendor in enumerate(df_t1_pivot.columns):
     text_labels = [f'{v}' if v != '0' else '' for v in df_t1_pivot[vendor]]
@@ -706,7 +714,7 @@ df_t2_pivot = df_t2_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR Name', 
 df_t2_pivot.index = df_t2_pivot.index.strftime('%d-%b-%Y')
 register_stacked = go.Figure()
 
-blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+blue_palette = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf']
 
 for i, vendor in enumerate(df_t2_pivot.columns):
     text_labels = [f'{v}' if v != '0' else '' for v in df_t2_pivot[vendor]]
@@ -882,7 +890,7 @@ df_t3_pivot = df_t3_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR Name', 
 df_t3_pivot.index = df_t3_pivot.index.strftime('%d-%b-%Y')
 order_stacked = go.Figure()
 
-blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+blue_palette = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf']
 
 for i, vendor in enumerate(df_t3_pivot.columns):
     text_labels = [f'{v}' if v != '0' else '' for v in df_t3_pivot[vendor]]
@@ -1163,7 +1171,7 @@ df_t3_pivot_gmvbdr.index = df_t3_pivot_gmvbdr.index.strftime('%d-%b-%Y')
 
 gmvbdr_stacked = go.Figure()
 
-blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+blue_palette = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf']
 
 for i, vendor in enumerate(df_t3_pivot_gmvbdr.columns):
     gmvbdr_stacked.add_trace(go.Bar(
@@ -1371,7 +1379,7 @@ df_t4_pivot = df_t4_stacked_bar.pivot(index='DATE_FOR_SORTING', columns='BDR Nam
 df_t4_pivot.index = df_t4_pivot.index.strftime('%d-%b-%Y')
 tasks_stacked = go.Figure()
 
-blue_palette = ['#1f77b4', '#aec7e8', '#c6dbef', '#6baed6', '#2171b5', '#4c78a8', '#9ecae1']
+blue_palette = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf']
 
 for i, vendor in enumerate(df_t4_pivot.columns):
     text_labels = [f'{v}' if v != '0' else '' for v in df_t4_pivot[vendor]]
