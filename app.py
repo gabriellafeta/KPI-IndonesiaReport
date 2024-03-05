@@ -1660,7 +1660,7 @@ formatted_max_date_t2 = max_date_t2.strftime('%Y-%m-%d')
 
 register_persegment_mtd.update_layout(
     title=f'Registered Stores on {formatted_max_date_t2} per Segment',
-    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
