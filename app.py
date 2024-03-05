@@ -1798,9 +1798,6 @@ with colN[0]:
 with colN_1[0]:
     st.plotly_chart(gmvbdr_stacked, use_container_width=True)
 
-with colN_2[0]:
-    st.plotly_chart(gmvbdr_stacked, use_container_width=True)
-
 with colN_3[0]:
     st.download_button(
     label="Download data as CSV",
