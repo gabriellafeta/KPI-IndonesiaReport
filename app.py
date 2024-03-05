@@ -836,7 +836,7 @@ df_t3_byday_sort = df_t3_byday.sort_values(by='DAY', ascending=True)
 df_t3_byday_sort['CUMULATIVE_ORDERS'] = df_t3_byday_sort['TOTAL_ORDERS'].cumsum()
 
 max_date_cum_t3 = df_t3_byday_sort['DAY'].max()
-start_date_cum_t3 = max_date_cum_t3 - pd.Timedelta(days=29)
+start_date_cum_t3 = max_date_cum_t3 - pd.Timedelta(days=360)
 df_t3_last_30_days = df_t3_byday_sort[(df_t3_byday_sort['DAY'] >= start_date_cum_t3) & (df_t3['DAY'] <= max_date_cum_t3)]
 
 date_range = pd.date_range(start=start_date_cum_t3, end=max_date_cum_t3)
