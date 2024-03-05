@@ -1573,6 +1573,10 @@ diff_orders = int(diff_orders)
 
 ### Sales Value
 
+df_t3_dm1['gmv_placed_customer'] = pd.to_numeric(df_t3_dm1['gmv_placed_customer'], errors='coerce').fillna(0)
+df_t3_dm1['gmv_placed_force'] = pd.to_numeric(df_t3_dm1['gmv_placed_force'], errors='coerce').fillna(0)
+df_t3_dm1['gmv_placed_grow'] = pd.to_numeric(df_t3_dm1['gmv_placed_grow'], errors='coerce').fillna(0)
+
 sum_sales = df_t3_sales_notnull_sort['TOTAL_SALES'].sum()
 df_t3_dm1['total_sales_dm1'] = df_t3_dm1['gmv_placed_customer'] + df_t3_dm1['gmv_placed_force'] + df_t3_dm1['gmv_placed_grow']
 sum_sales_dm1 = df_t3_dm1['total_sales_dm1'].sum()
