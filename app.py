@@ -1719,7 +1719,7 @@ with colS_1[0]:
     st.markdown(taskeffect_table_html, unsafe_allow_html=True)
     st.download_button(
     label="This table as CSV",
-    data=gpsday_csv,
+    data=taskday_csv,
     file_name='data.csv',
     mime='text/csv',
     key="download_button_8"
@@ -1738,6 +1738,13 @@ with colS_2[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(gps_table_html, unsafe_allow_html=True)
+    st.download_button(
+    label="This table as CSV",
+    data=gpsday_csv,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_9"
+)
 
 with colS_3[0]:
     st.markdown("""
@@ -1752,3 +1759,10 @@ with colS_3[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(gpsq_table_html, unsafe_allow_html=True)
+    st.download_button(
+    label="This table as CSV",
+    data=gpsqday_csv,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_10"
+)
