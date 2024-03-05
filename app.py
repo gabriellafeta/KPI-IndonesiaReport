@@ -1466,6 +1466,7 @@ with aba0:
     colN = st.columns(1)
     colN_1 = st.columns(1)
     colN_2 = st.columns(1)
+    colN_3 = st.columns(1)
     colO = st.columns(1)
     colP = st.columns(1)
     colQ = st.columns(2)
@@ -1646,6 +1647,14 @@ with colN_1[0]:
 
 with colN_2[0]:
     st.plotly_chart(gmvbdr_stacked, use_container_width=True)
+
+with colN_3[0]:
+    st.download_button(
+    label="Download data as CSV",
+    data=csv_t3,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_3")
 
 with colO[0]:
     st.markdown("""
