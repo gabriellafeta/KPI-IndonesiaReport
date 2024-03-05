@@ -140,11 +140,11 @@ blob_content = blob_client.download_blob().content_as_text()
 data_t5 = StringIO(blob_content)
 df_t5 = pd.read_csv(data_t5)
 
-# blob_name = 't6.csv'
-# blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-# blob_content = blob_client.download_blob().content_as_text()
-# data_t6 = StringIO(blob_content)
-# df_t6 = pd.read_csv(data_t6)
+blob_name = 't6.csv'
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+blob_content = blob_client.download_blob().content_as_text()
+data_t6 = StringIO(blob_content)
+df_t6 = pd.read_csv(data_t6)
 
 ##### Imagens
 
@@ -172,14 +172,14 @@ df_t2['BDR Name'] = df_t2['bdr_id'].map(BDR_dict)
 df_t3['BDR Name'] = df_t3['bdr_id'].map(BDR_dict)
 df_t4['BDR Name'] = df_t4['BDR_ID'].map(BDR_dict)
 df_t5['BDR Name'] = df_t5['BDR_ID'].map(BDR_dict)
-# df_t6['BDR Name'] = df_t6['BDR_ID'].map(BDR_dict)
+df_t6['BDR Name'] = df_t6['BDR_ID'].map(BDR_dict)
 
 df_t1 = df_t1[df_t1['BDR Name'].notnull()]
 df_t2 = df_t2[df_t2['BDR Name'].notnull()]
 df_t3 = df_t3[df_t3['BDR Name'].notnull()]
 df_t4 = df_t4[df_t4['BDR Name'].notnull()]
 df_t5 = df_t5[df_t5['BDR Name'].notnull()]
-# df_t6 = df_t6[df_t5['BDR Name'].notnull()]
+df_t6 = df_t6[df_t5['BDR Name'].notnull()]
 
 # Mostrar apenas os últimos 30 dias
 
@@ -250,6 +250,8 @@ csv_t2 = df_t2.to_csv(index=False).encode('utf-8')
 csv_t3 = df_t3.to_csv(index=False).encode('utf-8')
 csv_t4 = df_t4.to_csv(index=False).encode('utf-8')
 csv_t5 = df_t5.to_csv(index=False).encode('utf-8')
+csv_t6 = df_t6.to_csv(index=False).encode('utf-8')
+
 #------------------------------------------------------------------------------------------------------
 # Criando visualizações
 
@@ -2018,7 +2020,36 @@ with colG_3[0]:
 #---------------------------------------------------------------------------------------------------
 # Aba1
 with aba1:
-    colA_n = st.columns(1)
+    colAn = st.columns(1)
+    colBn = st.columns(1)
+    colCn = st.columns(1)
 
-with colA_n[0]:
+with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
+
+with colBn[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada1 {
+        font-size: 30px;
+        font-style: bold;
+    }
+    </style>
+    <div class="fonte-personalizada1">
+        KPI's management - Indonesia
+    </div>
+    """, unsafe_allow_html=True)
+
+with colCn[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        1.	Number of stores registered by day per segment.
+    </div>
+    """, unsafe_allow_html=True)
