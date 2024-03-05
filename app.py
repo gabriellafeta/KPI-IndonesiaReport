@@ -1725,3 +1725,41 @@ with colS_3[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(gpsq_table_html, unsafe_allow_html=True)
+
+with colC_1[0]:
+    st.plotly_chart(kpi1_all_barplot_bdr, use_container_width=True)
+
+with colC_2[0]:
+    st.plotly_chart(kpi1_all_barplot_bdr_mtd, use_container_width=True)
+
+with colC_3[0]:
+    st.plotly_chart(visits_stacked, use_container_width=True)
+
+with colD[0]:
+    st.plotly_chart(kpi1_all_barplot)
+with colD[1]:
+    st.plotly_chart(kpi1_bram_barplot)
+
+with colE[0]:
+    st.plotly_chart(kpi1_harris_barplot)
+with colE[1]:
+    st.plotly_chart(kpi1_cheryl_barplot)
+
+with colF[0]:
+    st.plotly_chart(kpi1_christian_barplot)
+with colF[1]:
+    st.plotly_chart(kpi1_iwan_barplot)
+
+with colG[0]:
+    st.plotly_chart(kpi1_dian_barplot)
+with colG[1]:
+    st.plotly_chart(kpi1_alvis_barplot)
+
+with colG_1[0]:
+    st.download_button(
+    label="Download data as CSV",
+    data=csv_t1,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_1"
+)
