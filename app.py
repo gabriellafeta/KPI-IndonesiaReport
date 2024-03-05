@@ -1683,7 +1683,13 @@ df_t2_sort_new = df_t2.sort_values(by='DATE', ascending=True)
 df_t2_sort_new['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b-%Y')
 df_t2_stacked2 = df_t2_sort_new.groupby(['FORMATTED_DATE', 'segment'])['register_format'].sum().reset_index()
 df_t2_stacked2['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
-df_t2_pivot_seg = df_t2_stacked2.pivot(index='DATE_FOR_SORTING', columns='segment', values='register_format').fillna(0)
+
+df_t2_pivot_seg = df_t2_stacked2.pivot_table(
+    index='DATE_FOR_SORTING',
+    columns='segment',
+    values='register_format',
+    aggfunc='sum'
+).fillna(0)
 
 df_t2_pivot_seg.index = df_t2_pivot_seg.index.strftime('%d-%b-%Y')
 register_stacked_seg = go.Figure()
@@ -1709,7 +1715,7 @@ for i, trace in enumerate(register_stacked_seg.data):
 # Customizing the figure's layout
 register_stacked_seg.update_layout(
     barmode='stack',
-    title='Daily Visits by BDR',
+    title='Daily Visits by Segment',
     xaxis_title='',
     yaxis_title='',
     xaxis_tickangle=-90,
@@ -2131,9 +2137,6 @@ with colG_3[0]:
     """, unsafe_allow_html=True)
     st.metric(label="Total Planned Visits", value=sum_visitsp, delta=diff_visitsp)
     st.plotly_chart(kpi1_all_barplot_bdr_p, use_container_width=True)
-
-
-
 
 
 #---------------------------------------------------------------------------------------------------
