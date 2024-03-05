@@ -1564,6 +1564,11 @@ diff_register = sum_register - sum_register_dm1
 diff_register = int(diff_register)
 
 ### Orders
+sum_orders = df_t3["TOTAL_ORDERS"].sum()
+df_t3_dm1['total_orders'] = df_t3_dm1['count_placed_orders_customer'] + df_t3_dm1['count_placed_orders_force'] + df_t3_dm1['count_placed_orders_grow']
+sum_orders_dm1 = df_t3_dm1['total_orders'].sum()
+diff_orders = sum_orders - sum_orders_dm1
+diff_orders = int(diff_orders)
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -1688,7 +1693,7 @@ with colH[0]:
     """, unsafe_allow_html=True)
 
 with colH_1[0]:
-    st.metric(label="Total Register", value=sum_register, delta=diff_register)
+    st.metric(label="Total Registers", value=sum_register, delta=diff_register)
     st.plotly_chart(kpi2_all_barplot_bdr, use_container_width=True)
 
 with colH_3[0]:
@@ -1720,6 +1725,7 @@ with colJ[0]:
     """, unsafe_allow_html=True)
 
 with colK_1[0]:
+    st.metric(label="Total Orders", value=sum_orders, delta=diff_orders)
     st.plotly_chart(kpi3_all_barplot_bdr, use_container_width=True)
 
 with colK_2[0]:
