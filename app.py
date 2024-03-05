@@ -1680,29 +1680,37 @@ with colP[0]:
     """, unsafe_allow_html=True)
 
 with colP_1[0]:
-    st.download_button(
-    label="This table as CSV",
-    data=force_csv,
-    file_name='data.csv',
-    mime='text/csv',
-    key="download_button_7"
-)
+    st.markdown(f"""
+    <div style="text-align: center;">
+        <a href="data:text/csv;base64,{force_csv}" download="data.csv">
+            <button>
+                This table as CSV
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+
 with colP_1[1]:
-    st.download_button(
-    label="Raw Tasks as CSV",
-    data=csv_t4,
-    file_name='data.csv',
-    mime='text/csv',
-    key="download_button_5"
-)
+    st.markdown(f"""
+    <div style="text-align: center;">
+        <a href="data:text/csv;base64,{csv_t4}" download="data.csv">
+            <button>
+                Raw Tasks as CSV
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+
 with colP_1[2]:
-    st.download_button(
-    label="Raw GPS as CSV",
-    data=csv_t5,
-    file_name='data.csv',
-    mime='text/csv',
-    key="download_button_6"
-)
+    st.markdown(f"""
+    <div style="text-align: center;">
+        <a href="data:text/csv;base64,{csv_t5}" download="data.csv">
+            <button>
+                Raw GPS as CSV
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
 with colS[0]:
     st.plotly_chart(tasks_stacked, use_container_width=True)
