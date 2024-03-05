@@ -172,7 +172,7 @@ df_t2['BDR Name'] = df_t2['bdr_id'].map(BDR_dict)
 df_t3['BDR Name'] = df_t3['bdr_id'].map(BDR_dict)
 df_t4['BDR Name'] = df_t4['BDR_ID'].map(BDR_dict)
 df_t5['BDR Name'] = df_t5['BDR_ID'].map(BDR_dict)
-df_t6['BDR Name'] = df_t6['BDR_ID'].map(BDR_dict)
+df_t6['BDR Name'] = df_t6['bdr_id'].map(BDR_dict)
 
 df_t1 = df_t1[df_t1['BDR Name'].notnull()]
 df_t2 = df_t2[df_t2['BDR Name'].notnull()]
