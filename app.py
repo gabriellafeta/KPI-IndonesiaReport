@@ -1991,5 +1991,5 @@ with colG_3[0]:
 with aba1:
     colA_n = st.columns(1)
 
-with colA_n:
+with colA_n[0]:
     st.image(blob_content_logo, use_column_width='always')
