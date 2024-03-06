@@ -1822,7 +1822,7 @@ df_t3_pivot_seg = df_t3_stacked_seg.pivot_table(
     aggfunc='sum'
 ).fillna(0)
 
-df_t3_pivot_seg.index = df_t3_pivot.index.strftime('%d-%b-%Y')
+df_t3_pivot_seg.index = df_t3_pivot_seg.index.strftime('%d-%b-%Y')
 order_stacked_seg = go.Figure()
 
 blue_palette_seg = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf', '#c7b198']
