@@ -1763,7 +1763,7 @@ orders_seg = px.bar(df_t3_agg_bees_sort_seg, x='store_segment', y='TOTAL_ORDERS'
 
 orders_seg.update_layout(
     title='BEES Orders ALLD per Segment',
-    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
