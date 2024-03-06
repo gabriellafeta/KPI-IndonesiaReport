@@ -2042,7 +2042,71 @@ force_html_seg = df_estilizado_joined_seg.to_html()
 
 force_csv_seg = df_joined_sort_seg.to_csv(index=False).encode('utf-8')
 
+#### Tasks stacked per Segment
 
+df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
+df_t4_sort = df_t4.sort_values(by='DATE', ascending=True)
+df_t4_sort['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b-%Y')
+df_t4_stacked_bar_seg = df_t4_sort.groupby(['FORMATTED_DATE', 'segment'])['TOTAL_TASKS'].sum().reset_index()
+df_t4_stacked_bar_seg['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_bar['FORMATTED_DATE'], format='%d-%b-%Y')
+df_t4_pivot_seg = df_t4_stacked_bar_seg.pivot(index='DATE_FOR_SORTING', columns='segment', values='TOTAL_TASKS').fillna(0)
+
+df_t4_pivot_seg.index = df_t4_pivot_seg.index.strftime('%d-%b-%Y')
+tasks_stacked_seg = go.Figure()
+
+for i, vendor in enumerate(df_t4_pivot_seg.columns):
+    text_labels = [f'{v}' if v != '0' else '' for v in df_t4_pivot_seg[vendor]]
+
+    tasks_stacked_seg.add_trace(go.Bar(
+        x=df_t4_pivot_seg.index, 
+        y=df_t4_pivot_seg[vendor], 
+        name=vendor,
+        marker_color=blue_palette_seg[i % len(blue_palette_seg)],  # Use the color palette
+        text=text_labels,  # Use the prepared text labels
+        textposition='outside'  # Position labels outside the bars
+    ))
+
+tasks_stacked_seg.update_layout(barmode='stack', title='Daily Tasks by Segment', xaxis_title='', yaxis_title='')
+for i, trace in enumerate(tasks_stacked_seg.data):
+    trace.text = [f'{int(v)}' if v != 0 else '' for v in df_t4_pivot_seg[trace.name]]
+
+# Customizing the figure's layout
+tasks_stacked_seg.update_layout(
+    barmode='stack',
+    title='Daily Tasks by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
+
+tasks_stacked_seg.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Tasks by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -2537,3 +2601,4 @@ with colHn[0]:
     <div style="display: table; margin: auto;">
         {force_html_seg}
     """, unsafe_allow_html=True)
+    st.plotly_chart(tasks_stacked_seg, use_container_width=True)
