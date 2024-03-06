@@ -1707,7 +1707,6 @@ register_stacked_seg.update_layout(barmode='stack', title='Daily Registers by Se
 for i, trace in enumerate(register_stacked_seg.data):
     trace.text = [f'{v}' if v != 0 else '' for v in df_t2_pivot_seg[trace.name]]
 
-# Customizing the figure's layout
 register_stacked_seg.update_layout(
     barmode='stack',
     title='Daily Visits by Segment',
@@ -1745,6 +1744,41 @@ register_stacked_seg.update_layout(
     margin=dict(b=50),
     height=600
     )
+
+############ Orders per Segment
+
+df_t3["TOTAL_ORDERS"] = df_t3["count_placed_orders_customer"] + df_t3["count_placed_orders_force"] + df_t3["count_placed_orders_grow"]
+
+max_date_t3 = df_t3['DAY'].max()
+max_date_t3 = pd.to_datetime(max_date_t3)
+
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sorted = df_t3.sort_values(by='DAY')
+
+df_t3_agg_bees_seg = df_t3_sorted.groupby('store_segment')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_agg_bees_sort_seg = df_t3_agg_bees_seg.sort_values(by='TOTAL_ORDERS', ascending=False)
+
+# KPI 3 ORDERS - ALLD per BDR
+orders_seg = px.bar(df_t3_agg_bees_sort_seg, x='store_segment', y='TOTAL_ORDERS', color_discrete_sequence=['#ffcc00'])
+
+orders_seg.update_layout(
+    title='BEES Orders ALLD per Segment',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+orders_seg.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+orders_seg.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+
+
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -2143,6 +2177,7 @@ with aba1:
     colDn = st.columns(1)
     colEn = st.columns(1)
     colFn = st.columns(1)
+    colFn_1 = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2195,3 +2230,5 @@ with colFn[0]:
     </div>
     """, unsafe_allow_html=True)
 
+with colFn_1[0]:
+    st.plotly_chart(orders_seg, use_container_width=True)
