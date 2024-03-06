@@ -2034,20 +2034,13 @@ df_t5_grouped_seg = df_t5.groupby('segment')[['GPS', 'GPS_QUALITY']].mean().rese
 df_t5_grouped_seg[['GPS', 'GPS_QUALITY']] = df_t5_grouped_seg[['GPS', 'GPS_QUALITY']].applymap(lambda x: f"{x * 100:.2f}%")
 df_t5_grouped_sort_seg = df_t5_grouped_seg.sort_values(by='GPS', ascending=False)
 
-cols_t5_seg = ['GPS', 'GPS_QUALITY']
-
-df_t5_grouped_sort_seg.rename(columns={'segment': 'segment_t5'}, inplace=True)
-
-df_joined_seg = df_t4_grouped_sort_seg.join(df_t5_grouped_sort_seg.set_index('segment_t5'), how='inner')
-
-df_joined_sort_seg = df_joined_seg.sort_values(by='TOTAL_TASKS', ascending=False)
-
-df_joined_sort_seg.dropna(how='any', inplace=True)
-
+df_t4_grouped_sort_seg.set_index('segment', inplace=True)
+df_t5_grouped_sort_seg.set_index('segment', inplace=True)
 
 
 df_joined_seg = df_t4_grouped_sort_seg.join(df_t5_grouped_sort_seg, how='outer', lsuffix='_t4', rsuffix='_t5')
-df_joined_sort_seg = df_joined_seg.sort_values(by='TOTAL_TASKS', ascending=False)
+df_joined_seg.reset_index(inplace=True)
+df_joined_sort_seg = df_joined_seg.sort_values(by='TOTAL_TASKS_t4', ascending=False)
 df_joined_sort_seg.columns = df_joined_sort_seg.columns.str.replace('_', ' ')
 df_estilizado_joined_seg = style_table(df_joined_sort_seg, df_joined_sort_seg.columns, font_size='10pt')
 force_html_seg = df_estilizado_joined_seg.to_html()
