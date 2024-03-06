@@ -2026,6 +2026,7 @@ df_t4_grouped_seg['TASK_EFFECTIVNESS'] = (df_t4_grouped_seg['EFFECTIVED_TASKS'] 
 df_t4_grouped_seg['TASK_EFFECTIVNESS'] = df_t4_grouped_seg['TASK_EFFECTIVNESS'].apply(lambda x: f"{x:.2f}%")
 df_t4_grouped_sort_seg = df_t4_grouped_seg.sort_values(by='TOTAL_TASKS', ascending=False)
 df_t4_grouped_sort_seg.set_index('segment', inplace=True)
+df_t4_grouped_sort.set_index(df_t4_grouped_sort_seg.columns[0], inplace=True)
 df_t4_grouped_sort_seg.fillna(0, inplace=True)
 
 df_t5_grouped_seg = df_t5.groupby('segment')[['GPS', 'GPS_QUALITY']].mean().reset_index()
