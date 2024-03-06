@@ -2123,8 +2123,8 @@ pivot_df_tgps_seg = df_t5_sort_gps.pivot_table(
     aggfunc='mean'
 )
 
-pivot_df_tgps_seg = pivot_df_tgps_seg.reindex(sorted(pivot_df_tgps.columns), axis=1)
-pivot_df_tgps_seg.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgps.columns]
+pivot_df_tgps_seg = pivot_df_tgps_seg.reindex(sorted(pivot_df_tgps_seg.columns), axis=1)
+pivot_df_tgps_seg.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgps_seg.columns]
 
 pivot_df_tgps_formatted_seg = pivot_df_tgps_seg.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
 all_columns_B_seg = pivot_df_tgps_formatted_seg.columns.tolist()
@@ -2148,7 +2148,7 @@ pivot_df_tgpsq_seg = df_t5_sort_gpsq.pivot_table(
 )
 
 pivot_df_tgpsq_seg = pivot_df_tgpsq_seg.reindex(sorted(pivot_df_tgpsq_seg.columns), axis=1)
-pivot_df_tgpsq_seg.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgpsq.columns]
+pivot_df_tgpsq_seg.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgpsq_seg.columns]
 
 pivot_df_tgpsq_formatted_seg = pivot_df_tgpsq_seg.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
 all_columns_C_seg = pivot_df_tgpsq_formatted_seg.columns.tolist()
