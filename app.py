@@ -2110,6 +2110,54 @@ tasks_stacked_seg.update_layout(
     height=600
     )
 
+# GPS tables
+df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
+df_t5_sort_gps = df_t5.sort_values(by='DATE', ascending=True)
+df_t5_sort_gps['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b-%Y')
+df_t5['GPS'] = df_t5['GPS'].astype(float)
+
+pivot_df_tgps_seg = df_t5_sort_gps.pivot_table(
+    index='segment', 
+    columns='DATE', 
+    values='GPS', 
+    aggfunc='mean'
+)
+
+pivot_df_tgps_seg = pivot_df_tgps_seg.reindex(sorted(pivot_df_tgps.columns), axis=1)
+pivot_df_tgps_seg.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgps.columns]
+
+pivot_df_tgps_formatted_seg = pivot_df_tgps_seg.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
+all_columns_B_seg = pivot_df_tgps_formatted_seg.columns.tolist()
+gps_table_seg = style_table(pivot_df_tgps_formatted_seg, all_columns_B_seg)
+
+gps_table_html_seg = gps_table_seg.to_html()
+gpsday_csv_seg = pivot_df_tgps_formatted_seg.to_csv(index=False).encode('utf-8')
+
+###### GPS Quality table by day
+
+df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
+df_t5_sort_gpsq = df_t5.sort_values(by='DATE', ascending=True)
+df_t5_sort_gpsq['FORMATTED_DATE'] = df_t5['DATE'].dt.strftime('%d-%b-%Y')
+df_t5['GPS_QUALITY'] = df_t5['GPS_QUALITY'].astype(float)
+
+pivot_df_tgpsq_seg = df_t5_sort_gpsq.pivot_table(
+    index='segment', 
+    columns='DATE', 
+    values='GPS_QUALITY', 
+    aggfunc='mean'
+)
+
+pivot_df_tgpsq_seg = pivot_df_tgpsq_seg.reindex(sorted(pivot_df_tgpsq_seg.columns), axis=1)
+pivot_df_tgpsq_seg.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_tgpsq.columns]
+
+pivot_df_tgpsq_formatted_seg = pivot_df_tgpsq_seg.applymap(lambda x: f"{x * 100:.0f}%" if pd.notnull(x) else "0%")
+all_columns_C_seg = pivot_df_tgpsq_formatted_seg.columns.tolist()
+gpsq_table_seg = style_table(pivot_df_tgpsq_formatted_seg, all_columns_C_seg)
+
+gpsq_table_html_seg = gpsq_table_seg.to_html()
+gpsqday_csv_seg = pivot_df_tgpsq_formatted_seg.to_csv(index=False).encode('utf-8')
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -2511,6 +2559,7 @@ with aba1:
     colGn = st.columns(1)
     colGn_1 = st.columns(1)
     colHn = st.columns(1)
+    colHn_1 = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2604,3 +2653,29 @@ with colHn[0]:
         {force_html_seg}
     """, unsafe_allow_html=True)
     st.plotly_chart(tasks_stacked_seg, use_container_width=True)
+
+with colHn_1[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada4 {
+        font-size: 20px;
+        font-style: bold
+    }
+    </style>
+    <div class="fonte-personalizada4">
+        GPS by day per segment
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown(gps_table_html_seg, unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    .fonte-personalizada4 {
+        font-size: 20px;
+        font-style: bold
+    }
+    </style>
+    <div class="fonte-personalizada4">
+        GPS Quality by day per segment
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown(gpsq_table_html_seg, unsafe_allow_html=True)
