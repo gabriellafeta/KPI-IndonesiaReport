@@ -2280,6 +2280,7 @@ with aba1:
     colEn = st.columns(1)
     colFn = st.columns(1)
     colFn_1 = st.columns(1)
+    colGn = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2336,3 +2337,17 @@ with colFn_1[0]:
     st.plotly_chart(orders_seg, use_container_width=True)
     st.plotly_chart(orders_seg_mtd, use_container_width=True)
     st.plotly_chart(order_stacked_seg, use_container_width=True)
+
+with colGn[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        3.	Sales value per Segment
+    </div>
+    """, unsafe_allow_html=True)
