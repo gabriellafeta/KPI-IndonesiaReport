@@ -2018,6 +2018,31 @@ sales_stacked_seg.update_layout(
     height=600
     )
 
+########### Force KPI's per segment
+
+## Table by Segment
+df_t4_grouped_seg = df_t4.groupby('segment')[['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']].sum().reset_index()
+df_t4_grouped_seg['TASK_EFFECTIVNESS'] = (df_t4_grouped_seg['EFFECTIVED_TASKS'] / df_t4_grouped_seg['TOTAL_TASKS']) * 100
+df_t4_grouped_seg['TASK_EFFECTIVNESS'] = df_t4_grouped_seg['TASK_EFFECTIVNESS'].apply(lambda x: f"{x:.2f}%")
+df_t4_grouped_sort_seg = df_t4_grouped_seg.sort_values(by='TOTAL_TASKS', ascending=False)
+
+cols_t4 = ['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']
+df_t4_grouped_sort_seg.set_index(df_t4_grouped_sort_seg.columns[0], inplace=True)
+df_t4_grouped_sort_seg.fillna(0, inplace=True)
+
+df_t5_grouped_seg = df_t5.groupby('segment')[['GPS', 'GPS_QUALITY']].mean().reset_index()
+df_t5_grouped_seg[['GPS', 'GPS_QUALITY']] = df_t5_grouped_seg[['GPS', 'GPS_QUALITY']].applymap(lambda x: f"{x * 100:.2f}%")
+df_t5_grouped_sort_seg = df_t5_grouped_seg.sort_values(by='GPS', ascending=False)
+
+cols_t5 = ['GPS', 'GPS_QUALITY']
+
+df_joined_seg = df_t4_grouped_sort_seg.join(df_t5_grouped_sort_seg, how='outer', lsuffix='_t4', rsuffix='_t5')
+df_joined_sort_seg = df_joined_seg.sort_values(by='TOTAL_TASKS', ascending=False)
+df_joined_sort_seg.columns = df_joined_sort_seg.columns.str.replace('_', ' ')
+df_estilizado_joined_seg = style_table(df_joined_sort_seg, df_joined_sort_seg.columns, font_size='10pt')
+force_html_seg = df_estilizado_joined_seg.to_html()
+
+force_csv_seg = df_joined_sort.to_csv(index=False).encode('utf-8')
 
 
 
@@ -2421,6 +2446,7 @@ with aba1:
     colFn_1 = st.columns(1)
     colGn = st.columns(1)
     colGn_1 = st.columns(1)
+    colHn = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2495,3 +2521,21 @@ with colGn[0]:
 with colGn_1[0]:
     st.plotly_chart(sales_seg, use_container_width=True)
     st.plotly_chart(sales_stacked_seg, use_container_width=True)
+
+with colHn[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        4.	Force KPI's per Segment
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="display: table; margin: auto;">
+        {force_html_seg}
+    """, unsafe_allow_html=True)
