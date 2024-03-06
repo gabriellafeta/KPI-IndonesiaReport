@@ -1778,6 +1778,32 @@ orders_seg.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
+## Order pr segment latest day
+
+df_t3_mtd = df_t3[df_t3['DAY'] == max_date_t3]
+df_t3_mtd_agg_seg = df_t3_mtd.groupby('store_segment')['TOTAL_ORDERS'].sum().reset_index()
+df_t3_mtd_agg_seg = df_t3_mtd_agg_seg.sort_values(by='TOTAL_ORDERS', ascending=False)
+
+
+orders_seg_mtd = px.bar(df_t3_mtd_agg_seg, x='store_segment', y='TOTAL_ORDERS', color_discrete_sequence=['#ffcc00'])
+formatted_max_date_t3 = max_date_t3.strftime('%Y-%m-%d')
+
+orders_seg_mtd.update_layout(
+    title=f'BEES Orders on {formatted_max_date_t3} per BDR',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+orders_seg_mtd.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+orders_seg_mtd.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
 
 
 #------------------------------------------------------------------------------------------------------
@@ -2232,3 +2258,4 @@ with colFn[0]:
 
 with colFn_1[0]:
     st.plotly_chart(orders_seg, use_container_width=True)
+    st.plotly_chart(orders_seg_mtd, use_container_width=True)
