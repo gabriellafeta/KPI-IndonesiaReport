@@ -2181,6 +2181,32 @@ taskeffect_table_html_seg = taskeffect_table_seg.to_html()
 taskday_csv_seg = pivot_df_teff_formatted_seg.to_csv(index=False).encode('utf-8')
 
 
+#################### VISITS per SEG
+
+########## KPI1 per BDR seg
+df_aggregated_t1_seg = df_t1_sorted.groupby('segment')['VISITS'].sum().reset_index()
+df_aggregated_t1_seg = df_aggregated_t1_seg.sort_values(by='VISITS', ascending=False)
+visits_seg = px.bar(df_aggregated_t1_seg, x='segment', y='VISITS', color_discrete_sequence=['#ffcc00'])
+
+visits_seg.update_layout(
+    title='Visits ALLD per Segment',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+visits_seg.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+visits_seg.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -2583,6 +2609,7 @@ with aba1:
     colGn_1 = st.columns(1)
     colHn = st.columns(1)
     colHn_1 = st.columns(1)
+    colHn_2 = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2714,4 +2741,7 @@ with colHn_1[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(gpsq_table_html_seg, unsafe_allow_html=True)
+
+with colHn_2[0]:
+    st.plotly_chart(visits_seg, use_container_width=True)
     
