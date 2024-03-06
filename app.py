@@ -2142,6 +2142,7 @@ with aba1:
     colCn = st.columns(1)
     colDn = st.columns(1)
     colEn = st.columns(1)
+    colFn = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2179,3 +2180,18 @@ with colDn[0]:
 
 with colEn[0]:
     st.plotly_chart(register_stacked_seg, use_container_width=True)
+
+with colFn[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        2.	Number of stores adopted (place order via apps) per day per Segment.
+    </div>
+    """, unsafe_allow_html=True)
+
