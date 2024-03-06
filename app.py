@@ -2157,6 +2157,29 @@ gpsq_table_seg = style_table(pivot_df_tgpsq_formatted_seg, all_columns_C_seg)
 gpsq_table_html_seg = gpsq_table_seg.to_html()
 gpsqday_csv_seg = pivot_df_tgpsq_formatted_seg.to_csv(index=False).encode('utf-8')
 
+# TASKS 
+df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
+df_t4_sort_eff = df_t4.sort_values(by='DATE', ascending=True)
+df_t4_sort_eff['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b-%Y')
+df_t4['TASK_EFFECTIVENESS'] = df_t4['TASK_EFFECTIVENESS'].astype(float)
+
+pivot_df_teff_seg = df_t4_sort_eff.pivot_table(
+    index='segment', 
+    columns='DATE', 
+    values='TASK_EFFECTIVENESS', 
+    aggfunc='mean'
+)
+
+pivot_df_teff_seg = pivot_df_teff_seg.reindex(sorted(pivot_df_teff_seg.columns), axis=1)
+pivot_df_teff_seg.columns = [date.strftime('%d-%b-%Y') for date in pivot_df_teff_seg.columns]
+
+pivot_df_teff_formatted_seg = pivot_df_teff_seg.applymap(lambda x: f"{x:.0%}" if pd.notnull(x) else "0%")
+all_columns_A_seg = pivot_df_teff_formatted_seg.columns.tolist()
+taskeffect_table_seg = style_table(pivot_df_teff_formatted_seg, all_columns_A_seg)
+
+taskeffect_table_html_seg = taskeffect_table_seg.to_html()
+taskday_csv_seg = pivot_df_teff_formatted_seg.to_csv(index=False).encode('utf-8')
+
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -2663,6 +2686,18 @@ with colHn_1[0]:
     }
     </style>
     <div class="fonte-personalizada4">
+        Task Effectivness by day per segment
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown(taskeffect_table_html_seg, unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    .fonte-personalizada4 {
+        font-size: 20px;
+        font-style: bold
+    }
+    </style>
+    <div class="fonte-personalizada4">
         GPS by day per segment
     </div>
     """, unsafe_allow_html=True)
@@ -2679,3 +2714,4 @@ with colHn_1[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(gpsq_table_html_seg, unsafe_allow_html=True)
+    
