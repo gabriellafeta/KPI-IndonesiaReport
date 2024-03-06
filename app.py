@@ -1916,7 +1916,7 @@ sales_seg = px.bar(df_t3_sales_notnull_sort_seg, x='store_segment', y='TOTAL_SAL
 
 sales_seg.update_layout(
     title='BEES Sales ALLD per Segment',
-    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    xaxis=dict(tickmode='linear', title=''),
     showlegend=False,
     yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
     plot_bgcolor='white'  # Set background color to white for a clean look
