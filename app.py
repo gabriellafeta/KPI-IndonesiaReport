@@ -1677,19 +1677,14 @@ register_persegment_mtd.update_layout( # Adjust the width to fit within the colu
 
 # Register Daily stacked by segment
 
-df_t2['register_format'] = df_t2['count_registered_stores'].apply(lambda x: f'{x:.0f}')
 df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
 df_t2_sort_new = df_t2.sort_values(by='DATE', ascending=True)
-df_t2_sort_new['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b-%Y')
-df_t2_stacked2 = df_t2_sort_new.groupby(['FORMATTED_DATE', 'segment'])['register_format'].sum().reset_index()
-df_t2_stacked2['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
+df_t2_sort_new['FORMATTED_DATE'] = df_t2_sort_new['DATE'].dt.strftime('%d-%b-%Y')
 
-df_t2_pivot_seg = df_t2_stacked2.pivot_table(
-    index='DATE_FOR_SORTING',
-    columns='segment',
-    values='register_format',
-    aggfunc='sum'
-).fillna(0)
+df_t2_stacked2 = df_t2_sort_new.groupby(['FORMATTED_DATE', 'segment'])['count_registered_stores'].sum().reset_index()
+df_t2_stacked2['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked2['FORMATTED_DATE'], format='%d-%b-%Y')
+
+df_t2_pivot_seg = df_t2_stacked2.pivot_table(index='DATE_FOR_SORTING', columns='segment', values='count_registered_stores', aggfunc='sum').fillna(0)
 
 df_t2_pivot_seg.index = df_t2_pivot_seg.index.strftime('%d-%b-%Y')
 register_stacked_seg = go.Figure()
@@ -1697,7 +1692,7 @@ register_stacked_seg = go.Figure()
 blue_palette_seg = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf', '#c7b198']
 
 for i, vendor in enumerate(df_t2_pivot_seg.columns):
-    text_labels = [f'{v}' if v != '0' else '' for v in df_t2_pivot_seg[vendor]]
+    text_labels = [f'{v:.0f}' if v != 0 else '' for v in df_t2_pivot_seg[vendor]]
 
     register_stacked_seg.add_trace(go.Bar(
         x=df_t2_pivot_seg.index, 
