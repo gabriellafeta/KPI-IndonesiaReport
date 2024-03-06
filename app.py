@@ -2036,6 +2036,7 @@ df_t5_grouped_sort_seg.set_index('segment', inplace=True)
 
 df_joined_seg = df_t4_grouped_sort_seg.join(df_t5_grouped_sort_seg, how='outer', lsuffix='_t4', rsuffix='_t5')
 df_joined_seg.reset_index(inplace=True)
+df_joined_seg.set_index('segment', inplace=True)
 df_joined_sort_seg = df_joined_seg.sort_values(by='TOTAL_TASKS', ascending=False)
 
 df_estilizado_joined_seg = style_table(df_joined_sort_seg, df_joined_sort_seg.columns, font_size='10pt')
