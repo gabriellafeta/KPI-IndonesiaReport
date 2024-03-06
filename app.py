@@ -2049,7 +2049,7 @@ df_t4_sort = df_t4.sort_values(by='DATE', ascending=True)
 df_t4_sort['FORMATTED_DATE'] = df_t4['DATE'].dt.strftime('%d-%b-%Y')
 df_t4_stacked_bar_seg = df_t4_sort.groupby(['FORMATTED_DATE', 'segment'])['TOTAL_TASKS'].sum().reset_index()
 df_t4_stacked_bar_seg['DATE_FOR_SORTING'] = pd.to_datetime(df_t4_stacked_bar['FORMATTED_DATE'], format='%d-%b-%Y')
-df_t4_pivot_seg = df_t4_stacked_bar_seg.pivot(index='DATE_FOR_SORTING', columns='segment', values='TOTAL_TASKS').fillna(0)
+df_t4_pivot_seg = df_t4_stacked_bar_seg.pivot_table(index='DATE_FOR_SORTING', columns='segment', values='TOTAL_TASKS', aggfunc=sum).fillna(0)
 
 df_t4_pivot_seg.index = df_t4_pivot_seg.index.strftime('%d-%b-%Y')
 tasks_stacked_seg = go.Figure()
