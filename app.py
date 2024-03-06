@@ -1882,6 +1882,56 @@ order_stacked_seg.update_layout(
     )
 
 
+################ Sales per Segment
+
+df_t3['gmv_placed_customer'] = pd.to_numeric(df_t3['gmv_placed_customer'], errors='coerce').fillna(0)
+df_t3['gmv_placed_force'] = pd.to_numeric(df_t3['gmv_placed_force'], errors='coerce').fillna(0)
+df_t3['gmv_placed_grow'] = pd.to_numeric(df_t3['gmv_placed_grow'], errors='coerce').fillna(0)
+
+df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
+df_t3['TOTAL_SALES'] = pd.to_numeric(df_t3['TOTAL_SALES'], errors='coerce').fillna(0)
+
+df_t3_sales_seg = df_t3.groupby('store_segment')['TOTAL_SALES'].sum().reset_index()
+df_t3_sales_notnull_seg = df_t3_sales_seg[(df_t3_sales_seg['TOTAL_SALES'] != 0)]
+df_t3_sales_notnull_seg.dropna(subset=['TOTAL_SALES'], inplace=True)
+
+df_t3_sales_notnull_sort_seg = df_t3_sales_notnull_seg.sort_values(by='TOTAL_SALES', ascending=False)
+
+df_t3_sales_notnull_sort_seg['TOTAL_SALES'] = df_t3_sales_notnull_sort_seg['TOTAL_SALES'].fillna(0).round(1)
+
+def custom_format(value):
+    if value >= 1e6:  # If the value is in millions
+        value = value / 1e6
+        return f'{value:.2f}M IDR'
+    elif value >= 1e3:  # If the value is in thousands
+        value = value / 1e3
+        return f'{value:.2f}K IDR'
+    else:  # If the value is less than a thousand
+        return f'{value:.2f} IDR'
+
+# Apply the formatting function to your sales data
+formatted_sales_seg = df_t3_sales_notnull_sort_seg['TOTAL_SALES'].apply(custom_format)
+
+sales_seg = px.bar(df_t3_sales_notnull_sort_seg, x='store_segment', y='TOTAL_SALES', color_discrete_sequence=['#ffcc00'], text=formatted_sales_seg)
+
+sales_seg.update_layout(
+    title='BEES Sales ALLD per Segment',
+    xaxis=dict(tickmode='linear', title='', tickangle=90),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+sales_seg.update_traces(
+    hovertemplate="<b>%{x}</b><br>Total Sales: %{y:.2s}<extra></extra>",  # Use .2s for smart formatting
+    textposition='outside'  # This positions the text on top of the bars  # Place the text above the bars
+)
+
+sales_seg.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -2281,6 +2331,7 @@ with aba1:
     colFn = st.columns(1)
     colFn_1 = st.columns(1)
     colGn = st.columns(1)
+    colGn_1 = st.columns(1)
 
 with colAn[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -2351,3 +2402,6 @@ with colGn[0]:
         3.	Sales value per Segment
     </div>
     """, unsafe_allow_html=True)
+
+with colGn_1[0]:
+    st.plotly_chart(sales_seg, use_container_width=True)
