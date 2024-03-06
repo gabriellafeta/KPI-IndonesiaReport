@@ -1805,6 +1805,76 @@ orders_seg_mtd.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
+# Segment stacked day Orders
+
+df_t3['Order_SUM'] = df_t3['count_placed_orders_customer'] + df_t3['count_placed_orders_force'] + df_t3['count_placed_orders_grow']
+
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sort_new = df_t3.sort_values(by='DAY', ascending=True)
+df_t3_sort_new['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b-%Y')
+df_t3_stacked_seg = df_t3_sort_new.groupby(['FORMATTED_DATE', 'store_segment'])['Order_SUM'].sum().reset_index()
+df_t3_stacked_seg['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
+df_t3_pivot_seg = df_t3_stacked_seg.pivot(index='DATE_FOR_SORTING', columns='store_segment', values='Order_SUM').fillna(0)
+
+df_t3_pivot_seg.index = df_t3_pivot.index.strftime('%d-%b-%Y')
+order_stacked_seg = go.Figure()
+
+blue_palette_seg = ['#1a2634', '#203e5f', '#ffcc00', '#fee5b1', '#393e46', '#393e46', '#acdbdf', '#c7b198']
+
+for i, vendor in enumerate(df_t3_pivot_seg.columns):
+    text_labels = [f'{v}' if v != '0' else '' for v in df_t3_pivot_seg[vendor]]
+
+    order_stacked_seg.add_trace(go.Bar(
+        x=df_t3_pivot_seg.index, 
+        y=df_t3_pivot_seg[vendor], 
+        name=vendor,
+        marker_color=blue_palette_seg[i % len(blue_palette_seg)],  # Use the color palette
+        text=text_labels,  # Use the prepared text labels
+        textposition='outside'  # Position labels outside the bars
+    ))
+
+order_stacked_seg.update_layout(barmode='stack', title='Daily Orders by Segment', xaxis_title='', yaxis_title='')
+for i, trace in enumerate(order_stacked_seg.data):
+    trace.text = [f'{v}' if v != 0 else '' for v in df_t3_pivot_seg[trace.name]]
+
+order_stacked_seg.update_layout(
+    barmode='stack',
+    title='Daily Orders by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
+
+
+order_stacked_seg.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily Orders by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
+
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -2259,3 +2329,4 @@ with colFn[0]:
 with colFn_1[0]:
     st.plotly_chart(orders_seg, use_container_width=True)
     st.plotly_chart(orders_seg_mtd, use_container_width=True)
+    st.plotly_chart(order_stacked_seg, use_container_width=True)
