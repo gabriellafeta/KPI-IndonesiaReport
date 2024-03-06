@@ -1931,6 +1931,95 @@ sales_seg.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
+### Sales by day Seg
+
+df_t3['TOTAL_SALES'] = df_t3['TOTAL_SALES'] = df_t3['gmv_placed_customer'] + df_t3['gmv_placed_force'] + df_t3['gmv_placed_grow']
+
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_sort_new_gmv = df_t3.sort_values(by='DAY', ascending=True)
+df_t3_sort_new_gmv['FORMATTED_DATE'] = df_t3['DAY'].dt.strftime('%d-%b-%Y')
+df_t3_stacked_gmvbdr_seg = df_t3_sort_new_gmv.groupby(['FORMATTED_DATE', 'store_segment'])['TOTAL_SALES'].sum().reset_index()
+df_t3_stacked_gmvbdr_seg['DATE_FOR_SORTING'] = pd.to_datetime(df_t3_stacked_gmvbdr_seg['FORMATTED_DATE'], format='%d-%b-%Y')
+
+df_t3_pivot_gmvbdr_seg = df_t3_stacked_gmvbdr_seg.pivot_table(
+    index='DATE_FOR_SORTING', columns='store_segment', values='TOTAL_SALES', aggfunc='sum').fillna(0)
+
+df_t3_pivot_gmvbdr_seg.index = df_t3_pivot_gmvbdr_seg.index.strftime('%d-%b-%Y')
+
+sales_stacked_seg = go.Figure()
+
+for i, vendor in enumerate(df_t3_pivot_gmvbdr_seg.columns):
+    sales_stacked_seg.add_trace(go.Bar(
+        x=df_t3_pivot_gmvbdr_seg.index, 
+        y=df_t3_pivot_gmvbdr_seg[vendor],
+        name=vendor,
+        marker_color=blue_palette_seg[i % len(blue_palette_seg)],
+        text=[custom_format(v) if v != 0 else '' for v in df_t3_pivot_gmvbdr_seg[vendor]],
+        textposition='outside',
+        hoverinfo='text',
+    ))
+
+for trace in sales_stacked_seg.data:
+    formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
+    trace.update(
+        hoverinfo='text',
+        hovertext=[f"<b>{trace.name}</b><br>{custom_format(y)}" for y in trace.y],
+        text=formatted_text,
+        texttemplate='%{text}',
+        textposition='outside'
+    )
+
+sales_stacked_seg.update_layout(barmode='stack', title='Daily GMV by BDR', xaxis_title='', yaxis_title='')
+
+for trace in sales_stacked_seg.data:
+    formatted_text = [custom_format(value) if value != 0 else '' for value in trace.y]
+    trace.update(
+        hoverinfo='text',
+        hovertext=[f"<b>{trace.name}</b><br>{custom_format(y)}" for y in trace.y],
+        text=formatted_text,
+        texttemplate='%{text}',
+        textposition='outside'
+    )
+
+sales_stacked_seg.update_layout(
+    barmode='stack',
+    title='Daily GMV by BDR',
+    xaxis_title='',
+    yaxis_title='',
+    xaxis_tickangle=-90,
+    yaxis={'visible': False, 'showticklabels': False},
+    plot_bgcolor='rgba(0,0,0,0)',
+    xaxis={'showgrid': False},
+)
+
+sales_stacked_seg.update_layout(
+    xaxis=dict(
+        tickmode='linear',
+        dtick=1,  # Set the interval between ticks to 1 day
+        tickangle=-90,  # Rotate labels by 90 degrees
+        type='category'  # This ensures that all categories (dates) are displayed
+    ),
+    yaxis=dict(
+        showticklabels=False,  # Hide Y-axis labels
+        showgrid=False,  # Hide grid lines
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+    barmode='stack',
+    title='Daily GMV by BDR',
+    showlegend=True,
+    legend=dict(
+        orientation='h',
+        yanchor='top',
+        y=-0.2,  # You might need to adjust this value to fit your chart
+        xanchor='center',
+        x=0.5  # Center the legend on the x-axis
+    ),
+    margin=dict(b=50),
+    height=600
+    )
+
+
+
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -2405,3 +2494,4 @@ with colGn[0]:
 
 with colGn_1[0]:
     st.plotly_chart(sales_seg, use_container_width=True)
+    st.plotly_chart(sales_stacked_seg, use_container_width=True)
