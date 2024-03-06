@@ -2025,23 +2025,18 @@ df_t4_grouped_seg = df_t4.groupby('segment')[['TOTAL_TASKS', 'COMPLETED_TASKS', 
 df_t4_grouped_seg['TASK_EFFECTIVNESS'] = (df_t4_grouped_seg['EFFECTIVED_TASKS'] / df_t4_grouped_seg['TOTAL_TASKS']) * 100
 df_t4_grouped_seg['TASK_EFFECTIVNESS'] = df_t4_grouped_seg['TASK_EFFECTIVNESS'].apply(lambda x: f"{x:.2f}%")
 df_t4_grouped_sort_seg = df_t4_grouped_seg.sort_values(by='TOTAL_TASKS', ascending=False)
-
-cols_t4_seg = ['TOTAL_TASKS', 'COMPLETED_TASKS', 'EFFECTIVED_TASKS']
-df_t4_grouped_sort_seg.set_index(df_t4_grouped_sort_seg.columns[0], inplace=True)
+df_t4_grouped_sort_seg.set_index('segment', inplace=True)
 df_t4_grouped_sort_seg.fillna(0, inplace=True)
 
 df_t5_grouped_seg = df_t5.groupby('segment')[['GPS', 'GPS_QUALITY']].mean().reset_index()
 df_t5_grouped_seg[['GPS', 'GPS_QUALITY']] = df_t5_grouped_seg[['GPS', 'GPS_QUALITY']].applymap(lambda x: f"{x * 100:.2f}%")
 df_t5_grouped_sort_seg = df_t5_grouped_seg.sort_values(by='GPS', ascending=False)
-
-df_t4_grouped_sort_seg.set_index('segment', inplace=True)
 df_t5_grouped_sort_seg.set_index('segment', inplace=True)
-
 
 df_joined_seg = df_t4_grouped_sort_seg.join(df_t5_grouped_sort_seg, how='outer', lsuffix='_t4', rsuffix='_t5')
 df_joined_seg.reset_index(inplace=True)
-df_joined_sort_seg = df_joined_seg.sort_values(by='TOTAL_TASKS_t4', ascending=False)
-df_joined_sort_seg.columns = df_joined_sort_seg.columns.str.replace('_', ' ')
+df_joined_sort_seg = df_joined_seg.sort_values(by='TOTAL_TASKS', ascending=False)
+
 df_estilizado_joined_seg = style_table(df_joined_sort_seg, df_joined_sort_seg.columns, font_size='10pt')
 force_html_seg = df_estilizado_joined_seg.to_html()
 
