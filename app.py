@@ -2205,6 +2205,29 @@ visits_seg.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
 
+# PLANNED
+
+########## KPI1 per BDR ALLD - Planned
+df_aggregated_t1_seg_p = df_t1_sorted.groupby('segment')['PLANNED_VISITS'].sum().reset_index()
+df_aggregated_t1_seg_p = df_aggregated_t1_seg_p.sort_values(by='PLANNED_VISITS', ascending=False)
+visists_seg_mtd = px.bar(df_aggregated_t1_seg_p, x='segment', y='PLANNED_VISITS', color_discrete_sequence=['#ffcc00'])
+
+visists_seg_mtd.update_layout(
+    title='Visits Planned ALLD per Segment',
+    xaxis=dict(tickmode='linear', title=''),
+    showlegend=False,
+    yaxis=dict(showgrid=False, showticklabels=False, title=''),  # Hide Y-axis grid lines and tick labels
+    plot_bgcolor='white'  # Set background color to white for a clean look
+)
+
+visists_seg_mtd.update_traces(
+    texttemplate='%{y}',  # Use the Y value for the text
+    textposition='outside'  # Place the text above the bars
+)
+
+visists_seg_mtd.update_layout( # Adjust the width to fit within the column
+    height=500  # You can also adjust the height if necessary
+)
 
 
 #------------------------------------------------------------------------------------------------------
@@ -2744,4 +2767,5 @@ with colHn_1[0]:
 
 with colHn_2[0]:
     st.plotly_chart(visits_seg, use_container_width=True)
+    st.plotly_chart(visists_seg_mtd, use_container_width=True)
     
