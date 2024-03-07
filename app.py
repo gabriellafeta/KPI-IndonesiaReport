@@ -2239,18 +2239,59 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 )
 #------------------------------------------------------------------------------------------------------
 #### Master Table
+## df_t3
 
 df_t3['week_of_year'] = df_t3['DAY'].dt.isocalendar().week
+df_t3['first_day_of_week'] = df_t3['DAY'].dt.to_period('W').start_time
+df_t3['TOTAL_BUYERS'] = df_t3['count_buyers_customer'] + df_t3['count_buyers_force'] + df_t3['count_buyers_grow']
 
 weekly_sales_gmv = df_t3.groupby('week_of_year').agg(
-    Total_GMV=('TOTAL_SALES', 'sum'),  # Rename TOTAL_SALES to Sales
-    GMV_Customer=('gmv_placed_customer', 'sum'),  # Sum and rename gmv_placed_customer
-    GMV_Force=('gmv_placed_force', 'sum'),  # Sum and rename gmv_placed_force
-    GMV_Grow=('gmv_placed_grow', 'sum')  # Sum and rename gmv_placed_grow
+    Total_GMV=('TOTAL_SALES', 'sum'),
+    GMV_Customer=('gmv_placed_customer', 'sum'),
+    GMV_Force=('gmv_placed_force', 'sum'),
+    GMV_Grow=('gmv_placed_grow', 'sum'),
+
+    Total_Orders=('TOTAL_ORDERS', 'sum'),
+    Customer_Orders=('count_placed_orders_customer','sum')
+    Force_Orders=('count_placed_orders_force','sum')
+    Grow_Orders=('count_placed_orders_grow','sum'),
+
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Customer_Buyers=('count_buyers_customer','sum')
+    Force_Buyers=('count_buyers_force','sum')
+    Grow_Buyers=('count_buyers_grow','sum')
 ).reset_index()
 
+##df_t1
+df_t1['week_of_year'] = df_t1['VISIT_DATE'].dt.isocalendar().week
 
-merged_df_master_table = pd.merge(weekly_data_id_df, weekly_sales_gmv, left_on='WEEK_OF_YEAR', right_on='week_of_year', how='left')
+weekly_visits = df_t1.groupby('week_of_year').agg(
+    PLANNED_VISITS=('PLANNED_VISITS', 'sum')
+).reset_index()
+
+## df_tf4
+df_t4['week_of_year'] = df_t4['VISIT_DATE'].dt.isocalendar().week
+
+weekly_tasks = df_t4.groupby('week_of_year').agg(
+    Total_Tasks=('TOTAL_TASKS', 'sum'),
+    Completed_Tasks=('TOTAL_TASKS', 'sum'),
+    Task_Effect=('TASK_EFFECTIVENESS', 'mean')
+).reset_index()
+
+## df_tf5
+df_t5['week_of_year'] = df_t5['VISIT_DATE'].dt.isocalendar().week
+
+weekly_gps = df_t4.groupby('week_of_year').agg(
+    GPS=('GPS', 'mean'),
+    GPS_QUALITY=('GPS_QUALITY', 'mean')
+).reset_index()
+
+#Merging
+merged_df = pd.merge(weekly_sales_gmv, weekly_visits, on='week_of_year', how='left')
+merged_df = pd.merge(merged_df, weekly_tasks, on='week_of_year', how='left')
+merged_df_master_table = pd.merge(merged_df, weekly_gps, on='week_of_year', how='left')
+
+### Final master table
 merged_df_master_table['AOV'] = merged_df_master_table['Total_GMV'] / merged_df_master_table['Total_ORDERS']
 
 for column in merged_df_master_table.columns[2:]:
