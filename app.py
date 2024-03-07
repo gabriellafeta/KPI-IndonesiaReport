@@ -2240,8 +2240,9 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 #------------------------------------------------------------------------------------------------------
 #### Master Table
 
+columns_master_table = weekly_data_id_df.columns
 
-master_table = style_table(weekly_data_id_df, all_columns_A_seg)
+master_table = style_table(weekly_data_id_df, columns_master_table)
 master_table_html = master_table.to_html()
 
 
