@@ -2252,7 +2252,7 @@ weekly_sales_gmv = df_t3.groupby('week_of_year').agg(
     GMV_Grow=('gmv_placed_grow', 'sum'),
 
     Total_Orders=('TOTAL_ORDERS', 'sum'),
-    Customer_Orders=('count_placed_orders_customer','sum')
+    Customer_Orders=('count_placed_orders_customer','sum'),
     Force_Orders=('count_placed_orders_force','sum'),
     Grow_Orders=('count_placed_orders_grow','sum'),
 
