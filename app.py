@@ -2240,7 +2240,7 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 #------------------------------------------------------------------------------------------------------
 #### Master Table
 
-weekly_data_id_df['AOV_calc'] = weekly_data_id_df['Total_GMV'] / weekly_data_id_df['Total_ORDERS']
+weekly_data_id_df['AOV'] = weekly_data_id_df['Total_GMV'] / weekly_data_id_df['Total_ORDERS']
 
 for column in weekly_data_id_df.columns[2:]:
     weekly_data_id_df[column] = pd.to_numeric(weekly_data_id_df[column], errors='coerce')
