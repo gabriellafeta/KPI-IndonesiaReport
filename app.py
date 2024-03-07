@@ -2273,7 +2273,7 @@ weekly_visits = df_t1.groupby('week_of_year').agg(
 ##df_t2
 df_t2['week_of_year'] = df_t2['DATE'].dt.isocalendar().week
 
-weekly_register = df_t1.groupby('week_of_year').agg(
+weekly_register = df_t2.groupby('week_of_year').agg(
     Registered_Stores=('count_registered_stores', 'sum')
 ).reset_index()
 
