@@ -2307,12 +2307,12 @@ merged_df_master_table['GPS_QUALITY'] = merged_df_master_table['GPS_QUALITY'].ap
 merged_df_master_table['Task_Effect'] = merged_df_master_table['Task_Effect'].apply(formata_percentual)
 
 merged_df_master_table_sorted = merged_df_master_table.sort_values(by='week_of_year', ascending=False).fillna(0)
-merged_df_master_table.columns = merged_df_master_table.columns.str.replace('_', ' ')
-merged_df_master_table = merged_df_master_table.set_index(merged_df_master_table.columns[0])
+merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
+merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table.columns[0])
 
-columns_master_table = merged_df_master_table.columns
+columns_master_table = merged_df_master_table_sorted.columns
 
-master_table = style_table(merged_df_master_table, columns_master_table)
+master_table = style_table(merged_df_master_table_sorted, columns_master_table)
 master_table_html = master_table.to_html()
 
 
