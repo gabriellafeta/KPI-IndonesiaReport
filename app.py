@@ -2281,7 +2281,7 @@ weekly_tasks = df_t4.groupby('week_of_year').agg(
 ## df_tf5
 df_t5['week_of_year'] = df_t5['DATE'].dt.isocalendar().week
 
-weekly_gps = df_t4.groupby('week_of_year').agg(
+weekly_gps = df_t5.groupby('week_of_year').agg(
     GPS=('GPS', 'mean'),
     GPS_QUALITY=('GPS_QUALITY', 'mean')
 ).reset_index()
