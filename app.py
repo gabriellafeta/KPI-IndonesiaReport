@@ -146,6 +146,12 @@ blob_content = blob_client.download_blob().content_as_text()
 data_t6 = StringIO(blob_content)
 df_t6 = pd.read_csv(data_t6)
 
+blob_name = 'weekly_data_id.csv'
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+blob_content = blob_client.download_blob().content_as_text()
+weekly_data_id = StringIO(blob_content)
+weekly_data_id_df = pd.read_csv(weekly_data_id)
+
 ##### Imagens
 
 logo = "logo.png"
@@ -180,6 +186,14 @@ df_t3 = df_t3[df_t3['BDR Name'].notnull()]
 df_t4 = df_t4[df_t4['BDR Name'].notnull()]
 df_t5 = df_t5[df_t5['BDR Name'].notnull()]
 df_t6 = df_t6[df_t6['BDR Name'].notnull()]
+
+# Criando coluna de semana
+
+df_t1['WEEK'] = df_t1['VISIT_DATE'].dt.isocalendar().week
+df_t2['WEEK'] = df_t2['DATE'].dt.isocalendar().week
+df_t3['WEEK'] = df_t3['DAY'].dt.isocalendar().week
+df_t4['WEEK'] = df_t4['DATE'].dt.isocalendar().week
+df_t5['WEEK'] = df_t5['DATE'].dt.isocalendar().week
 
 # Mostrar apenas os últimos 30 dias
 
@@ -2231,6 +2245,12 @@ visists_seg_mtd.update_traces(
 visists_seg_mtd.update_layout( # Adjust the width to fit within the column
     height=500  # You can also adjust the height if necessary
 )
+#------------------------------------------------------------------------------------------------------
+#### Master Table
+
+
+master_table = style_table(weekly_data_id_df, all_columns_A_seg)
+master_table_html = master_table.to_html()
 
 
 #------------------------------------------------------------------------------------------------------
@@ -2245,6 +2265,7 @@ aba1 = abas[1]
 with aba0:
     colA = st.columns(1)
     colB = st.columns(1)
+    colB_alpha = st.columns(1)
     colH = st.columns(1)
     colH_2 = st.columns(1)
     colH_1 = st.columns(1)
@@ -2304,6 +2325,22 @@ with colB[0]:
         KPI's management - Indonesia
     </div>
     """, unsafe_allow_html=True)
+
+with colB_alpha[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        Weekly Results
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown(master_table_html, unsafe_allow_html=True)
+
 
 with colC_1[0]:
     st.metric(label="Total Visits", value=sum_visits, delta=diff_visits)
