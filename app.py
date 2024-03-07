@@ -597,7 +597,7 @@ kpi1_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 )
 
 #### Visits stacked
-
+df_t1['VISITS'] = pd.to_numeric(df_t1['VISITS'], errors='coerce').fillna(0)
 df_t1['visits_format'] = df_t1['VISITS'].apply(lambda x: f'{x:.0f}')
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
 df_t1_sort_new = df_t1.sort_values(by='VISIT_DATE', ascending=True)
@@ -668,6 +668,7 @@ visits_stacked.update_layout(
     )
 
 #### PLANNED VISITS STACKED
+
 df_t1['PLANNED_VISITS'] = pd.to_numeric(df_t1['PLANNED_VISITS'], errors='coerce').fillna(0)
 df_t1['visits_format_planned'] = df_t1['PLANNED_VISITS'].apply(lambda x: f'{x:.0f}')
 df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
