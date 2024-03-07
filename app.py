@@ -2241,22 +2241,32 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 #### Master Table
 
 df_t3['week_of_year'] = df_t3['DAY'].dt.isocalendar().week
-weekly_data_id_df['AOV'] = weekly_data_id_df['Total_GMV'] / weekly_data_id_df['Total_ORDERS']
 
-for column in weekly_data_id_df.columns[2:]:
-    weekly_data_id_df[column] = pd.to_numeric(weekly_data_id_df[column], errors='coerce')
+weekly_sales_gmv = df_t3.groupby('week_of_year').agg(
+    Total_GMV=('TOTAL_SALES', 'sum'),  # Rename TOTAL_SALES to Sales
+    GMV_Customer=('gmv_placed_customer', 'sum'),  # Sum and rename gmv_placed_customer
+    GMV_Force=('gmv_placed_force', 'sum'),  # Sum and rename gmv_placed_force
+    GMV_Grow=('gmv_placed_grow', 'sum')  # Sum and rename gmv_placed_grow
+).reset_index()
 
-weekly_data_id_df['GMV_customer'] = weekly_data_id_df['GMV_customer'].apply(formata_numero)
-weekly_data_id_df['GMV_force'] = weekly_data_id_df['GMV_force'].apply(formata_numero)
-weekly_data_id_df['GMV_grow'] = weekly_data_id_df['GMV_grow'].apply(formata_numero)
-weekly_data_id_df['Total_GMV'] = weekly_data_id_df['Total_GMV'].apply(formata_numero)
 
-weekly_data_id_df.columns = weekly_data_id_df.columns.str.replace('_', ' ')
-weekly_data_id_df = weekly_data_id_df.set_index(weekly_data_id_df.columns[0])
+merged_df_master_table = pd.merge(weekly_data_id_df, weekly_sales_gmv, left_on='WEEK_OF_YEAR', right_on='week_of_year', how='left')
+merged_df_master_table['AOV'] = merged_df_master_table['Total_GMV'] / merged_df_master_table['Total_ORDERS']
 
-columns_master_table = weekly_data_id_df.columns
+for column in merged_df_master_table.columns[2:]:
+    merged_df_master_table[column] = pd.to_numeric(merged_df_master_table[column], errors='coerce')
 
-master_table = style_table(weekly_data_id_df, columns_master_table)
+merged_df_master_table['GMV_Customer'] = merged_df_master_table['GMV_Customer'].apply(formata_numero)
+merged_df_master_table['GMV_Force'] = merged_df_master_table['GMV_Force'].apply(formata_numero)
+merged_df_master_table['GMV_Grow'] = merged_df_master_table['GMV_Grow'].apply(formata_numero)
+merged_df_master_table['Total_GMV'] = merged_df_master_table['Total_GMV'].apply(formata_numero)
+
+merged_df_master_table.columns = merged_df_master_table.columns.str.replace('_', ' ')
+merged_df_master_table = merged_df_master_table.set_index(merged_df_master_table.columns[0])
+
+columns_master_table = merged_df_master_table.columns
+
+master_table = style_table(merged_df_master_table, columns_master_table)
 master_table_html = master_table.to_html()
 
 
