@@ -2292,7 +2292,7 @@ merged_df = pd.merge(merged_df, weekly_tasks, on='week_of_year', how='left')
 merged_df_master_table = pd.merge(merged_df, weekly_gps, on='week_of_year', how='left')
 
 ### Final master table
-merged_df_master_table['AOV'] = merged_df_master_table['Total_GMV'] / merged_df_master_table['Total_ORDERS']
+merged_df_master_table['AOV'] = merged_df_master_table['Total_GMV'] / merged_df_master_table['Total_Orders']
 
 for column in merged_df_master_table.columns[2:]:
     merged_df_master_table[column] = pd.to_numeric(merged_df_master_table[column], errors='coerce')
