@@ -2275,7 +2275,7 @@ df_t4['week_of_year'] = df_t4['DATE'].dt.isocalendar().week
 
 weekly_tasks = df_t4.groupby('week_of_year').agg(
     Total_Tasks=('TOTAL_TASKS', 'sum'),
-    Completed_Tasks=('TOTAL_TASKS', 'sum'),
+    Completed_Tasks=('COMPLETED_TASKS', 'sum'),
     Task_Effect=('TASK_EFFECTIVENESS', 'mean')
 ).reset_index()
 
