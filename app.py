@@ -2243,6 +2243,7 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 
 df_t3['week_of_year'] = df_t3['DAY'].dt.isocalendar().week
 df_t3['first_day_of_week'] = df_t3['DAY'].dt.to_period('W').dt.start_time
+df_t3['first_day_of_week'] = df_t3['first_day_of_week'].dt.strftime('%d-%m')
 df_t3['TOTAL_BUYERS'] = df_t3['count_buyers_customer'] + df_t3['count_buyers_force'] + df_t3['count_buyers_grow']
 
 weekly_sales_gmv = df_t3.groupby(['week_of_year', 'first_day_of_week']).agg(
