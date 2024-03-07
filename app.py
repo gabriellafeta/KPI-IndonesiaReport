@@ -2245,7 +2245,10 @@ weekly_data_id_df['AOV'] = weekly_data_id_df['Total_GMV'] / weekly_data_id_df['T
 for column in weekly_data_id_df.columns[2:]:
     weekly_data_id_df[column] = pd.to_numeric(weekly_data_id_df[column], errors='coerce')
 
-weekly_data_id_df['AOV'] = weekly_data_id_df['AOV'].apply(formata_numero)
+weekly_data_id_df['GMV_customer'] = weekly_data_id_df['GMV_customer'].apply(formata_numero)
+weekly_data_id_df['GMV_force'] = weekly_data_id_df['GMV_force'].apply(formata_numero)
+weekly_data_id_df['GMV_grow'] = weekly_data_id_df['GMV_grow'].apply(formata_numero)
+weekly_data_id_df['Total_GMV'] = weekly_data_id_df['Total_GMV'].apply(formata_numero)
 
 weekly_data_id_df.columns = weekly_data_id_df.columns.str.replace('_', ' ')
 weekly_data_id_df = weekly_data_id_df.set_index(weekly_data_id_df.columns[0])
