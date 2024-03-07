@@ -2308,7 +2308,7 @@ merged_df_master_table['Task_Effect'] = merged_df_master_table['Task_Effect'].ap
 
 merged_df_master_table_sorted = merged_df_master_table.sort_values(by='week_of_year', ascending=False).fillna(0)
 merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
-merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table.columns[0])
+merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
 
 columns_master_table = merged_df_master_table_sorted.columns
 
