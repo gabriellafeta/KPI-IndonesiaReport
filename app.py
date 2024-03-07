@@ -187,14 +187,6 @@ df_t4 = df_t4[df_t4['BDR Name'].notnull()]
 df_t5 = df_t5[df_t5['BDR Name'].notnull()]
 df_t6 = df_t6[df_t6['BDR Name'].notnull()]
 
-# Criando coluna de semana
-
-df_t1['WEEK'] = df_t1['VISIT_DATE'].dt.isocalendar().week
-df_t2['WEEK'] = df_t2['DATE'].dt.isocalendar().week
-df_t3['WEEK'] = df_t3['DAY'].dt.isocalendar().week
-df_t4['WEEK'] = df_t4['DATE'].dt.isocalendar().week
-df_t5['WEEK'] = df_t5['DATE'].dt.isocalendar().week
-
 # Mostrar apenas os últimos 30 dias
 
 # df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
