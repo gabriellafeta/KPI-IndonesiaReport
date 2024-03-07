@@ -2302,6 +2302,12 @@ merged_df_master_table['GMV_Force'] = merged_df_master_table['GMV_Force'].apply(
 merged_df_master_table['GMV_Grow'] = merged_df_master_table['GMV_Grow'].apply(formata_numero)
 merged_df_master_table['Total_GMV'] = merged_df_master_table['Total_GMV'].apply(formata_numero)
 
+merged_df_master_table['GPS'] = merged_df_master_table['GPS'].apply(formata_percentual)
+merged_df_master_table['GPS_QUALITY'] = merged_df_master_table['GPS_QUALITY'].apply(formata_percentual)
+merged_df_master_table['Task_Effect'] = merged_df_master_table['Task_Effect'].apply(formata_percentual)
+
+
+merged_df_master_table_sorted = merged_df_master_table.sort_values(by='date_column', ascending=False).fillna(0)
 merged_df_master_table.columns = merged_df_master_table.columns.str.replace('_', ' ')
 merged_df_master_table = merged_df_master_table.set_index(merged_df_master_table.columns[0])
 
