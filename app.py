@@ -2270,7 +2270,7 @@ weekly_visits = df_t1.groupby('week_of_year').agg(
 ).reset_index()
 
 ## df_tf4
-df_t4['week_of_year'] = df_t4['VISIT_DATE'].dt.isocalendar().week
+df_t4['week_of_year'] = df_t4['DATE'].dt.isocalendar().week
 
 weekly_tasks = df_t4.groupby('week_of_year').agg(
     Total_Tasks=('TOTAL_TASKS', 'sum'),
@@ -2279,7 +2279,7 @@ weekly_tasks = df_t4.groupby('week_of_year').agg(
 ).reset_index()
 
 ## df_tf5
-df_t5['week_of_year'] = df_t5['VISIT_DATE'].dt.isocalendar().week
+df_t5['week_of_year'] = df_t5['DATE'].dt.isocalendar().week
 
 weekly_gps = df_t4.groupby('week_of_year').agg(
     GPS=('GPS', 'mean'),
