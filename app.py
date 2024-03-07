@@ -2240,6 +2240,7 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 #------------------------------------------------------------------------------------------------------
 #### Master Table
 
+df_t3['week_of_year'] = df_t3['DAY'].dt.isocalendar().week
 weekly_data_id_df['AOV'] = weekly_data_id_df['Total_GMV'] / weekly_data_id_df['Total_ORDERS']
 
 for column in weekly_data_id_df.columns[2:]:
