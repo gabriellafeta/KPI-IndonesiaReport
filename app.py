@@ -2270,6 +2270,14 @@ weekly_visits = df_t1.groupby('week_of_year').agg(
     PLANNED_VISITS=('PLANNED_VISITS', 'sum')
 ).reset_index()
 
+##df_t2
+df_t2['week_of_year'] = df_t2['DATE'].dt.isocalendar().week
+
+weekly_register = df_t1.groupby('week_of_year').agg(
+    Registered_Stores=('count_registered_stores', 'sum')
+).reset_index()
+
+
 ## df_tf4
 df_t4['week_of_year'] = df_t4['DATE'].dt.isocalendar().week
 
@@ -2290,6 +2298,7 @@ weekly_gps = df_t5.groupby('week_of_year').agg(
 #Merging
 merged_df = pd.merge(weekly_sales_gmv, weekly_visits, on='week_of_year', how='left')
 merged_df = pd.merge(merged_df, weekly_tasks, on='week_of_year', how='left')
+merged_df = pd.merge(merged_df, weekly_register, on='week_of_year', how='left')
 merged_df_master_table = pd.merge(merged_df, weekly_gps, on='week_of_year', how='left')
 
 ### Final master table
