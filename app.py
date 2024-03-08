@@ -7,6 +7,7 @@ from io import StringIO
 import os
 import plotly.express as px
 import plotly.graph_objects as go
+import numpy as np
 
 #------------------------------------------------------------------------------------------------------
 st.set_page_config(layout="wide") # Configuração da página larga
@@ -2293,6 +2294,7 @@ weekly_gps = df_t5.groupby('week_of_year').agg(
     GPS_QUALITY=('GPS_QUALITY', 'mean')
 ).reset_index()
 
+
 #Merging
 merged_df = pd.merge(weekly_sales_gmv, weekly_visits, on='week_of_year', how='left')
 merged_df = pd.merge(merged_df, weekly_tasks, on='week_of_year', how='left')
@@ -2302,23 +2304,36 @@ merged_df_master_table = pd.merge(merged_df, weekly_gps, on='week_of_year', how=
 ### Final master table
 merged_df_master_table['AOV'] = merged_df_master_table['Total_GMV'] / merged_df_master_table['Total_Orders']
 
-for column in merged_df_master_table.columns[2:]:
-    merged_df_master_table[column] = pd.to_numeric(merged_df_master_table[column], errors='coerce')
+aggregated_values = {}
+for column in merged_df_master_table.columns:
+    if column in ['GPS', 'GPS_QUALITY', 'Task_Effect', 'Completed_Tasks']:
+        aggregated_values[column] = np.mean(merged_df_master_table[column].replace(0, np.nan))
+    else:
+        aggregated_values[column] = merged_df_master_table[column].sum()
 
-merged_df_master_table['GMV_Customer'] = merged_df_master_table['GMV_Customer'].apply(formata_numero)
-merged_df_master_table['GMV_Force'] = merged_df_master_table['GMV_Force'].apply(formata_numero)
-merged_df_master_table['GMV_Grow'] = merged_df_master_table['GMV_Grow'].apply(formata_numero)
-merged_df_master_table['Total_GMV'] = merged_df_master_table['Total_GMV'].apply(formata_numero)
+aggregated_df = pd.DataFrame(aggregated_values, index=['Accumulated'])
 
-merged_df_master_table['GPS'] = merged_df_master_table['GPS'].apply(formata_percentual)
-merged_df_master_table['GPS_QUALITY'] = merged_df_master_table['GPS_QUALITY'].apply(formata_percentual)
-merged_df_master_table['Task_Effect'] = merged_df_master_table['Task_Effect'].apply(formata_percentual)
-merged_df_master_table['Completed_Tasks'] = merged_df_master_table['Completed_Tasks'].apply(formata_percentual)
+merged_df_master_table_with_accumulated = pd.concat([aggregated_df, merged_df_master_table])
 
-merged_df_master_table_sorted = merged_df_master_table.sort_values(by='week_of_year', ascending=False).fillna(0)
+for column in merged_df_master_table_with_accumulated.columns[2:]:
+    merged_df_master_table_with_accumulated[column] = pd.to_numeric(merged_df_master_table_with_accumulated[column], errors='coerce')
+
+merged_df_master_table_with_accumulated['GMV_Customer'] = merged_df_master_table_with_accumulated['GMV_Customer'].apply(formata_numero)
+merged_df_master_table_with_accumulated['GMV_Force'] = merged_df_master_table_with_accumulated['GMV_Force'].apply(formata_numero)
+merged_df_master_table_with_accumulated['GMV_Grow'] = merged_df_master_table_with_accumulated['GMV_Grow'].apply(formata_numero)
+merged_df_master_table_with_accumulated['Total_GMV'] = merged_df_master_table_with_accumulated['Total_GMV'].apply(formata_numero)
+
+merged_df_master_table_with_accumulated['GPS'] = merged_df_master_table_with_accumulated['GPS'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['GPS_QUALITY'] = merged_df_master_table_with_accumulated['GPS_QUALITY'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['Task_Effect'] = merged_df_master_table_with_accumulated['Task_Effect'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['Completed_Tasks'] = merged_df_master_table_with_accumulated['Completed_Tasks'].apply(formata_percentual)
+
+merged_df_master_table_sorted = merged_df_master_table_with_accumulated.sort_values(by='week_of_year', ascending=False).fillna(0)
 merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_table_sorted['week_of_year'].isin([3, 4])]
 merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
 merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
+
+merged_df_master_table_sorted.fillna(0, inplace=True)
 
 columns_master_table = merged_df_master_table_sorted.columns
 merged_df_master_table_sorted_cv = merged_df_master_table_sorted.to_csv(index=False).encode('utf-8')
