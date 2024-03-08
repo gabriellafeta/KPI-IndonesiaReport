@@ -2321,6 +2321,7 @@ merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.st
 merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
 
 columns_master_table = merged_df_master_table_sorted.columns
+merged_df_master_table_sorted_cv = merged_df_master_table_sorted.to_csv(index=False).encode('utf-8')
 
 master_table = style_table(merged_df_master_table_sorted, columns_master_table)
 master_table_html = master_table.to_html()
@@ -2413,6 +2414,16 @@ with colB_alpha[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(master_table_html, unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
+        <a href="data:text/csv;base64,{merged_df_master_table_sorted_cv}" download="data.csv">
+            <button>
+                This table as CSV
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+    
 
 
 with colC_1[0]:
