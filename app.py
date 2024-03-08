@@ -2333,8 +2333,6 @@ merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_
 merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
 merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
 
-min_date = merged_df_master_table_sorted['first_day'].min()
-merged_df_master_table_sorted.at['Accumulated', 'first_day'] = min_date
 merged_df_master_table_sorted.at['Accumulated', 'week_of_year'] = "Launch to present"
 
 merged_df_master_table_sorted.fillna(0, inplace=True)
