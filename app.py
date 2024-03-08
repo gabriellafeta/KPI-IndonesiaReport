@@ -2277,10 +2277,11 @@ weekly_register = df_t2.groupby('week_of_year').agg(
 
 ## df_tf4
 df_t4['week_of_year'] = df_t4['DATE'].dt.isocalendar().week
+df_t4['p_completed_tasks'] = df_t4['COMPLETED_TASKS'] / df_t4['TOTAL_TASKS']
 
 weekly_tasks = df_t4.groupby('week_of_year').agg(
     Total_Tasks=('TOTAL_TASKS', 'sum'),
-    Completed_Tasks=('COMPLETED_TASKS', 'sum'),
+    Completed_Tasks=('p_completed_tasks', 'mean'),
     Task_Effect=('TASK_EFFECTIVENESS', 'mean')
 ).reset_index()
 
@@ -2312,6 +2313,7 @@ merged_df_master_table['Total_GMV'] = merged_df_master_table['Total_GMV'].apply(
 merged_df_master_table['GPS'] = merged_df_master_table['GPS'].apply(formata_percentual)
 merged_df_master_table['GPS_QUALITY'] = merged_df_master_table['GPS_QUALITY'].apply(formata_percentual)
 merged_df_master_table['Task_Effect'] = merged_df_master_table['Task_Effect'].apply(formata_percentual)
+merged_df_master_table['Completed_Tasks'] = merged_df_master_table['Completed_Tasks'].apply(formata_percentual)
 
 merged_df_master_table_sorted = merged_df_master_table.sort_values(by='week_of_year', ascending=False).fillna(0)
 merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_table_sorted['week_of_year'].isin([3, 4])]
