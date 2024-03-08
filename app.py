@@ -2333,6 +2333,7 @@ merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_
 merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
 merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
 
+merged_df_master_table_sorted = merged_df_master_table_sorted.rename(index={merged_df_master_table_sorted.index[0]: "Accumulated"})
 merged_df_master_table_sorted.iloc[0, 0] = "Launch"
 
 merged_df_master_table_sorted.fillna(0, inplace=True)
