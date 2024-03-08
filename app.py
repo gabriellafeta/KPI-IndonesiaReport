@@ -2333,11 +2333,9 @@ merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_
 merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
 merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
 
-first_day_col_index = merged_df_master_table_sorted.columns.get_loc('first_day')
 min_date = merged_df_master_table_sorted['first_day'].min()
-merged_df_master_table_sorted.iloc[0, first_day_col_index] = min_date
-
-
+merged_df_master_table_sorted.iloc[0, 0] = "Accumulated"
+merged_df_master_table_sorted.iloc[0, 1] = min_date
 
 merged_df_master_table_sorted.fillna(0, inplace=True)
 
