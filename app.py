@@ -833,14 +833,13 @@ kpi2_all_barplot_bdr_mtd.update_layout( # Adjust the width to fit within the col
 )
 
 #### Register stacked
-
-df_t2['register_format'] = df_t2['count_registered_stores'].apply(lambda x: f'{x:.0f}')
+df_t2['count_registered_stores'] = pd.to_numeric(df_t2['count_registered_stores'], errors='coerce').fillna(0)
 df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
 df_t2_sort_new = df_t2.sort_values(by='DATE', ascending=True)
 df_t2_sort_new['FORMATTED_DATE'] = df_t2['DATE'].dt.strftime('%d-%b-%Y')
-df_t2_stacked = df_t2_sort_new.groupby(['FORMATTED_DATE', 'BDR Name'])['register_format'].sum().reset_index()
+df_t2_stacked = df_t2_sort_new.groupby(['FORMATTED_DATE', 'BDR Name'])['count_registered_stores'].sum().reset_index()
 df_t2_stacked['DATE_FOR_SORTING'] = pd.to_datetime(df_t2_stacked['FORMATTED_DATE'], format='%d-%b-%Y')
-df_t2_pivot = df_t2_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR Name', values='register_format').fillna(0)
+df_t2_pivot = df_t2_stacked.pivot(index='DATE_FOR_SORTING', columns='BDR Name', values='count_registered_stores').fillna(0)
 
 df_t2_pivot.index = df_t2_pivot.index.strftime('%d-%b-%Y')
 register_stacked = go.Figure()
