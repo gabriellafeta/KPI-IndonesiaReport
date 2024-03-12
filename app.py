@@ -2414,7 +2414,7 @@ track_alma = {
 
     f"GMV {adopted_last_day_key}": buyers_table_lastday["Total_GMV"].tolist(),
     f"GMV {adopted_yesterday_day_key}": buyers_table_penultimo["Total_GMV"].tolist(),
-    "GMV Current Week": buyers_table_semana_atual["v"].tolist(),
+    "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
     "GMV LTD": buyers_table["Total_GMV"].tolist()
 }
 
