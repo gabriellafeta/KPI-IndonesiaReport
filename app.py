@@ -2506,14 +2506,14 @@ def style_table_2(df, columns, font_size='10pt'):
         ])
 
     # Adicionando bordas grossas a cada 4 colunas, começando na terceira coluna
-    for col in range(2, len(df.columns), 4):
+    for col in range(1, len(df.columns), 4):
         styler = styler.set_table_styles([
             {'selector': f'td:nth-child({col})',
              'props': [('border-right', '2px solid black')]}
         ], overwrite=False, axis=1)
 
     # Estilizando a última linha com fundo preto e fonte amarela
-    styler = styler.set_properties(**{'background-color': 'black', 'color': 'yellow'}, subset=pd.IndexSlice[df.index[-1], :])
+    styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
     return styler
 
