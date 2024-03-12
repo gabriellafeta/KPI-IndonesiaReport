@@ -2475,10 +2475,51 @@ totals_df = pd.DataFrame([totals_row])
 track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
 
 gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
-
 for col in gmv_columns:
     track_alma_df[col] = track_alma_df[col].apply(formata_numero)
 
+track_alma_df.set_index(track_alma_df.columns[0], inplace=True)
+
+#### New Styler
+
+def style_table_2(df, columns, font_size='10pt'):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
+
+    # Aplicando a formatação com pontos para os valores numéricos
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            # Estilo do cabeçalho
+            {'selector': 'thead th',
+             'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
+            # Alinhamento dos dados na célula
+            {'selector': 'td',
+             'props': [('text-align', 'center')]},
+            # Estilo da fonte e tamanho para toda a tabela
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]},
+            # Removendo linhas de grade
+            {'selector': 'table',
+             'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
+        ])
+
+    # Adicionando bordas grossas a cada 4 colunas, começando na terceira coluna
+    for col in range(2, len(df.columns), 4):
+        styler = styler.set_table_styles([
+            {'selector': f'td:nth-child({col})',
+             'props': [('border-right', '2px solid black')]}
+        ], overwrite=False, axis=1)
+
+    # Estilizando a última linha com fundo preto e fonte amarela
+    styler = styler.set_properties(**{'background-color': 'black', 'color': 'yellow'}, subset=pd.IndexSlice[df.index[-1], :])
+
+    return styler
+
+
+master_table_2 = style_table_2(track_alma_df, track_alma_df.columns)
+master_table_2_html = master_table_2.to_html()
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -3071,4 +3112,4 @@ with colBm[0]:
     """, unsafe_allow_html=True)
 
 with colCm[0]:
-    st.dataframe(track_alma_df)
+    st.markdown(master_table_2_html, unsafe_allow_html=True)
