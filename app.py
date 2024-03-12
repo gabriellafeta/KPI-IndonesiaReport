@@ -2372,10 +2372,10 @@ buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_key not in buyers_table_lastday['BDR Name'].values:
+    if bdr_name not in buyers_table_lastday['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
-            'BDR Name': bdr_key,
+            'BDR Name': bdr_name,
             'Total_Buyers': 0,
             'Customer_Adopted': 0,
             'Total_Orders': 0,
@@ -2402,10 +2402,10 @@ buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_key not in buyers_table_penultimo['BDR Name'].values:
+    if bdr_name not in buyers_table_penultimo['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
-            'BDR Name': bdr_key,
+            'BDR Name': bdr_name,
             'Total_Buyers': 0,
             'Customer_Adopted': 0,
             'Total_Orders': 0,
@@ -2432,10 +2432,10 @@ buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_key not in buyers_table_semana_atual['BDR Name'].values:
+    if bdr_name not in buyers_table_semana_atual['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
-            'BDR Name': bdr_key,
+            'BDR Name': bdr_name,
             'Total_Buyers': 0,
             'Customer_Adopted': 0,
             'Total_Orders': 0,
