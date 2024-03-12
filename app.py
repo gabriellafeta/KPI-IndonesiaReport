@@ -2464,15 +2464,15 @@ track_alma = {
     "GMV LTD": buyers_table["Total_GMV"].tolist()
 }
 
-track_alma.sort_values(by='Adopted', inplace=True)
+track_alma_df = pd.DataFrame(track_alma)
+track_alma_df.sort_values(by='Adopted', inplace=True)
 
-sum_row = track_alma.sum(numeric_only=True)
+sum_row = track_alma_df.sum(numeric_only=True)
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
+totals_df = pd.DataFrame([totals_row])
 
-track_alma = track_alma.append(totals_row, ignore_index=True)
-track_alma_df = pd.DataFrame(track_alma)
-
+track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
