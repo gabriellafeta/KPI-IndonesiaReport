@@ -2343,14 +2343,92 @@ merged_df_master_table_sorted_cv = merged_df_master_table_sorted.to_csv(index=Fa
 master_table = style_table(merged_df_master_table_sorted, columns_master_table)
 master_table_html = master_table.to_html()
 
+####### KPI track Table
+### Tabela Buyers
+
+buyers_table = df_t3.groupby(['BDR name']).agg(
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Custumer_Adopted = ('count_buyers_customer', 'sum'),
+    Total_Orders = ('TOTAL_ORDERS', 'sum'),
+    Total_GMV = ('TOTAL_SALES', 'sum')
+).reset_index()
+
+buyers_table['Total_GMV'] = buyers_table['Total_GMV'].apply(formata_numero)
+### Filtro ultimo dia
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+last_day = df_t3['DAY'].max()
+df_t3_ultimo = df_t3[df_t3['DAY'] == last_day]
+
+buyers_table_lastday = df_t3_ultimo.groupby(['BDR name']).agg(
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Custumer_Adopted = ('count_buyers_customer', 'sum'),
+    Total_Orders = ('TOTAL_ORDERS', 'sum'),
+    Total_GMV = ('TOTAL_SALES', 'sum')
+).reset_index()
+
+
+buyers_table_lastday['Total_GMV'] = buyers_table_lastday['Total_GMV'].apply(formata_numero)
+
+### Filtro penultimo dia
+penultimo_dia = last_day - pd.Timedelta(days=1)
+df_t3_penultimo = df_t3[df_t3['DAY'] == penultimo_dia]
+
+buyers_table_penultimo = df_t3_penultimo.groupby(['BDR name']).agg(
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Custumer_Adopted = ('count_buyers_customer', 'sum'),
+    Total_Orders = ('TOTAL_ORDERS', 'sum'),
+    Total_GMV = ('TOTAL_SALES', 'sum')
+).reset_index()
+
+buyers_table_penultimo['Total_GMV'] = buyers_table_penultimo['Total_GMV'].apply(formata_numero)
+
+### Semana Atual
+semana_atual = df_t3['week_of_year'].max()
+df_t3_semana_atual= df_t3[df_t3['week_of_year'] == semana_atual]
+
+buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR name']).agg(
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Custumer_Adopted = ('count_buyers_customer', 'sum'),
+    Total_Orders = ('TOTAL_ORDERS', 'sum'),
+    Total_GMV = ('TOTAL_SALES', 'sum')
+).reset_index()
+
+buyers_table_semana_atual['Total_GMV'] = buyers_table_semana_atual['Total_GMV'].apply(formata_numero)
+
+### DF consolidado
+adopted_last_day_key = f"Adopted {last_day.strftime('%Y-%m')}"
+adopted_yesterday_day_key = f"Adopted {penultimo_dia.strftime('%Y-%m')}"
+
+
+track_alma = {
+    "BDR": buyers_table["BDR name"].tolist(),
+    "Adopted": buyers_table["Total_Buyers"].tolist(),
+    f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
+    f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
+    "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
+
+    f"Orders {adopted_last_day_key}": buyers_table_lastday["TOTAL_ORDERS"].tolist(),
+    f"Orders {adopted_yesterday_day_key}": buyers_table_penultimo["TOTAL_ORDERS"].tolist(),
+    "Orders Current Week": buyers_table_semana_atual["TOTAL_ORDERS"].tolist(),
+    "Orders LTD": buyers_table["TOTAL_ORDERS"].tolist(),
+
+    f"GMV {adopted_last_day_key}": buyers_table_lastday["TOTAL_SALES"].tolist(),
+    f"GMV {adopted_yesterday_day_key}": buyers_table_penultimo["TOTAL_SALES"].tolist(),
+    "GMV Current Week": buyers_table_semana_atual["TOTAL_SALES"].tolist(),
+    "GMV LTD": buyers_table["TOTAL_SALES"].tolist()
+}
+
+track_alma_df = pd.DataFrame(track_alma)
+
 
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
 
-abas = st.tabs(["By BDR", "By Segment"])
+abas = st.tabs(["By BDR", "By Segment", "General Tracking"])
 aba0 = abas[0]
 aba1 = abas[1]
+aba2 = abas[2]
 
 # Aba0
 with aba0:
@@ -2909,4 +2987,25 @@ with colHn_1[0]:
 with colHn_2[0]:
     st.plotly_chart(visits_seg, use_container_width=True)
     st.plotly_chart(visists_seg_mtd, use_container_width=True)
-    
+
+
+#-------------------------------------------------------------------------------------------------
+with aba2:
+    colAm = st.columns(1)
+    colBm = st.columns(1)
+
+with colAm[0]:
+    st.image(blob_content_logo, use_column_width='always')
+
+with colBm[0]:
+    st.markdown("""
+    <style>
+    .fonte-personalizada1 {
+        font-size: 30px;
+        font-style: bold;
+    }
+    </style>
+    <div class="fonte-personalizada1">
+        General KPI
+    </div>
+    """, unsafe_allow_html=True)
