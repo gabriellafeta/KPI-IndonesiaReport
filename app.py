@@ -2382,7 +2382,8 @@ for bdr_key, bdr_name in BDR_dict.items():
             'Total_GMV': 0
         }
         # Adicionando a nova linha ao buyers_table
-        buyers_table_lastday = buyers_table_lastday.append(new_row, ignore_index=True)
+        new_row_df = pd.DataFrame([new_row])
+        buyers_table_lastday = pd.concat([buyers_table_lastday, new_row_df], ignore_index=True)
 
 buyers_table_lastday.sort_values(by='BDR Name', inplace=True)
 buyers_table_lastday.reset_index(drop=True, inplace=True)
@@ -2411,7 +2412,8 @@ for bdr_key, bdr_name in BDR_dict.items():
             'Total_GMV': 0
         }
         # Adicionando a nova linha ao buyers_table
-        buyers_table_penultimo = buyers_table_penultimo.append(new_row, ignore_index=True)
+        new_row_df = pd.DataFrame([new_row])
+        buyers_table_penultimo = pd.concat([buyers_table_penultimo, new_row_df], ignore_index=True)
 
 buyers_table_penultimo.sort_values(by='BDR Name', inplace=True)
 buyers_table_penultimo.reset_index(drop=True, inplace=True)
@@ -2440,7 +2442,8 @@ for bdr_key, bdr_name in BDR_dict.items():
             'Total_GMV': 0
         }
         # Adicionando a nova linha ao buyers_table
-        buyers_table_semana_atual = buyers_table_semana_atual.append(new_row, ignore_index=True)
+        new_row_df = pd.DataFrame([new_row])
+        buyers_table_semana_atual = pd.concat([buyers_table_semana_atual, new_row_df], ignore_index=True)
 
 buyers_table_semana_atual.sort_values(by='BDR Name', inplace=True)
 buyers_table_semana_atual.reset_index(drop=True, inplace=True)
