@@ -2443,8 +2443,8 @@ buyers_table_semana_atual.sort_values(by='BDR Name', inplace=True)
 buyers_table_semana_atual.reset_index(drop=True, inplace=True)
 
 ### DF consolidado
-adopted_last_day_key = f"Adopted {last_day.strftime('%Y-%m')}"
-adopted_yesterday_day_key = f"Adopted {penultimo_dia.strftime('%Y-%m')}"
+adopted_last_day_key = f"{last_day.strftime('%d-%m')}"
+adopted_yesterday_day_key = f"{penultimo_dia.strftime('%d-%m')}"
 
 track_alma = {
     "BDR": buyers_table["BDR Name"].tolist(),
