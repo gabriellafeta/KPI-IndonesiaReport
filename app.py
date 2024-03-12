@@ -2346,7 +2346,7 @@ master_table_html = master_table.to_html()
 ####### KPI track Table
 ### Tabela Buyers
 
-buyers_table = df_t3.groupby(['BDR name']).agg(
+buyers_table = df_t3.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2359,7 +2359,7 @@ df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 last_day = df_t3['DAY'].max()
 df_t3_ultimo = df_t3[df_t3['DAY'] == last_day]
 
-buyers_table_lastday = df_t3_ultimo.groupby(['BDR name']).agg(
+buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2373,7 +2373,7 @@ buyers_table_lastday['Total_GMV'] = buyers_table_lastday['Total_GMV'].apply(form
 penultimo_dia = last_day - pd.Timedelta(days=1)
 df_t3_penultimo = df_t3[df_t3['DAY'] == penultimo_dia]
 
-buyers_table_penultimo = df_t3_penultimo.groupby(['BDR name']).agg(
+buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2386,7 +2386,7 @@ buyers_table_penultimo['Total_GMV'] = buyers_table_penultimo['Total_GMV'].apply(
 semana_atual = df_t3['week_of_year'].max()
 df_t3_semana_atual= df_t3[df_t3['week_of_year'] == semana_atual]
 
-buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR name']).agg(
+buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2401,7 +2401,7 @@ adopted_yesterday_day_key = f"Adopted {penultimo_dia.strftime('%Y-%m')}"
 
 
 track_alma = {
-    "BDR": buyers_table["BDR name"].tolist(),
+    "BDR": buyers_table["BDR Name"].tolist(),
     "Adopted": buyers_table["Total_Buyers"].tolist(),
     f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
     f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
