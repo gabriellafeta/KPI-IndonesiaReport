@@ -2465,13 +2465,13 @@ track_alma = {
 }
 
 track_alma_df = pd.DataFrame(track_alma)
-track_alma_df_sorted = track_alma_df.sort_values(by='Adopted', inplace=True)
+track_alma_df.sort_values(by='Adopted', inplace=True)
 
-sum_row = track_alma_df_sorted.sum(numeric_only=True)
+sum_row = track_alma_df.sum(numeric_only=True)
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
 
-track_alma_df_sorted = track_alma_df_sorted.append(totals_row, ignore_index=True)
+track_alma_df = track_alma_df.append(totals_row, ignore_index=True)
 
 #------------------------------------------------------------------------------------------------------
 #### App
