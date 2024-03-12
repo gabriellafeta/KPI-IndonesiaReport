@@ -2353,8 +2353,6 @@ buyers_table = df_t3.groupby(['BDR Name']).agg(
     Total_GMV = ('TOTAL_SALES', 'sum')
 ).reset_index()
 
-buyers_table['Total_GMV'] = buyers_table['Total_GMV'].apply(formata_numero)
-
 buyers_table.sort_values(by='BDR Name', inplace=True)
 buyers_table.reset_index(drop=True, inplace=True)
 
@@ -2388,8 +2386,6 @@ for bdr_key, bdr_name in BDR_dict.items():
 buyers_table_lastday.sort_values(by='BDR Name', inplace=True)
 buyers_table_lastday.reset_index(drop=True, inplace=True)
 
-buyers_table_lastday['Total_GMV'] = buyers_table_lastday['Total_GMV'].apply(formata_numero)
-
 ### Filtro penultimo dia
 penultimo_dia = last_day - pd.Timedelta(days=1)
 df_t3_penultimo = df_t3[df_t3['DAY'] == penultimo_dia]
@@ -2417,8 +2413,6 @@ for bdr_key, bdr_name in BDR_dict.items():
 
 buyers_table_penultimo.sort_values(by='BDR Name', inplace=True)
 buyers_table_penultimo.reset_index(drop=True, inplace=True)
-
-buyers_table_penultimo['Total_GMV'] = buyers_table_penultimo['Total_GMV'].apply(formata_numero)
 
 ### Semana Atual
 semana_atual = df_t3['week_of_year'].max()
@@ -2448,8 +2442,6 @@ for bdr_key, bdr_name in BDR_dict.items():
 buyers_table_semana_atual.sort_values(by='BDR Name', inplace=True)
 buyers_table_semana_atual.reset_index(drop=True, inplace=True)
 
-buyers_table_semana_atual['Total_GMV'] = buyers_table_semana_atual['Total_GMV'].apply(formata_numero)
-
 ### DF consolidado
 adopted_last_day_key = f"Adopted {last_day.strftime('%Y-%m')}"
 adopted_yesterday_day_key = f"Adopted {penultimo_dia.strftime('%Y-%m')}"
@@ -2473,7 +2465,13 @@ track_alma = {
 }
 
 track_alma_df = pd.DataFrame(track_alma)
+track_alma_df_sorted = track_alma_df.sort_values(by='Adopted', inplace=True)
 
+sum_row = track_alma_df_sorted.sum(numeric_only=True)
+totals_row = {'BDR': 'TOTALS'}
+totals_row.update(sum_row.to_dict())
+
+track_alma_df_sorted = track_alma_df_sorted.append(totals_row, ignore_index=True)
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -3047,6 +3045,7 @@ with colHn_2[0]:
 with aba2:
     colAm = st.columns(1)
     colBm = st.columns(1)
+    colCm = st.columns(1)
 
 with colAm[0]:
     st.image(blob_content_logo, use_column_width='always')
@@ -3063,3 +3062,6 @@ with colBm[0]:
         General KPI
     </div>
     """, unsafe_allow_html=True)
+
+with colCm[0]:
+    st.dataframe(track_alma_df, use_column_width='always')
