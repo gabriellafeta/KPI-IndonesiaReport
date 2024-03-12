@@ -2354,7 +2354,12 @@ buyers_table = df_t3.groupby(['BDR Name']).agg(
 ).reset_index()
 
 buyers_table['Total_GMV'] = buyers_table['Total_GMV'].apply(formata_numero)
+
+buyers_table.sort_values(by='BDR Name', inplace=True)
+buyers_table.reset_index(drop=True, inplace=True)
+
 ### Filtro ultimo dia
+
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 last_day = df_t3['DAY'].max()
 df_t3_ultimo = df_t3[df_t3['DAY'] == last_day]
@@ -2366,6 +2371,21 @@ buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
     Total_GMV = ('TOTAL_SALES', 'sum')
 ).reset_index()
 
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_key not in buyers_table_lastday['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_key,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        buyers_table_lastday = buyers_table_lastday.append(new_row, ignore_index=True)
+
+buyers_table_lastday.sort_values(by='BDR Name', inplace=True)
+buyers_table_lastday.reset_index(drop=True, inplace=True)
 
 buyers_table_lastday['Total_GMV'] = buyers_table_lastday['Total_GMV'].apply(formata_numero)
 
@@ -2380,6 +2400,22 @@ buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
     Total_GMV = ('TOTAL_SALES', 'sum')
 ).reset_index()
 
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_key not in buyers_table_penultimo['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_key,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        buyers_table_penultimo = buyers_table_penultimo.append(new_row, ignore_index=True)
+
+buyers_table_penultimo.sort_values(by='BDR Name', inplace=True)
+buyers_table_penultimo.reset_index(drop=True, inplace=True)
+
 buyers_table_penultimo['Total_GMV'] = buyers_table_penultimo['Total_GMV'].apply(formata_numero)
 
 ### Semana Atual
@@ -2393,12 +2429,27 @@ buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
     Total_GMV = ('TOTAL_SALES', 'sum')
 ).reset_index()
 
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_key not in buyers_table_semana_atual['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_key,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        buyers_table_semana_atual = buyers_table_semana_atual.append(new_row, ignore_index=True)
+
+buyers_table_semana_atual.sort_values(by='BDR Name', inplace=True)
+buyers_table_semana_atual.reset_index(drop=True, inplace=True)
+
 buyers_table_semana_atual['Total_GMV'] = buyers_table_semana_atual['Total_GMV'].apply(formata_numero)
 
 ### DF consolidado
 adopted_last_day_key = f"Adopted {last_day.strftime('%Y-%m')}"
 adopted_yesterday_day_key = f"Adopted {penultimo_dia.strftime('%Y-%m')}"
-
 
 track_alma = {
     "BDR": buyers_table["BDR Name"].tolist(),
