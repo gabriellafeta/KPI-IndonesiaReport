@@ -2465,7 +2465,7 @@ track_alma = {
 }
 
 track_alma_df = pd.DataFrame(track_alma)
-track_alma_df.sort_values(by='Adopted', inplace=True)
+track_alma_df.sort_values(by='Adopted', inplace=True, ascending=False)
 
 sum_row = track_alma_df.sum(numeric_only=True)
 totals_row = {'BDR': 'TOTALS'}
