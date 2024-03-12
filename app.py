@@ -3064,4 +3064,4 @@ with colBm[0]:
     """, unsafe_allow_html=True)
 
 with colCm[0]:
-    st.dataframe(track_alma_df, use_column_width='always')
+    st.dataframe(track_alma_df)
