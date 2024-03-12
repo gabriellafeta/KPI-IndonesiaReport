@@ -107,7 +107,7 @@ def style_table(df, title):
 
 #------------------------------------------------------------------------------------------------------
 #### Mandar arquivos na pasta DataID para o Azure Blob Storage
-upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
+# upload_files_to_blob_storage(local_file_path, container_client, overwrite=True)
 
 ##### Tables from Blob
                 
