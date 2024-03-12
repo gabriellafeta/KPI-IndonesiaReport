@@ -2473,6 +2473,13 @@ totals_row.update(sum_row.to_dict())
 totals_df = pd.DataFrame([totals_row])
 
 track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
+
+gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
+
+for col in gmv_columns:
+    track_alma_df[col] = track_alma_df[col].apply(formata_numero)
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
