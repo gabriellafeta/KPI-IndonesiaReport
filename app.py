@@ -2442,6 +2442,94 @@ for bdr_key, bdr_name in BDR_dict.items():
 buyers_table_semana_atual.sort_values(by='BDR Name', inplace=True)
 buyers_table_semana_atual.reset_index(drop=True, inplace=True)
 
+# REGISTER
+##### ALLD
+register_table = df_t2.groupby(['BDR Name']).agg(
+    Total_Registers=('count_registered_stores', 'sum')
+).reset_index()
+
+register_table.sort_values(by='BDR Name', inplace=True)
+register_table.reset_index(drop=True, inplace=True)
+
+##### Ultimo dia
+
+df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+last_day2 = df_t2['DATE'].max()
+df_t2_ultimo = df_t2[df_t2['DATE'] == last_day2]
+
+registers_table_lastday = df_t2_ultimo.groupby(['BDR Name']).agg(
+    Total_Registers=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in registers_table_lastday['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        registers_table_lastday = pd.concat([registers_table_lastday, new_row_df], ignore_index=True)
+
+registers_table_lastday.sort_values(by='BDR Name', inplace=True)
+registers_table_lastday.reset_index(drop=True, inplace=True)
+
+### Penultimo dia
+
+penultimo_dia2 = last_day - pd.Timedelta(days=1)
+df_t2_penultimo = df_t2[df_t2['DATE'] == penultimo_dia2]
+
+registers_table_penultimo = df_t2_penultimo.groupby(['BDR Name']).agg(
+    Total_Registers=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in registers_table_penultimo['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        registers_table_penultimo = pd.concat([registers_table_penultimo, new_row_df], ignore_index=True)
+
+registers_table_penultimo.sort_values(by='BDR Name', inplace=True)
+registers_table_penultimo.reset_index(drop=True, inplace=True)
+
+##### Semana
+
+semana_atual2 = df_t2['week_of_year'].max()
+df_t2_semana_atual= df_t2[df_t2['week_of_year'] == semana_atual2]
+
+register_table_semana_atual = df_t2_semana_atual.groupby(['BDR Name']).agg(
+    Total_Registers=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in register_table_semana_atual['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        register_table_semana_atual = pd.concat([register_table_semana_atual, new_row_df], ignore_index=True)
+
+register_table_semana_atual.sort_values(by='BDR Name', inplace=True)
+register_table_semana_atual.reset_index(drop=True, inplace=True)
+
 ### DF consolidado
 adopted_last_day_key = f"{last_day.strftime('%d-%m')}"
 adopted_yesterday_day_key = f"{penultimo_dia.strftime('%d-%m')}"
@@ -2461,7 +2549,14 @@ track_alma = {
     f"GMV {adopted_last_day_key}": buyers_table_lastday["Total_GMV"].tolist(),
     f"GMV {adopted_yesterday_day_key}": buyers_table_penultimo["Total_GMV"].tolist(),
     "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
-    "GMV LTD": buyers_table["Total_GMV"].tolist()
+    "GMV LTD": buyers_table["Total_GMV"].tolist(),
+
+    f"Register {adopted_last_day_key}": registers_table_lastday["Total_Registers"].tolist(),
+    f"Register {adopted_yesterday_day_key}": registers_table_penultimo["Total_Registers"].tolist(),
+    "Register Current Week": register_table_semana_atual["Total_Registers"].tolist(),
+    "Register LTD": register_table["Total_Registers"].tolist()
+
+
 }
 
 track_alma_df = pd.DataFrame(track_alma)
@@ -2479,6 +2574,7 @@ for col in gmv_columns:
     track_alma_df[col] = track_alma_df[col].apply(formata_numero)
 
 track_alma_df.set_index(track_alma_df.columns[0], inplace=True)
+
 
 #### New Styler
 
