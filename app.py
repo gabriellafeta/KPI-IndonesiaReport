@@ -2612,7 +2612,7 @@ def style_table_2(df, columns, font_size='10pt'):
 
     return styler
 
-
+alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
 master_table_2 = style_table_2(track_alma_df, track_alma_df.columns)
 master_table_2_html = master_table_2.to_html()
 
@@ -3208,3 +3208,12 @@ with colBm[0]:
 
 with colCm[0]:
     st.markdown(master_table_2_html, unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
+        <a href="data:text/csv;base64,{alma_csv}" download="data.csv">
+            <button>
+                This table as CSV
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
