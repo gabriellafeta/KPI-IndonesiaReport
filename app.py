@@ -2445,7 +2445,7 @@ buyers_table_semana_atual.reset_index(drop=True, inplace=True)
 # REGISTER
 ##### ALLD
 register_table = df_t2.groupby(['BDR Name']).agg(
-    Total_Registers=('count_registered_stores', 'sum')
+    Total_Registers=('count_registered_stores', 'sum').fillna(0)
 ).reset_index()
 
 register_table.sort_values(by='BDR Name', inplace=True)
@@ -2458,7 +2458,7 @@ last_day2 = df_t2['DATE'].max()
 df_t2_ultimo = df_t2[df_t2['DATE'] == last_day2]
 
 registers_table_lastday = df_t2_ultimo.groupby(['BDR Name']).agg(
-    Total_Registers=('count_registered_stores', 'sum')
+    Total_Registers=('count_registered_stores', 'sum').fillna(0)
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2484,7 +2484,7 @@ penultimo_dia2 = last_day - pd.Timedelta(days=1)
 df_t2_penultimo = df_t2[df_t2['DATE'] == penultimo_dia2]
 
 registers_table_penultimo = df_t2_penultimo.groupby(['BDR Name']).agg(
-    Total_Registers=('count_registered_stores', 'sum')
+    Total_Registers=('count_registered_stores', 'sum').fillna(0)
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2510,7 +2510,7 @@ semana_atual2 = df_t2['week_of_year'].max()
 df_t2_semana_atual= df_t2[df_t2['week_of_year'] == semana_atual2]
 
 register_table_semana_atual = df_t2_semana_atual.groupby(['BDR Name']).agg(
-    Total_Registers=('count_registered_stores', 'sum')
+    Total_Registers=('count_registered_stores', 'sum').fillna(0)
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2555,8 +2555,6 @@ track_alma = {
     f"Register {adopted_yesterday_day_key}": registers_table_penultimo["Total_Registers"].tolist(),
     "Register Current Week": register_table_semana_atual["Total_Registers"].tolist(),
     "Register LTD": register_table["Total_Registers"].tolist()
-
-
 }
 
 track_alma_df = pd.DataFrame(track_alma)
