@@ -2454,7 +2454,7 @@ register_table.reset_index(drop=True, inplace=True)
 ##### Ultimo dia
 
 df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
-last_day2 = df_t2['DATE'].max()
+last_day2 = pd.Timestamp.now().normalize()
 df_t2_ultimo = df_t2[df_t2['DATE'] == last_day2]
 
 registers_table_lastday = df_t2_ultimo.groupby(['BDR Name']).agg(
