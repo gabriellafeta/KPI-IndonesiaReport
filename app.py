@@ -2771,6 +2771,10 @@ for bdr_key, bdr_name in BDR_dict.items():
 visits15_table_lw_grouped.sort_values(by='BDR Name', inplace=True)
 visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 
+############################ Register
+
+
+
 # DF CONSOLIDADO
 
 target_value1 = 450
@@ -2791,8 +2795,14 @@ track_alma_df_v2.sort_values(by='Total Visits', inplace=True, ascending=False)
 track_alma_df_v2['Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
+
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
+
+if 'Total Visits' in sum_row and 'Target' in sum_row and sum_row['Target'] != 0:
+    totals_row['Achieved %'] = (sum_row['Total Visits'] / sum_row['Target']) * 100
+
+# Create the totals DataFrame
 totals_df = pd.DataFrame([totals_row])
 
 track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
