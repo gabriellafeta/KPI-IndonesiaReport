@@ -2799,7 +2799,7 @@ sum_row = track_alma_df_v2.sum(numeric_only=True)
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
 
-totals_row['Achieved %'] = (sum_row['Total Visits'] / sum_row['Target']) * 100 if sum_row['Target'] != 0 else 0
+totals_row['Achieved %'] = (sum_row['Total Visits'] / sum_row['Target']) if sum_row['Target'] != 0 else 0
 
 totals_df = pd.DataFrame([totals_row])
 
