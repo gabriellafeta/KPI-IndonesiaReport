@@ -2709,11 +2709,11 @@ visits15_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits15_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
+df_15v['week_of_year'] = df_15v['DAY'].dt.isocalendar().week
+current_week_number = pd.Timestamp('now').isocalendar()[1]
+visits_current_week = df_15v[df_15v['week_of_year'] == current_week_number]
 
-semana_atual2 = df_15v['week_of_year'].max()
-visits15_table_lw= df_15v[df_15v['week_of_year'] == semana_atual2]
-
-visits15_table_lw_grouped = visits15_table_lw.groupby(['BDR Name']).agg(
+visits15_table_lw_grouped = visits_current_week.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
 ).reset_index()
 
