@@ -2644,20 +2644,15 @@ def style_table_3(df, columns, font_size='10pt'):
              'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
         ])
 
-    # Adicionando bordas grossas a cada 6 colunas, começando na terceira coluna (índice 3)
-    for col in range(3, len(df.columns) + 1, 6):
+    # Adicionando bordas grossas a cada 4 colunas, começando na terceira coluna
+    for col in range(1, len(df.columns), 6):
         styler = styler.set_table_styles([
             {'selector': f'td:nth-child({col})',
              'props': [('border-right', '2px solid black')]}
         ], overwrite=False, axis=1)
 
-    # Estilizando a última linha com fundo preto e fonte branca
+    # Estilizando a última linha com fundo preto e fonte amarela
     styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
-
-    # Pintando colunas com valores percentuais em gradientes de verde, vermelho e amarelo
-    percent_columns = [col for col in df.columns if '%' in col]
-    if percent_columns:
-        styler = styler.background_gradient(subset=percent_columns, cmap='RdYlGn')
 
     return styler
 
