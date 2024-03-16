@@ -2694,9 +2694,9 @@ visits15_table.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia - visits15_table
 
-df_t1['DAY'] = pd.to_datetime(df_t1['DAY'])
-last_day2 = df_t1['DAY'].max()
-visits15_table_ld = df_t1[df_t1['DAY'] == last_day2]
+df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+last_day2 = df_t1['VISIT_DATE'].max()
+visits15_table_ld = df_t1[df_t1['VISIT_DATE'] == last_day2]
 
 visits15_table_ld_grouped = visits15_table_ld.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
@@ -2719,7 +2719,7 @@ visits15_table_ld_grouped.reset_index(drop=True, inplace=True)
 ### Penultimo dia
 
 penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
-visits15_table_pld = df_t1[df_t1['DAY'] == penultimo_dia2]
+visits15_table_pld = df_t1[df_t1['VISIT_DATE'] == penultimo_dia2]
 
 visits15_table_pld_grouped = visits15_table_pld.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
@@ -2740,7 +2740,7 @@ visits15_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits15_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-df_t1['week_of_year'] = df_t1['DAY'].dt.isocalendar().week
+df_t1['week_of_year'] = df_t1['VISIT_DATE'].dt.isocalendar().week
 current_week_number = pd.Timestamp('now').isocalendar()[1]
 visits_current_week = df_t1[df_t1['week_of_year'] == current_week_number]
 
@@ -2785,9 +2785,9 @@ visits8_table.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia - visits15_table
 
-df_t2['DAY'] = pd.to_datetime(df_t2['DAY'])
-last_day2 = df_t2['DAY'].max()
-visits8_table_ld = df_t2[df_t2['DAY'] == last_day2]
+df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+last_day2 = df_t2['DATE'].max()
+visits8_table_ld = df_t2[df_t2['DATE'] == last_day2]
 
 visits8_table_ld_grouped = visits8_table_ld.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
@@ -2810,7 +2810,7 @@ visits8_table_ld_grouped.reset_index(drop=True, inplace=True)
 ### Penultimo dia
 
 penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
-visits8_table_pld = df_t2[df_t2['DAY'] == penultimo_dia2]
+visits8_table_pld = df_t2[df_t2['DATE'] == penultimo_dia2]
 
 visits8_table_pld_grouped = visits8_table_pld.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
@@ -2831,7 +2831,7 @@ visits8_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits8_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-df_t2['week_of_year'] = df_t2['DAY'].dt.isocalendar().week
+df_t2['week_of_year'] = df_t2['DATE'].dt.isocalendar().week
 current_week_number = pd.Timestamp('now').isocalendar()[1]
 visits_current_week8 = df_t2[df_t2['week_of_year'] == current_week_number]
 
