@@ -2626,11 +2626,11 @@ end_date = pd.to_datetime('today').strftime('%Y-%m-%d')
 all_dates = pd.date_range(start=start_date, end=end_date, freq='D')
 df_dates = pd.DataFrame(all_dates, columns=['DAY'])
 
-unique_bdrs = df_t3['BDR_ID'].unique()
-df_bdrs = pd.DataFrame(unique_bdrs, columns=['BDR_ID'])
+unique_bdrs = df_t3['bdr_id'].unique()
+df_bdrs = pd.DataFrame(unique_bdrs, columns=['bdr_id'])
 
 df_all_combinations = pd.merge(df_bdrs, df_dates, how='cross')
-df_t3_expanded = pd.merge(df_all_combinations, df_t3, on=['BDR_ID', 'DAY'], how='left')
+df_t3_expanded = pd.merge(df_all_combinations, df_t3, on=['bdr_id', 'DAY'], how='left')
 df_t3_expanded.fillna(0, inplace=True)
 
 df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR_ID', 'VISIT_DATE', 'VISITS']], left_on=['BDR_ID', 'DAY'], right_on=['BDR_ID', 'VISIT_DATE'], how='left')
