@@ -2633,7 +2633,7 @@ df_all_combinations = pd.merge(df_bdrs, df_dates, how='cross')
 df_t3_expanded = pd.merge(df_all_combinations, df_t3, on=['bdr_id', 'DAY'], how='left')
 df_t3_expanded.fillna(0, inplace=True)
 
-df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR_ID', 'VISIT_DATE', 'VISITS']], left_on=['BDR_ID', 'DAY'], right_on=['BDR_ID', 'VISIT_DATE'], how='left')
+df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR_ID', 'VISIT_DATE', 'VISITS']], left_on=['bdr_id', 'DAY'], right_on=['BDR_ID', 'VISIT_DATE'], how='left')
 df_select = pd.merge(df_merged_intermediario, df_t2[['bdr_id', 'DATE', 'count_registered_stores']], left_on=['BDR_ID', 'DAY'], right_on=['bdr_id', 'DATE'], how='left')
 df_select = df_select.drop(columns=['bdr_id'])
 
