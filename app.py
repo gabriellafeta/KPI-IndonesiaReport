@@ -2732,7 +2732,7 @@ visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 # DF CONSOLIDADO
 
 track_alma_v2 = {
-    "BDR": df_select["BDR Name"].tolist(),
+    "BDR": buyers_table["BDR Name"].tolist(),
     f"Visits {adopted_last_day_key}": visits15_table_ld_grouped["Total_Visits"].tolist(),
     f"Visits {adopted_yesterday_day_key}": visits15_table_pld_grouped["Total_Visits"].tolist(),
     "Visits Current Week": visits15_table_lw_grouped["Total_Visits"].tolist(),
