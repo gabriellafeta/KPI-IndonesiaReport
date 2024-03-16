@@ -2733,15 +2733,15 @@ visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 
 track_alma_v2 = {
     "BDR": df_select["BDR Name"].tolist(),
-    f"Visits {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
-    f"Visits {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
-    "Visits Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
+    f"Visits {adopted_last_day_key}": visits15_table_ld_grouped["Total_Visits"].tolist(),
+    f"Visits {adopted_yesterday_day_key}": visits15_table_pld_grouped["Total_Visits"].tolist(),
+    "Visits Current Week": visits15_table_lw_grouped["Total_Visits"].tolist(),
     "Total Visits": buyers_table["Total_Buyers"].tolist()
 
 }
 
 track_alma_df_v2 = pd.DataFrame(track_alma_v2)
-track_alma_df_v2.sort_values(by='Adopted', inplace=True, ascending=False)
+track_alma_df_v2.sort_values(by='Total Visits', inplace=True, ascending=False)
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
 totals_row = {'BDR': 'TOTALS'}
