@@ -2674,13 +2674,15 @@ df_t3_expanded.fillna(0, inplace=True)
 
 df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR Name', 'VISIT_DATE', 'VISITS']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'VISIT_DATE'], how='left')
 df_select = pd.merge(df_merged_intermediario, df_t2[['BDR Name', 'DATE', 'count_registered_stores']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'DATE'], how='left')
-df_select.drop_duplicates(subset=['DAY', 'BDR Name'], inplace=True)
+df_select.drop_duplicates(inplace=True)
+
+select_csv = df_select.to_csv(index=False).encode('utf-8')
 
 ### DF select segmentado por Visits
 
-df_15v = df_select[df_select['VISITS'] >= 15]
-df_8v = df_select[(df_select['VISITS'] >= 8) & (df_select['VISITS'] < 15)]
-df_3v = df_select[(df_select['VISITS'] >= 3) & (df_select['VISITS'] < 8)]
+# df_15v = df_select[df_select['VISITS'] >= 15]
+# df_8v = df_select[(df_select['VISITS'] >= 8) & (df_select['VISITS'] < 15)]
+# df_3v = df_select[(df_select['VISITS'] >= 3) & (df_select['VISITS'] < 8)]
 
 ##### Customer Visit com df_15v
 ##### ALLD
