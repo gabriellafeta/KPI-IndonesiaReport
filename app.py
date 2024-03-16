@@ -2667,7 +2667,7 @@ df_15v['DAY'] = pd.to_datetime(df_15v['DAY'])
 last_day2 = df_15v['DAY'].max()
 visits15_table_ld = df_15v[df_15v['DAY'] == last_day2]
 
-visits15_table_ld_grouped = df_15v.groupby(['BDR Name']).agg(
+visits15_table_ld_grouped = visits15_table_ld.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
 ).reset_index()
 
