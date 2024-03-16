@@ -2875,12 +2875,14 @@ track_alma_v2 = {
     "Visits Current Week": visits15_table_lw_grouped["Total_Visits"].tolist(),
     "Total Visits": visits15_table["Total_Visits"].tolist(),
     "Target": [target_value1] * len(visits15_table["Total_Visits"].tolist()),
+    "Achieved %": [x / target_value1 for x in visits15_table["Total_Visits"].tolist()],
 
     f"Registers {adopted_last_day_key}": visits8_table_ld_grouped["Total_Register"].fillna(0).tolist(),
     f"Registers {adopted_yesterday_day_key}": visits8_table_pld_grouped["Total_Register"].fillna(0).tolist(),
     "Registers Current Week": visits8_table_lw_grouped["Total_Register"].fillna(0).tolist(),
     "Total Registers": visits8_table["Total_Register"].fillna(0).tolist(),
-    "Target Register": [target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist())
+    "Target Register": [target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist()),
+    "Achieved Register %": [x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()]
 
 
 
@@ -2889,17 +2891,13 @@ track_alma_v2 = {
 track_alma_df_v2 = pd.DataFrame(track_alma_v2)
 track_alma_df_v2.sort_values(by='Total Visits', inplace=True, ascending=False)
 
-track_alma_df_v2['Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
-track_alma_df_v2.loc[track_alma_df_v2.index[:-1], 'Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
-
-track_alma_df_v2['Achieved % Register'] = track_alma_df_v2['Total Registers'] / track_alma_df_v2['Target Register']
-
 sum_row = track_alma_df_v2.sum(numeric_only=True)
 
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
 
 totals_row['Achieved %'] = (sum_row['Total Visits'] / sum_row['Target']) if sum_row['Target'] != 0 else 0
+totals_row['Achieved Register %'] = (sum_row['Total Registers'] / sum_row['Target Register']) if sum_row['Target Register'] != 0 else 0
 totals_df = pd.DataFrame([totals_row])
 
 track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
