@@ -2890,6 +2890,8 @@ track_alma_df_v2 = pd.DataFrame(track_alma_v2)
 track_alma_df_v2.sort_values(by='Total Visits', inplace=True, ascending=False)
 
 track_alma_df_v2['Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
+track_alma_df_v2.loc[track_alma_df_v2.index[:-1], 'Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
+
 track_alma_df_v2['Achieved % Register'] = track_alma_df_v2['Total Registers'] / track_alma_df_v2['Target Register']
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
