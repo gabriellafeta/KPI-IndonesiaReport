@@ -2652,11 +2652,11 @@ visits15_table.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia - visits15_table
 
-visits15_table['DAY'] = pd.to_datetime(visits15_table['DAY'])
+df_15v['DAY'] = pd.to_datetime(df_15v['DAY'])
 last_day2 = pd.Timestamp.now().normalize()
-visits15_table_ld = visits15_table[df_t2['DATE'] == last_day2]
+visits15_table_ld = df_15v[df_15v['DATE'] == last_day2]
 
-visits15_table_ld_grouped = visits15_table.groupby(['BDR Name']).agg(
+visits15_table_ld_grouped = df_15v.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
 ).reset_index()
 
@@ -2680,7 +2680,7 @@ visits15_table_ld_grouped.reset_index(drop=True, inplace=True)
 ### Penultimo dia
 
 penultimo_dia2 = last_day - pd.Timedelta(days=1)
-visits15_table_pld = visits15_table[visits15_table['DATE'] == penultimo_dia2]
+visits15_table_pld = df_15v[df_15v['DAY'] == penultimo_dia2]
 
 visits15_table_pld_grouped = visits15_table_pld.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
@@ -2705,8 +2705,8 @@ visits15_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
 
-semana_atual2 = visits15_table['week_of_year'].max()
-visits15_table_lw= visits15_table[visits15_table['week_of_year'] == semana_atual2]
+semana_atual2 = df_15v['week_of_year'].max()
+visits15_table_lw= df_15v[df_15v['week_of_year'] == semana_atual2]
 
 visits15_table_lw_grouped = visits15_table_lw.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
