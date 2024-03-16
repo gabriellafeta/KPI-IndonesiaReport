@@ -2619,6 +2619,43 @@ master_table_2 = style_table_2(track_alma_df, track_alma_df.columns)
 master_table_2_html = master_table_2.to_html()
 
 #------------------------------------------------------------------------------------------------------
+#### New Styler
+
+def style_table_3(df, columns, font_size='10pt'):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
+
+    # Aplicando a formatação com pontos para os valores numéricos
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            # Estilo do cabeçalho
+            {'selector': 'thead th',
+             'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
+            # Alinhamento dos dados na célula
+            {'selector': 'td',
+             'props': [('text-align', 'center')]},
+            # Estilo da fonte e tamanho para toda a tabela
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]},
+            # Removendo linhas de grade
+            {'selector': 'table',
+             'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
+        ])
+
+    # Adicionando bordas grossas a cada 4 colunas, começando na terceira coluna
+    for col in range(1, len(df.columns), 6):
+        styler = styler.set_table_styles([
+            {'selector': f'td:nth-child({col})',
+             'props': [('border-right', '2px solid black')]}
+        ], overwrite=False, axis=1)
+
+    # Estilizando a última linha com fundo preto e fonte amarela
+    styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
+
+    return styler
+
 ### Tabela v2
 
 #### DF com colunas selecionadas
@@ -2754,6 +2791,21 @@ track_alma_df_v2.sort_values(by='Total Visits', inplace=True, ascending=False)
 track_alma_df_v2['Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
+
+# Identify columns that contain percentages
+percentage_columns = [col for col in track_alma_df_v2.columns if '%' in col]
+
+# For each percentage column, perform the required calculation
+for col in percentage_columns:
+    # Assume the columns you need are directly to the left of the percentage column
+    num_col = track_alma_df_v2.columns.get_loc(col) - 2
+    den_col = track_alma_df_v2.columns.get_loc(col) - 1
+    if num_col >= 0 and den_col >= 0:
+        numerator = sum_row.iloc[num_col]
+        denominator = sum_row.iloc[den_col]
+        sum_row[col] = numerator / denominator if denominator != 0 else 0
+
+# Create the totals row DataFrame
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
 totals_df = pd.DataFrame([totals_row])
@@ -2771,7 +2823,7 @@ for col in achieved_columns:
 track_alma_df_v2.set_index(track_alma_df_v2.columns[0], inplace=True)
 
 alma_csv_v2 = track_alma_df_v2.to_csv(index=False).encode('utf-8')
-master_table_3 = style_table_2(track_alma_df_v2, track_alma_df_v2.columns)
+master_table_3 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
 master_table_3_html = master_table_3.to_html()
 
 #------------------------------------------------------------------------------------------------------
