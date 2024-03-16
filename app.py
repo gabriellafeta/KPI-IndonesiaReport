@@ -2736,17 +2736,22 @@ visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 
 # DF CONSOLIDADO
 
+target_value1 = 450
+
 track_alma_v2 = {
     "BDR": buyers_table["BDR Name"].tolist(),
     f"Visits {adopted_last_day_key}": visits15_table_ld_grouped["Total_Visits"].tolist(),
     f"Visits {adopted_yesterday_day_key}": visits15_table_pld_grouped["Total_Visits"].tolist(),
     "Visits Current Week": visits15_table_lw_grouped["Total_Visits"].tolist(),
-    "Total Visits": visits15_table["Total_Visits"].tolist()
+    "Total Visits": visits15_table["Total_Visits"].tolist(),
+    "Target": [target_value1] * len(visits15_table["Total_Visits"].tolist())
 
 }
 
 track_alma_df_v2 = pd.DataFrame(track_alma_v2)
 track_alma_df_v2.sort_values(by='Total Visits', inplace=True, ascending=False)
+
+track_alma_df_v2['Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
 totals_row = {'BDR': 'TOTALS'}
@@ -2758,6 +2763,10 @@ track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
 gmv_columns = [col for col in track_alma_df_v2.columns if 'GMV' in col]
 for col in gmv_columns:
     track_alma_df_v2[col] = track_alma_df_v2[col].apply(formata_numero)
+
+achieved_columns = [col for col in track_alma_df_v2.columns if '%' in col]
+for col in achieved_columns:
+    track_alma_df_v2[col] = track_alma_df_v2[col].apply(formata_percentual)
 
 track_alma_df_v2.set_index(track_alma_df_v2.columns[0], inplace=True)
 
