@@ -2882,9 +2882,15 @@ track_alma_v2 = {
     "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
     "Total Adopted": buyers_table["Total_Buyers"].tolist(),
     "Target Adopted": [target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist()),
-    "Achieved Adopted %": [x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()]
+    "Achieved Adopted %": [x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()],
 
+    f"Orders {adopted_last_day_key}": buyers_table_lastday["Total_Orders"].tolist(),
+    "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
+    "Orders LTD": buyers_table["Total_Orders"].tolist(),
 
+    f"GMV {adopted_last_day_key}": buyers_table_lastday["Total_GMV"].tolist(),
+    "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
+    "GMV LTD": buyers_table["Total_GMV"].tolist()
 
 
 }
