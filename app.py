@@ -2791,21 +2791,6 @@ track_alma_df_v2.sort_values(by='Total Visits', inplace=True, ascending=False)
 track_alma_df_v2['Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
-
-# Identify columns that contain percentages
-percentage_columns = [col for col in track_alma_df_v2.columns if '%' in col]
-
-# For each percentage column, perform the required calculation
-for col in percentage_columns:
-    # Assume the columns you need are directly to the left of the percentage column
-    num_col = track_alma_df_v2.columns.get_loc(col) - 2
-    den_col = track_alma_df_v2.columns.get_loc(col) - 1
-    if num_col >= 0 and den_col >= 0:
-        numerator = sum_row.iloc[num_col]
-        denominator = sum_row.iloc[den_col]
-        sum_row[col] = numerator / denominator if denominator != 0 else 0
-
-# Create the totals row DataFrame
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
 totals_df = pd.DataFrame([totals_row])
