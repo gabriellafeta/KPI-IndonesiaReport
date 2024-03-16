@@ -2654,7 +2654,7 @@ visits15_table.reset_index(drop=True, inplace=True)
 
 df_15v['DAY'] = pd.to_datetime(df_15v['DAY'])
 last_day2 = pd.Timestamp.now().normalize()
-visits15_table_ld = df_15v[df_15v['DATE'] == last_day2]
+visits15_table_ld = df_15v[df_15v['DAY'] == last_day2]
 
 visits15_table_ld_grouped = df_15v.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
@@ -2723,7 +2723,7 @@ visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 # DF CONSOLIDADO
 
 track_alma_v2 = {
-    "BDR": visits15_table["BDR Name"].tolist(),
+    "BDR": buyers_table["BDR Name"].tolist(),
     f"Visits {adopted_last_day_key}": visits15_table_ld_grouped["Total_Visits"].tolist(),
     f"Visits {adopted_yesterday_day_key}": visits15_table_pld_grouped["Total_Visits"].tolist(),
     "Visits Current Week": visits15_table_lw_grouped["Total_Visits"].tolist(),
