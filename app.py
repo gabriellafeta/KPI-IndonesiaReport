@@ -2799,10 +2799,8 @@ sum_row = track_alma_df_v2.sum(numeric_only=True)
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
 
-if 'Total Visits' in sum_row and 'Target' in sum_row and sum_row['Target'] != 0:
-    totals_row['Achieved %'] = (sum_row['Total Visits'] / sum_row['Target']) * 100
+totals_row['Achieved %'] = (sum_row['Total Visits'] / sum_row['Target']) * 100 if sum_row['Target'] != 0 else 0
 
-# Create the totals DataFrame
 totals_df = pd.DataFrame([totals_row])
 
 track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
