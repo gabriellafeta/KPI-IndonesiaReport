@@ -2659,9 +2659,10 @@ def style_table_3(df, columns, font_size='10pt'):
 ### Tabela v2
 
 #### DF com colunas selecionadas
-start_date = '2023-02-26'
-end_date = pd.to_datetime('today').strftime('%Y-%m-%d')
-all_dates = pd.date_range(start=start_date, end=end_date, freq='D')
+
+start_date_nn = '2023-02-26'
+end_date_nn = pd.to_datetime('today').strftime('%Y-%m-%d')
+all_dates = pd.date_range(start=start_date_nn, end=end_date_nn, freq='D')
 df_dates = pd.DataFrame(all_dates, columns=['DAY'])
 
 unique_bdrs = df_t3['BDR Name'].unique()
