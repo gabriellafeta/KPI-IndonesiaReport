@@ -2859,6 +2859,7 @@ visits8_table_lw_grouped.reset_index(drop=True, inplace=True)
 
 target_value1 = 450
 target_value2 = 240
+target_value3 = 90
 
 track_alma_v2 = {
     "BDR": buyers_table["BDR Name"].tolist(),
@@ -2874,7 +2875,15 @@ track_alma_v2 = {
     "Registers Current Week": visits8_table_lw_grouped["Total_Register"].fillna(0).tolist(),
     "Total Registers": visits8_table["Total_Register"].fillna(0).tolist(),
     "Target Register": [target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist()),
-    "Achieved Register %": [x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()]
+    "Achieved Register %": [x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()],
+
+    f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
+    f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
+    "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
+    "Total Adopted": buyers_table["Total_Buyers"].tolist(),
+    "Target Adopted": [target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist()),
+    "Achieved Adopted %": [x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()]
+
 
 
 
@@ -2890,6 +2899,7 @@ totals_row.update(sum_row.to_dict())
 
 totals_row['Achieved %'] = (sum_row['Total Visits'] / sum_row['Target']) if sum_row['Target'] != 0 else 0
 totals_row['Achieved Register %'] = (sum_row['Total Registers'] / sum_row['Target Register']) if sum_row['Target Register'] != 0 else 0
+totals_row['Achieved Adopted %'] = (sum_row['Total Adopted'] / sum_row['Target Adopted']) if sum_row['Target Adopted'] != 0 else 0
 totals_df = pd.DataFrame([totals_row])
 
 track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
