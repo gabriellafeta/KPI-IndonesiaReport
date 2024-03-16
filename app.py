@@ -2683,7 +2683,7 @@ df_3v = df_select[(df_select['VISITS'] >= 3) & (df_select['VISITS'] < 8)]
 
 ##### Customer Visit com df_15v
 ##### ALLD
-visits15_table = df_15v.groupby(['BDR Name']).agg(
+visits15_table = df_select.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
 ).reset_index()
 
@@ -2703,9 +2703,9 @@ visits15_table.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia - visits15_table
 
-df_15v['DAY'] = pd.to_datetime(df_15v['DAY'])
-last_day2 = df_15v['DAY'].max()
-visits15_table_ld = df_15v[df_15v['DAY'] == last_day2]
+df_select['DAY'] = pd.to_datetime(df_select['DAY'])
+last_day2 = df_select['DAY'].max()
+visits15_table_ld = df_select[df_select['DAY'] == last_day2]
 
 visits15_table_ld_grouped = visits15_table_ld.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
@@ -2728,7 +2728,7 @@ visits15_table_ld_grouped.reset_index(drop=True, inplace=True)
 ### Penultimo dia
 
 penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
-visits15_table_pld = df_15v[df_15v['DAY'] == penultimo_dia2]
+visits15_table_pld = df_select[df_select['DAY'] == penultimo_dia2]
 
 visits15_table_pld_grouped = visits15_table_pld.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
@@ -2749,9 +2749,9 @@ visits15_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits15_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-df_15v['week_of_year'] = df_15v['DAY'].dt.isocalendar().week
+df_select['week_of_year'] = df_select['DAY'].dt.isocalendar().week
 current_week_number = pd.Timestamp('now').isocalendar()[1]
-visits_current_week = df_15v[df_15v['week_of_year'] == current_week_number]
+visits_current_week = df_select[df_select['week_of_year'] == current_week_number]
 
 visits15_table_lw_grouped = visits_current_week.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
@@ -2774,7 +2774,7 @@ visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 ############################ Register
 ##### Registered com df_8v
 ##### ALLD
-visits8_table = df_8v.groupby(['BDR Name']).agg(
+visits8_table = df_select.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
 ).reset_index()
 
@@ -2794,11 +2794,11 @@ visits8_table.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia - visits15_table
 
-df_8v['DAY'] = pd.to_datetime(df_8v['DAY'])
-last_day2 = df_8v['DAY'].max()
-visits8_table_ld = df_8v[df_8v['DAY'] == last_day2]
+df_select['DAY'] = pd.to_datetime(df_select['DAY'])
+last_day2 = df_select['DAY'].max()
+visits8_table_ld = df_select[df_select['DAY'] == last_day2]
 
-visits8_table_ld_grouped = df_8v.groupby(['BDR Name']).agg(
+visits8_table_ld_grouped = df_select.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
 ).reset_index()
 
@@ -2819,7 +2819,7 @@ visits8_table_ld_grouped.reset_index(drop=True, inplace=True)
 ### Penultimo dia
 
 penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
-visits8_table_pld = df_8v[df_8v['DAY'] == penultimo_dia2]
+visits8_table_pld = df_select[df_select['DAY'] == penultimo_dia2]
 
 visits8_table_pld_grouped = visits8_table_pld.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
@@ -2840,9 +2840,9 @@ visits8_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits8_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-df_8v['week_of_year'] = df_8v['DAY'].dt.isocalendar().week
+df_select['week_of_year'] = df_select['DAY'].dt.isocalendar().week
 current_week_number = pd.Timestamp('now').isocalendar()[1]
-visits_current_week8 = df_8v[df_8v['week_of_year'] == current_week_number]
+visits_current_week8 = df_select[df_select['week_of_year'] == current_week_number]
 
 visits8_table_lw_grouped = visits_current_week8.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
@@ -2862,6 +2862,7 @@ for bdr_key, bdr_name in BDR_dict.items():
 visits8_table_lw_grouped.sort_values(by='BDR Name', inplace=True)
 visits8_table_lw_grouped.reset_index(drop=True, inplace=True)
 
+############## Adoption
 
 # DF CONSOLIDADO
 
