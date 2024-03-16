@@ -2626,15 +2626,15 @@ end_date = pd.to_datetime('today').strftime('%Y-%m-%d')
 all_dates = pd.date_range(start=start_date, end=end_date, freq='D')
 df_dates = pd.DataFrame(all_dates, columns=['DAY'])
 
-unique_bdrs = df_t3['bdr_id'].unique()
-df_bdrs = pd.DataFrame(unique_bdrs, columns=['bdr_id'])
+unique_bdrs = df_t3['BDR Name'].unique()
+df_bdrs = pd.DataFrame(unique_bdrs, columns=['BDR Name'])
 
 df_all_combinations = pd.merge(df_bdrs, df_dates, how='cross')
-df_t3_expanded = pd.merge(df_all_combinations, df_t3, on=['bdr_id', 'DAY'], how='left')
+df_t3_expanded = pd.merge(df_all_combinations, df_t3, on=['BDR Name', 'DAY'], how='left')
 df_t3_expanded.fillna(0, inplace=True)
 
-df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR_ID', 'VISIT_DATE', 'VISITS']], left_on=['bdr_id', 'DAY'], right_on=['BDR_ID', 'VISIT_DATE'], how='left')
-df_select = pd.merge(df_merged_intermediario, df_t2[['bdr_id', 'DATE', 'count_registered_stores']], left_on=['BDR_ID', 'DAY'], right_on=['bdr_id', 'DATE'], how='left')
+df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR Name', 'VISIT_DATE', 'VISITS']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'VISIT_DATE'], how='left')
+df_select = pd.merge(df_merged_intermediario, df_t2[['BDR Name', 'DATE', 'count_registered_stores']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'DATE'], how='left')
 
 ### DF select segmentado por Visits
 df_15v = df_select[df_select['VISITS'] >= 15]
