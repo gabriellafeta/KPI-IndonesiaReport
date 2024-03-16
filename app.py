@@ -2530,6 +2530,7 @@ for bdr_key, bdr_name in BDR_dict.items():
 register_table_semana_atual.sort_values(by='BDR Name', inplace=True)
 register_table_semana_atual.reset_index(drop=True, inplace=True)
 
+
 ### DF consolidado
 adopted_last_day_key = f"{last_day.strftime('%d-%m')}"
 adopted_yesterday_day_key = f"{penultimo_dia.strftime('%d-%m')}"
@@ -2615,6 +2616,150 @@ def style_table_2(df, columns, font_size='10pt'):
 alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
 master_table_2 = style_table_2(track_alma_df, track_alma_df.columns)
 master_table_2_html = master_table_2.to_html()
+
+#------------------------------------------------------------------------------------------------------
+### Tabela v2
+
+#### DF com colunas selecionadas
+start_date = '2023-01-15'
+end_date = pd.to_datetime('today').strftime('%Y-%m-%d')
+all_dates = pd.date_range(start=start_date, end=end_date, freq='D')
+df_dates = pd.DataFrame(all_dates, columns=['DAY'])
+
+unique_bdrs = df_t3['BDR_ID'].unique()
+df_bdrs = pd.DataFrame(unique_bdrs, columns=['BDR_ID'])
+
+df_all_combinations = pd.merge(df_bdrs, df_dates, how='cross')
+df_t3_expanded = pd.merge(df_all_combinations, df_t3, on=['BDR_ID', 'DAY'], how='left')
+df_t3_expanded.fillna(0, inplace=True)
+
+df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR_ID', 'VISIT_DATE', 'VISITS']], left_on=['BDR_ID', 'DAY'], right_on=['BDR_ID', 'VISIT_DATE'], how='left')
+df_select = pd.merge(df_merged_intermediario, df_t2[['bdr_id', 'DATE', 'count_registered_stores']], left_on=['BDR_ID', 'DAY'], right_on=['bdr_id', 'DATE'], how='left')
+df_select = df_select.drop(columns=['bdr_id'])
+
+### DF select segmentado por Visits
+df_15v = df_select[df_select['VISITS'] >= 15]
+df_8v = df_select[(df_select['VISITS'] >= 8) & (df_select['VISITS'] < 15)]
+df_3v = df_select[(df_select['VISITS'] >= 3) & (df_select['VISITS'] < 8)]
+
+##### Customer Visit com df_15v
+##### ALLD
+visits15_table = df_15v.groupby(['BDR Name']).agg(
+    Total_Visits=('VISITS', 'sum')
+).reset_index()
+
+visits15_table.sort_values(by='BDR Name', inplace=True)
+visits15_table.reset_index(drop=True, inplace=True)
+
+##### Ultimo dia - visits15_table
+
+visits15_table['DAY'] = pd.to_datetime(visits15_table['DAY'])
+last_day2 = pd.Timestamp.now().normalize()
+visits15_table_ld = visits15_table[df_t2['DATE'] == last_day2]
+
+visits15_table_ld_grouped = visits15_table.groupby(['BDR Name']).agg(
+    Total_Visits=('VISITS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits15_table_ld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits15_table_ld_grouped = pd.concat([visits15_table_ld_grouped, new_row_df], ignore_index=True)
+
+visits15_table_ld_grouped.sort_values(by='BDR Name', inplace=True)
+visits15_table_ld_grouped.reset_index(drop=True, inplace=True)
+
+### Penultimo dia
+
+penultimo_dia2 = last_day - pd.Timedelta(days=1)
+visits15_table_pld = visits15_table[visits15_table['DATE'] == penultimo_dia2]
+
+visits15_table_pld_grouped = visits15_table_pld.groupby(['BDR Name']).agg(
+    Total_Visits=('VISITS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits15_table_pld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits15_table_pld_grouped = pd.concat([visits15_table_pld_grouped, new_row_df], ignore_index=True)
+
+visits15_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
+visits15_table_pld_grouped.reset_index(drop=True, inplace=True)
+
+##### Semana
+
+semana_atual2 = visits15_table['week_of_year'].max()
+visits15_table_lw= visits15_table[visits15_table['week_of_year'] == semana_atual2]
+
+visits15_table_lw_grouped = visits15_table_lw.groupby(['BDR Name']).agg(
+    Total_Visits=('VISITS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits15_table_lw_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits15_table_lw_grouped = pd.concat([visits15_table_lw_grouped, new_row_df], ignore_index=True)
+
+visits15_table_lw_grouped.sort_values(by='BDR Name', inplace=True)
+visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
+
+# DF CONSOLIDADO
+
+track_alma_v2 = {
+    "BDR": df_select["BDR Name"].tolist(),
+    f"Visits {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
+    f"Visits {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
+    "Visits Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
+    "Total Visits": buyers_table["Total_Buyers"].tolist()
+
+}
+
+track_alma_df_v2 = pd.DataFrame(track_alma_v2)
+track_alma_df_v2.sort_values(by='Adopted', inplace=True, ascending=False)
+
+sum_row = track_alma_df_v2.sum(numeric_only=True)
+totals_row = {'BDR': 'TOTALS'}
+totals_row.update(sum_row.to_dict())
+totals_df = pd.DataFrame([totals_row])
+
+track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
+
+gmv_columns = [col for col in track_alma_df_v2.columns if 'GMV' in col]
+for col in gmv_columns:
+    track_alma_df_v2[col] = track_alma_df_v2[col].apply(formata_numero)
+
+track_alma_df_v2.set_index(track_alma_df_v2.columns[0], inplace=True)
+
+alma_csv_v2 = track_alma_df.to_csv(index=False).encode('utf-8')
+master_table_3 = style_table_2(track_alma_df_v2, track_alma_df_v2.columns)
+master_table_3_html = master_table_3.to_html()
 
 #------------------------------------------------------------------------------------------------------
 #### App
@@ -3211,6 +3356,16 @@ with colCm[0]:
     st.markdown(f"""
     <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
         <a href="data:text/csv;base64,{alma_csv}" download="data.csv">
+            <button>
+                This table as CSV
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown(master_table_3_html, unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
+        <a href="data:text/csv;base64,{alma_csv_v2}" download="data.csv">
             <button>
                 This table as CSV
             </button>
