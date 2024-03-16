@@ -2647,6 +2647,17 @@ visits15_table = df_15v.groupby(['BDR Name']).agg(
     Total_Visits=('VISITS', 'sum')
 ).reset_index()
 
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits15_table['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits15_table = pd.concat([visits15_table, new_row_df], ignore_index=True)
+
 visits15_table.sort_values(by='BDR Name', inplace=True)
 visits15_table.reset_index(drop=True, inplace=True)
 
