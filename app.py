@@ -2636,7 +2636,7 @@ df_t3_expanded.fillna(0, inplace=True)
 
 df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR Name', 'VISIT_DATE', 'VISITS']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'VISIT_DATE'], how='left')
 df_select = pd.merge(df_merged_intermediario, df_t2[['BDR Name', 'DATE', 'count_registered_stores']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'DATE'], how='left')
-df_select.drop_duplicates(subset=['DAY', 'BDR'], inplace=True)
+df_select.drop_duplicates(subset=['DAY', 'BDR Name'], inplace=True)
 
 ### DF select segmentado por Visits
 
