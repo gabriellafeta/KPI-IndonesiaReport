@@ -2798,7 +2798,7 @@ df_select['DAY'] = pd.to_datetime(df_select['DAY'])
 last_day2 = df_select['DAY'].max()
 visits8_table_ld = df_select[df_select['DAY'] == last_day2]
 
-visits8_table_ld_grouped = df_select.groupby(['BDR Name']).agg(
+visits8_table_ld_grouped = visits8_table_ld.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
 ).reset_index()
 
