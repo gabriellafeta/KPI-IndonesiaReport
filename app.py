@@ -2664,7 +2664,7 @@ visits15_table.reset_index(drop=True, inplace=True)
 ##### Ultimo dia - visits15_table
 
 df_15v['DAY'] = pd.to_datetime(df_15v['DAY'])
-last_day2 = pd.Timestamp.now().normalize()
+last_day2 = df_15v['DAY'].max()
 visits15_table_ld = df_15v[df_15v['DAY'] == last_day2]
 
 visits15_table_ld_grouped = df_15v.groupby(['BDR Name']).agg(
@@ -2687,7 +2687,7 @@ visits15_table_ld_grouped.reset_index(drop=True, inplace=True)
 
 ### Penultimo dia
 
-penultimo_dia2 = last_day - pd.Timedelta(days=1)
+penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
 visits15_table_pld = df_15v[df_15v['DAY'] == penultimo_dia2]
 
 visits15_table_pld_grouped = visits15_table_pld.groupby(['BDR Name']).agg(
