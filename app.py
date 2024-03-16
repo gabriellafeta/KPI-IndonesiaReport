@@ -2635,7 +2635,6 @@ df_t3_expanded.fillna(0, inplace=True)
 
 df_merged_intermediario = pd.merge(df_t3_expanded, df_t1[['BDR_ID', 'VISIT_DATE', 'VISITS']], left_on=['bdr_id', 'DAY'], right_on=['BDR_ID', 'VISIT_DATE'], how='left')
 df_select = pd.merge(df_merged_intermediario, df_t2[['bdr_id', 'DATE', 'count_registered_stores']], left_on=['BDR_ID', 'DAY'], right_on=['bdr_id', 'DATE'], how='left')
-df_select = df_select.drop(columns=['bdr_id'])
 
 ### DF select segmentado por Visits
 df_15v = df_select[df_select['VISITS'] >= 15]
