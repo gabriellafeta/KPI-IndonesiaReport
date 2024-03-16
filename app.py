@@ -2876,11 +2876,11 @@ track_alma_v2 = {
     "Total Visits": visits15_table["Total_Visits"].tolist(),
     "Target": [target_value1] * len(visits15_table["Total_Visits"].tolist()),
 
-    f"Registers {adopted_last_day_key}": visits8_table_ld_grouped["Total_Register"].tolist(),
-    f"Registers {adopted_yesterday_day_key}": visits8_table_pld_grouped["Total_Register"].tolist(),
-    "Registers Current Week": visits8_table_lw_grouped["Total_Register"].tolist(),
-    "Total Registers": visits8_table["Total_Register"].tolist(),
-    "Target Register": [target_value2] * len(visits8_table["Total_Register"].tolist())
+    f"Registers {adopted_last_day_key}": visits8_table_ld_grouped["Total_Register"].fillna(0).tolist(),
+    f"Registers {adopted_yesterday_day_key}": visits8_table_pld_grouped["Total_Register"].fillna(0).tolist(),
+    "Registers Current Week": visits8_table_lw_grouped["Total_Register"].fillna(0).tolist(),
+    "Total Registers": visits8_table["Total_Register"].fillna(0).tolist(),
+    "Target Register": [target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist())
 
 
 
