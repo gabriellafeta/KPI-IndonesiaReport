@@ -2772,12 +2772,101 @@ visits15_table_lw_grouped.sort_values(by='BDR Name', inplace=True)
 visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 
 ############################ Register
+##### Registered com df_8v
+##### ALLD
+visits8_table = df_8v.groupby(['BDR Name']).agg(
+    Total_Register=('count_registered_stores', 'sum')
+).reset_index()
 
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits8_table['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Register': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits8_table = pd.concat([visits8_table, new_row_df], ignore_index=True)
+
+visits8_table.sort_values(by='BDR Name', inplace=True)
+visits8_table.reset_index(drop=True, inplace=True)
+
+##### Ultimo dia - visits15_table
+
+df_8v['DAY'] = pd.to_datetime(df_8v['DAY'])
+last_day2 = df_8v['DAY'].max()
+visits8_table_ld = df_8v[df_8v['DAY'] == last_day2]
+
+visits8_table_ld_grouped = df_8v.groupby(['BDR Name']).agg(
+    Total_Register=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits8_table_ld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits8_table_ld_grouped = pd.concat([visits8_table_ld_grouped, new_row_df], ignore_index=True)
+
+visits8_table_ld_grouped.sort_values(by='BDR Name', inplace=True)
+visits8_table_ld_grouped.reset_index(drop=True, inplace=True)
+
+### Penultimo dia
+
+penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
+visits8_table_pld = df_8v[df_8v['DAY'] == penultimo_dia2]
+
+visits8_table_pld_grouped = visits8_table_pld.groupby(['BDR Name']).agg(
+    Total_Register=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits8_table_pld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits8_table_pld_grouped = pd.concat([visits8_table_pld_grouped, new_row_df], ignore_index=True)
+
+visits8_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
+visits8_table_pld_grouped.reset_index(drop=True, inplace=True)
+
+##### Semana
+df_8v['week_of_year'] = df_8v['DAY'].dt.isocalendar().week
+current_week_number = pd.Timestamp('now').isocalendar()[1]
+visits_current_week8 = df_8v[df_8v['week_of_year'] == current_week_number]
+
+visits8_table_lw_grouped = visits_current_week8.groupby(['BDR Name']).agg(
+    Total_Register=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits8_table_lw_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits8_table_lw_grouped = pd.concat([visits8_table_lw_grouped, new_row_df], ignore_index=True)
+
+visits8_table_lw_grouped.sort_values(by='BDR Name', inplace=True)
+visits8_table_lw_grouped.reset_index(drop=True, inplace=True)
 
 
 # DF CONSOLIDADO
 
 target_value1 = 450
+target_value2 = 240
 
 track_alma_v2 = {
     "BDR": buyers_table["BDR Name"].tolist(),
@@ -2785,7 +2874,15 @@ track_alma_v2 = {
     f"Visits {adopted_yesterday_day_key}": visits15_table_pld_grouped["Total_Visits"].tolist(),
     "Visits Current Week": visits15_table_lw_grouped["Total_Visits"].tolist(),
     "Total Visits": visits15_table["Total_Visits"].tolist(),
-    "Target": [target_value1] * len(visits15_table["Total_Visits"].tolist())
+    "Target": [target_value1] * len(visits15_table["Total_Visits"].tolist()),
+
+    f"Registers {adopted_last_day_key}": visits8_table_ld_grouped["Total_Register"].tolist(),
+    f"Registers {adopted_yesterday_day_key}": visits8_table_pld_grouped["Total_Register"].tolist(),
+    "Registers Current Week": visits8_table_lw_grouped["Total_Register"].tolist(),
+    "Total Registers": visits8_table["Total_Register"].tolist(),
+    "Target Register": [target_value2] * len(visits8_table["Total_Register"].tolist())
+
+
 
 }
 
@@ -2793,6 +2890,7 @@ track_alma_df_v2 = pd.DataFrame(track_alma_v2)
 track_alma_df_v2.sort_values(by='Total Visits', inplace=True, ascending=False)
 
 track_alma_df_v2['Achieved %'] = track_alma_df_v2['Total Visits'] / track_alma_df_v2['Target']
+track_alma_df_v2['Achieved % Register'] = track_alma_df_v2['Total Registers'] / track_alma_df_v2['Target Register']
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
 
@@ -2800,7 +2898,6 @@ totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
 
 totals_row['Achieved %'] = (sum_row['Total Visits'] / sum_row['Target']) if sum_row['Target'] != 0 else 0
-
 totals_df = pd.DataFrame([totals_row])
 
 track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
