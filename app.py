@@ -2665,10 +2665,7 @@ for bdr_key, bdr_name in BDR_dict.items():
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
-            'Total_Buyers': 0,
-            'Customer_Adopted': 0,
-            'Total_Orders': 0,
-            'Total_GMV': 0
+            'Total_Visits': 0
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
@@ -2691,10 +2688,7 @@ for bdr_key, bdr_name in BDR_dict.items():
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
-            'Total_Buyers': 0,
-            'Customer_Adopted': 0,
-            'Total_Orders': 0,
-            'Total_GMV': 0
+            'Total_Visits': 0
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
@@ -2717,10 +2711,7 @@ for bdr_key, bdr_name in BDR_dict.items():
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
-            'Total_Buyers': 0,
-            'Customer_Adopted': 0,
-            'Total_Orders': 0,
-            'Total_GMV': 0
+            'Total_Visits': 0
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
@@ -2756,7 +2747,7 @@ for col in gmv_columns:
 
 track_alma_df_v2.set_index(track_alma_df_v2.columns[0], inplace=True)
 
-alma_csv_v2 = track_alma_df.to_csv(index=False).encode('utf-8')
+alma_csv_v2 = track_alma_df_v2.to_csv(index=False).encode('utf-8')
 master_table_3 = style_table_2(track_alma_df_v2, track_alma_df_v2.columns)
 master_table_3_html = master_table_3.to_html()
 
