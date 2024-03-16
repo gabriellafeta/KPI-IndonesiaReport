@@ -3364,6 +3364,19 @@ with colCm[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(master_table_3_html, unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    .fonte-personalizada3 {
+        font-size: 10px;
+        font-style: italic
+    }
+    </style>
+    <div class="fonte-personalizada3">
+        Visits Columns = Filtered days with 15 or more Visits
+        Register Columns = Filtered days with visits between 8 and 15
+        Adoption Columns = Filtered days with visits between 3 and 8
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown(f"""
     <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
         <a href="data:text/csv;base64,{alma_csv_v2}" download="data.csv">
