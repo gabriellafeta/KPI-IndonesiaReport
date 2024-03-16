@@ -535,7 +535,8 @@ kpi1_alvis_barplot.update_layout(
 )
 
 ########## KPI1 per BDR ALLD
-df_aggregated_t1_BDR = df_t1_sorted.groupby('BDR Name')['VISITS'].sum().reset_index()
+
+df_aggregated_t1_BDR = pd.pivot_table(df_t1_sorted, values='VISITS', index='BDR Name', aggfunc='sum').reset_index()
 df_aggregated_t1_BDR = df_aggregated_t1_BDR.sort_values(by='VISITS', ascending=False)
 kpi1_all_barplot_bdr = px.bar(df_aggregated_t1_BDR, x='BDR Name', y='VISITS', color_discrete_sequence=['#ffcc00'])
 
@@ -3372,9 +3373,9 @@ with colCm[0]:
     }
     </style>
     <div class="fonte-personalizada3">
-        Visits Columns = Filtered days with 15 or more Visits
-        Register Columns = Filtered days with visits between 8 and 15
-        Adoption Columns = Filtered days with visits between 3 and 8
+        Visits Columns = Filtered days with 15 or more Visits,
+        Register Columns = Filtered days with visits between 8 and 15,
+        Adoption Columns = Filtered days with visits between 3 and 8,
     </div>
     """, unsafe_allow_html=True)
     st.markdown(f"""
