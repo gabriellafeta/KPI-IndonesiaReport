@@ -3630,6 +3630,18 @@ with colCm[0]:
         </a>
     </div>
     """, unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    .fonte-personalizada2 {
+        font-size: 20px;
+        font-style: bold;
+        text-decoration: underline; /* This line adds the underline */
+    }
+    </style>
+    <div class="fonte-personalizada2">
+        From Feb 26 2024 to Mar 31 2024
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown(master_table_3_html, unsafe_allow_html=True)
     st.markdown("""
     <style>
