@@ -3546,9 +3546,7 @@ with colCm[0]:
     }
     </style>
     <div class="fonte-personalizada3">
-        Visits Columns = Filtered days with 15 or more Visits,
-        Register Columns = Filtered days with visits between 8 and 15,
-        Adoption Columns = Filtered days with visits between 3 and 8,
+        Start date = Feb 26 2024
     </div>
     """, unsafe_allow_html=True)
     st.markdown(f"""
