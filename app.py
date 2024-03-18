@@ -2844,7 +2844,7 @@ visits8_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
 df_t2_filtrado['week_of_year'] = df_t2_filtrado['DATE'].dt.isocalendar().week
-current_week_number = pd.Timestamp('now').isocalendar()[1]
+current_week_number = df_t2_filtrado['week_of_year'].max()
 visits_current_week8 = df_t2_filtrado[df_t2_filtrado['week_of_year'] == current_week_number]
 
 visits8_table_lw_grouped = visits_current_week8.groupby(['BDR Name']).agg(
