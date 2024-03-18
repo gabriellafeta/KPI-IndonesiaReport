@@ -2868,7 +2868,9 @@ visits8_table_lw_grouped.reset_index(drop=True, inplace=True)
 ############## Adoption
 
 # Visits X GPS
-visits_gpsapp_df = pd.merge(df_t1_filtrado, df_t5_filtrado, left_on=['BDR Name', 'VISIT_DATE'], right_on=['BDR Name', 'DATE'], how='inner')
+gps_daily_avg = df_t5_filtrado.groupby('DATE')['GPS'].mean().reset_index()
+
+visits_gpsapp_df = pd.merge(df_t1_filtrado, gps_daily_avg, left_on=['BDR Name', 'VISIT_DATE'], right_on=['BDR Name', 'DATE'], how='inner')
 visits_gpsapp_df['VISITS_GPS'] = visits_gpsapp_df['VISITED_STORES'] * visits_gpsapp_df['GPS']
 
 visits_gpsapp_df_grouped = visits_gpsapp_df.groupby(['BDR Name']).agg(
