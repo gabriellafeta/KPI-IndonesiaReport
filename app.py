@@ -2941,7 +2941,7 @@ visits_gpsapp_df['week_of_year'] = visits_gpsapp_df['VISIT_DATE'].dt.isocalendar
 current_week_number = pd.Timestamp('now').isocalendar()[1]
 visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == current_week_number]
 
-visits_gpsapp_df_lw_grouped = visits_gpsapp_df.groupby(['BDR Name']).agg(
+visits_gpsapp_df_lw_grouped = visits_gpsapp_df_lw.groupby(['BDR Name']).agg(
     VISITS_GPS=('VISITS_GPS', 'sum')
 ).reset_index()
 
