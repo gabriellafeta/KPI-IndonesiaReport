@@ -70,11 +70,11 @@ def formata_numero(valor, prefixo=''):
     if valor < 1000:
         return f'{prefixo}{valor:.2f}'
     elif valor < 1000000:
-        return f'{prefixo}{valor / 1000:.2f} k IDR'
+        return f'{prefixo}{valor / 1000:.2f} k'
     elif valor < 1000000000:
-        return f'{prefixo}{valor / 1000000:.2f} mi IDR'
+        return f'{prefixo}{valor / 1000000:.2f} mi'
     else:
-        return f'{prefixo}{valor / 1000000000:.2f} bi IDR'
+        return f'{prefixo}{valor / 1000000000:.2f} bi'
     
 
 def formata_percentual(valor, sufixo='%'):
@@ -3070,7 +3070,19 @@ alma_csv_v2 = track_alma_df_v2.to_csv(index=False).encode('utf-8')
 master_table_3 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
 
 master_table_3_html = master_table_3.to_html()
+display_date = df_t1_filtrado['VISIT_DATE'].max()
 
+html_date = f"""
+    <style>
+    .fonte-personalizada4 {{
+        font-size: 20px;
+        font-weight: bold;  /* 'font-style: bold' está incorreto. Deve ser 'font-weight' para negrito */
+    }}
+    </style>
+    <div class="fonte-personalizada4">
+        Current day: {display_date.strftime('%Y-%m-%d')}  /* Formatando a data como desejar */
+    </div>
+    """
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -3662,6 +3674,7 @@ with colBm[0]:
     """, unsafe_allow_html=True)
 
 with colCm[0]:
+    st.markdown(html_date, unsafe_allow_html=True)
     st.markdown(master_table_2_html, unsafe_allow_html=True)
     st.markdown(f"""
     <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
@@ -3672,6 +3685,7 @@ with colCm[0]:
         </a>
     </div>
     """, unsafe_allow_html=True)
+    st.markdown(html_date, unsafe_allow_html=True)
     st.markdown("""
     <style>
     .fonte-personalizada2 {
