@@ -2766,7 +2766,7 @@ visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 ##### Registered com df_8v
 ##### ALLD
 data_inicio = pd.Timestamp('2024-02-26')
-df_t2_filtrado = df_t2[df_t2.index >= data_inicio]
+df_t2_filtrado = df_t2[df_t2['DATE'] >= data_inicio]
 
 visits8_table = df_t2_filtrado.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
