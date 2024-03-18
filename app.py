@@ -2867,6 +2867,98 @@ visits8_table_lw_grouped.reset_index(drop=True, inplace=True)
 
 ############## Adoption
 
+# Visits X GPS
+visits_gpsapp_df = pd.merge(df_t1_filtrado, df_t5_filtrado, left_on=['BDR Name', 'VISIT_DATE'], right_on=['BDR Name', 'DATE'], how='inner')
+visits_gpsapp_df['VISITS_GPS'] = visits_gpsapp_df['VISITED_STORES'] * visits_gpsapp_df['GPS']
+
+visits_gpsapp_df_grouped = visits_gpsapp_df.groupby(['BDR Name']).agg(
+    Total_Register=('VISITS_GPS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits_gpsapp_df_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Register': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits_gpsapp_df_grouped = pd.concat([visits_gpsapp_df_grouped, new_row_df], ignore_index=True)
+
+visits_gpsapp_df_grouped.sort_values(by='BDR Name', inplace=True)
+visits_gpsapp_df_grouped.reset_index(drop=True, inplace=True)
+
+##### Ultimo dia - GPS
+
+visits_gpsapp_df['VISIT_DATE'] = pd.to_datetime(visits_gpsapp_df['VISIT_DATE'])
+last_day2 = visits_gpsapp_df['VISIT_DATE'].max()
+visits_gpsapp_df_ld = visits_gpsapp_df[visits_gpsapp_df['VISIT_DATE'] == last_day2]
+
+visits_gpsapp_df_ld_grouped = visits_gpsapp_df_ld.groupby(['BDR Name']).agg(
+    Total_Register=('VISITS_GPS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits_gpsapp_df_ld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits_gpsapp_df_ld_grouped = pd.concat([visits_gpsapp_df_ld_grouped, new_row_df], ignore_index=True)
+
+visits_gpsapp_df_ld_grouped.sort_values(by='BDR Name', inplace=True)
+visits_gpsapp_df_ld_grouped.reset_index(drop=True, inplace=True)
+
+### Penultimo dia
+
+penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
+visits_gpsapp_df_pld = visits_gpsapp_df[visits_gpsapp_df['VISIT_DATE'] == penultimo_dia2]
+
+visits_gpsapp_df_pld_grouped = visits_gpsapp_df_pld.groupby(['BDR Name']).agg(
+    Total_Register=('VISITS_GPS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits_gpsapp_df_pld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits_gpsapp_df_pld_grouped = pd.concat([visits_gpsapp_df_pld_grouped, new_row_df], ignore_index=True)
+
+visits_gpsapp_df_pld_grouped.sort_values(by='BDR Name', inplace=True)
+visits_gpsapp_df_pld_grouped.reset_index(drop=True, inplace=True)
+
+##### Semana
+visits_gpsapp_df['week_of_year'] = visits_gpsapp_df['VISIT_DATE'].dt.isocalendar().week
+current_week_number = pd.Timestamp('now').isocalendar()[1]
+visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == current_week_number]
+
+visits_gpsapp_df_lw_grouped = visits_gpsapp_df.groupby(['BDR Name']).agg(
+    Total_Register=('VISITS_GPS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits_gpsapp_df_lw_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        vvisits_gpsapp_df_grouped = pd.concat([visits_gpsapp_df_grouped, new_row_df], ignore_index=True)
+
+visits_gpsapp_df_lw_grouped.sort_values(by='BDR Name', inplace=True)
+visits_gpsapp_df_lw_grouped.reset_index(drop=True, inplace=True)
+
 # DF CONSOLIDADO
 
 target_value1 = 450
@@ -2875,32 +2967,32 @@ target_value3 = 90
 
 track_alma_v2 = {
     "BDR": buyers_table["BDR Name"].tolist(),
-    f"Visits {adopted_last_day_key}": visits15_table_ld_grouped["Total_Visits"].tolist(),
-    f"Visits {adopted_yesterday_day_key}": visits15_table_pld_grouped["Total_Visits"].tolist(),
-    "Visits Current Week": visits15_table_lw_grouped["Total_Visits"].tolist(),
-    "Total Visits": visits15_table["Total_Visits"].tolist(),
-    "Target": [target_value1] * len(visits15_table["Total_Visits"].tolist()),
-    "Achieved %": [x / target_value1 for x in visits15_table["Total_Visits"].tolist()],
+    f"Visits Today": visits_gpsapp_df_ld_grouped["VISITS_GPS"].tolist(),
+    f"Visits Yesterday": visits_gpsapp_df_pld_grouped["VISITS_GPS"].tolist(),
+    "Visits WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
+    "Visits LTD": visits_gpsapp_df_grouped["VISITS_GPS"].tolist(),
+    "Target": [target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()),
+    "Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()],
 
-    f"Registers {adopted_last_day_key}": visits8_table_ld_grouped["Total_Register"].fillna(0).tolist(),
-    f"Registers {adopted_yesterday_day_key}": visits8_table_pld_grouped["Total_Register"].fillna(0).tolist(),
-    "Registers Current Week": visits8_table_lw_grouped["Total_Register"].fillna(0).tolist(),
-    "Total Registers": visits8_table["Total_Register"].fillna(0).tolist(),
+    f"Registers Today": visits8_table_ld_grouped["Total_Register"].fillna(0).tolist(),
+    f"Registers Yesterday": visits8_table_pld_grouped["Total_Register"].fillna(0).tolist(),
+    "Registers WTD": visits8_table_lw_grouped["Total_Register"].fillna(0).tolist(),
+    "Register LTD": visits8_table["Total_Register"].fillna(0).tolist(),
     "Target Register": [target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist()),
     "Achieved Register %": [x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()],
 
-    f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
-    f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
+    f"Adopted Today": buyers_table_lastday["Total_Buyers"].tolist(),
+    f"Adopted Yesterday": buyers_table_penultimo["Total_Buyers"].tolist(),
     "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
-    "Total Adopted": buyers_table["Total_Buyers"].tolist(),
+    "Adoption LTD": buyers_table["Total_Buyers"].tolist(),
     "Target Adopted": [target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist()),
     "Achieved Adopted %": [x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()],
 
-    f"Orders {adopted_last_day_key}": buyers_table_lastday["Total_Orders"].tolist(),
+    f"Orders Today": buyers_table_lastday["Total_Orders"].tolist(),
     "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
     "Orders LTD": buyers_table["Total_Orders"].tolist(),
 
-    f"GMV {adopted_last_day_key}": buyers_table_lastday["Total_GMV"].tolist(),
+    f"GMV Today": buyers_table_lastday["Total_GMV"].tolist(),
     "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
     "GMV LTD": buyers_table["Total_GMV"].tolist()
 
