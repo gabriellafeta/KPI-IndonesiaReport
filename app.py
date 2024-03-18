@@ -3080,7 +3080,7 @@ html_date = f"""
     }}
     </style>
     <div class="fonte-personalizada4">
-        Current day: {display_date.strftime('%Y-%m-%d')}  /* Formatando a data como desejar */
+        Current day: {display_date.strftime('%d-%m-%Y')}
     </div>
     """
 #------------------------------------------------------------------------------------------------------
