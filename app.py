@@ -2675,7 +2675,7 @@ def style_table_3(df, columns, font_size='10pt'):
 ##### Customer Visit com df_15v
 ##### ALLD
 visits15_table = df_t1.groupby(['BDR Name']).agg(
-    Total_Visits=('VISITS', 'sum')
+    Total_Visits=('VISITED_STORES', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2699,7 +2699,7 @@ last_day2 = df_t1['VISIT_DATE'].max()
 visits15_table_ld = df_t1[df_t1['VISIT_DATE'] == last_day2]
 
 visits15_table_ld_grouped = visits15_table_ld.groupby(['BDR Name']).agg(
-    Total_Visits=('VISITS', 'sum')
+    Total_Visits=('VISITED_STORES', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2722,7 +2722,7 @@ penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
 visits15_table_pld = df_t1[df_t1['VISIT_DATE'] == penultimo_dia2]
 
 visits15_table_pld_grouped = visits15_table_pld.groupby(['BDR Name']).agg(
-    Total_Visits=('VISITS', 'sum')
+    Total_Visits=('VISITED_STORES', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2745,7 +2745,7 @@ current_week_number = pd.Timestamp('now').isocalendar()[1]
 visits_current_week = df_t1[df_t1['week_of_year'] == current_week_number]
 
 visits15_table_lw_grouped = visits_current_week.groupby(['BDR Name']).agg(
-    Total_Visits=('VISITS', 'sum')
+    Total_Visits=('VISITED_STORES', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
