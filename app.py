@@ -3058,18 +3058,19 @@ totals_df = pd.DataFrame([totals_row])
 
 track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
 
-gmv_columns = [col for col in track_alma_df_v2.columns if 'GMV' in col]
-for col in gmv_columns:
-    track_alma_df_v2[col] = track_alma_df_v2[col].apply(formata_numero)
-
-achieved_columns = [col for col in track_alma_df_v2.columns if '%' in col]
-for col in achieved_columns:
-    track_alma_df_v2[col] = track_alma_df_v2[col].apply(formata_percentual)
-
 track_alma_df_v2.set_index(track_alma_df_v2.columns[0], inplace=True)
 
 alma_csv_v2 = track_alma_df_v2.to_csv(index=False).encode('utf-8')
 master_table_3 = style_table_4(track_alma_df_v2, track_alma_df_v2.columns)
+
+gmv_columns = [col for col in track_alma_df_v2.columns if 'GMV' in col]
+for col in gmv_columns:
+    master_table_3[col] = master_table_3[col].apply(formata_numero)
+
+achieved_columns = [col for col in master_table_3.columns if '%' in col]
+for col in achieved_columns:
+    master_table_3[col] = master_table_3[col].apply(formata_percentual)
+
 master_table_3_html = master_table_3.to_html()
 
 #------------------------------------------------------------------------------------------------------
