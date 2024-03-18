@@ -2240,14 +2240,23 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 )
 #------------------------------------------------------------------------------------------------------
 #### Master Table
+data_inicio = pd.Timestamp('2024-02-26')
+
+df_t1_filtrado = df_t1[df_t1['VISIT_DATE'] >= data_inicio]
+df_t2_filtrado = df_t2[df_t2['DATE'] >= data_inicio]
+df_t3_filtrado = df_t3[df_t3['DAY'] >= data_inicio]
+df_t4_filtrado = df_t4[df_t4['DATE'] >= data_inicio]
+df_t5_filtrado = df_t5[df_t5['DATE'] >= data_inicio]
+
+
 ## df_t3
 
-df_t3['week_of_year'] = df_t3['DAY'].dt.isocalendar().week
-df_t3['first_day'] = df_t3['DAY'].dt.to_period('W').dt.start_time
-df_t3['first_day'] = df_t3['first_day'].dt.strftime('%d-%m')
-df_t3['TOTAL_BUYERS'] = df_t3['count_buyers_customer'] + df_t3['count_buyers_force'] + df_t3['count_buyers_grow']
+df_t3_filtrado['week_of_year'] = df_t3_filtrado['DAY'].dt.isocalendar().week
+df_t3_filtrado['first_day'] = df_t3_filtrado['DAY'].dt.to_period('W').dt.start_time
+df_t3_filtrado['first_day'] = df_t3_filtrado['first_day'].dt.strftime('%d-%m')
+df_t3_filtrado['TOTAL_BUYERS'] = df_t3_filtrado['count_buyers_customer'] + df_t3_filtrado['count_buyers_force'] + df_t3_filtrado['count_buyers_grow']
 
-weekly_sales_gmv = df_t3.groupby(['week_of_year', 'first_day']).agg(
+weekly_sales_gmv = df_t3_filtrado.groupby(['week_of_year', 'first_day']).agg(
     Total_GMV=('TOTAL_SALES', 'sum'),
     GMV_Customer=('gmv_placed_customer', 'sum'),
     GMV_Force=('gmv_placed_force', 'sum'),
@@ -2262,34 +2271,34 @@ weekly_sales_gmv = df_t3.groupby(['week_of_year', 'first_day']).agg(
 ).reset_index()
 
 ##df_t1
-df_t1['week_of_year'] = df_t1['VISIT_DATE'].dt.isocalendar().week
+df_t1_filtrado['week_of_year'] = df_t1_filtrado['VISIT_DATE'].dt.isocalendar().week
 
-weekly_visits = df_t1.groupby('week_of_year').agg(
+weekly_visits = df_t1_filtrado.groupby('week_of_year').agg(
     PLANNED_VISITS=('PLANNED_VISITS', 'sum')
 ).reset_index()
 
 ##df_t2
-df_t2['week_of_year'] = df_t2['DATE'].dt.isocalendar().week
+df_t2_filtrado['week_of_year'] = df_t2_filtrado['DATE'].dt.isocalendar().week
 
-weekly_register = df_t2.groupby('week_of_year').agg(
+weekly_register = df_t2_filtrado.groupby('week_of_year').agg(
     Registered_Stores=('count_registered_stores', 'sum')
 ).reset_index()
 
 
 ## df_tf4
-df_t4['week_of_year'] = df_t4['DATE'].dt.isocalendar().week
-df_t4['p_completed_tasks'] = df_t4['COMPLETED_TASKS'] / df_t4['TOTAL_TASKS']
+df_t4_filtrado['week_of_year'] = df_t4_filtrado['DATE'].dt.isocalendar().week
+df_t4_filtrado['p_completed_tasks'] = df_t4_filtrado['COMPLETED_TASKS'] / df_t4_filtrado['TOTAL_TASKS']
 
-weekly_tasks = df_t4.groupby('week_of_year').agg(
+weekly_tasks = df_t4_filtrado.groupby('week_of_year').agg(
     Total_Tasks=('TOTAL_TASKS', 'sum'),
     Completed_Tasks=('p_completed_tasks', 'mean'),
     Task_Effect=('TASK_EFFECTIVENESS', 'mean')
 ).reset_index()
 
 ## df_tf5
-df_t5['week_of_year'] = df_t5['DATE'].dt.isocalendar().week
+df_t5_filtrado['week_of_year'] = df_t5_filtrado['DATE'].dt.isocalendar().week
 
-weekly_gps = df_t5.groupby('week_of_year').agg(
+weekly_gps = df_t5_filtrado.groupby('week_of_year').agg(
     GPS=('GPS', 'mean'),
     GPS_QUALITY=('GPS_QUALITY', 'mean')
 ).reset_index()
@@ -2347,7 +2356,7 @@ master_table_html = master_table.to_html()
 ####### KPI track Table
 ### Tabela Buyers
 
-buyers_table = df_t3.groupby(['BDR Name']).agg(
+buyers_table = df_t3_filtrado.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2359,9 +2368,9 @@ buyers_table.reset_index(drop=True, inplace=True)
 
 ### Filtro ultimo dia
 
-df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t3_filtrado['DAY'] = pd.to_datetime(df_t3_filtrado['DAY'])
 last_day = df_t3['DAY'].max()
-df_t3_ultimo = df_t3[df_t3['DAY'] == last_day]
+df_t3_ultimo = df_t3_filtrado[df_t3_filtrado['DAY'] == last_day]
 
 buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
@@ -2389,7 +2398,7 @@ buyers_table_lastday.reset_index(drop=True, inplace=True)
 
 ### Filtro penultimo dia
 penultimo_dia = last_day - pd.Timedelta(days=1)
-df_t3_penultimo = df_t3[df_t3['DAY'] == penultimo_dia]
+df_t3_penultimo = df_t3_filtrado[df_t3_filtrado['DAY'] == penultimo_dia]
 
 buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
@@ -2416,8 +2425,8 @@ buyers_table_penultimo.sort_values(by='BDR Name', inplace=True)
 buyers_table_penultimo.reset_index(drop=True, inplace=True)
 
 ### Semana Atual
-semana_atual = df_t3['week_of_year'].max()
-df_t3_semana_atual= df_t3[df_t3['week_of_year'] == semana_atual]
+semana_atual = df_t3_filtrado['week_of_year'].max()
+df_t3_semana_atual= df_t3_filtrado[df_t3_filtrado['week_of_year'] == semana_atual]
 
 buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
@@ -2445,7 +2454,7 @@ buyers_table_semana_atual.reset_index(drop=True, inplace=True)
 
 # REGISTER
 ##### ALLD
-register_table = df_t2.groupby(['BDR Name']).agg(
+register_table = df_t2_filtrado.groupby(['BDR Name']).agg(
     Total_Registers=('count_registered_stores', 'sum')
 ).reset_index()
 
@@ -2454,7 +2463,7 @@ register_table.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia
 
-df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+df_t2_filtrado['DATE'] = pd.to_datetime(df_t2_filtrado['DATE'])
 last_day2 = pd.Timestamp.now().normalize()
 df_t2_ultimo = df_t2[df_t2['DATE'] == last_day2]
 
@@ -2507,8 +2516,8 @@ registers_table_penultimo.reset_index(drop=True, inplace=True)
 
 ##### Semana
 
-semana_atual2 = df_t2['week_of_year'].max()
-df_t2_semana_atual= df_t2[df_t2['week_of_year'] == semana_atual2]
+semana_atual2 = df_t2_filtrado['week_of_year'].max()
+df_t2_semana_atual= df_t2_filtrado[df_t2_filtrado['week_of_year'] == semana_atual2]
 
 register_table_semana_atual = df_t2_semana_atual.groupby(['BDR Name']).agg(
     Total_Registers=('count_registered_stores', 'sum')
@@ -2674,7 +2683,7 @@ def style_table_3(df, columns, font_size='10pt'):
 
 ##### Customer Visit com df_15v
 ##### ALLD
-visits15_table = df_t1.groupby(['BDR Name']).agg(
+visits15_table = df_t1_filtrado.groupby(['BDR Name']).agg(
     Total_Visits=('VISITED_STORES', 'sum')
 ).reset_index()
 
@@ -2694,9 +2703,9 @@ visits15_table.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia - visits15_table
 
-df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
-last_day2 = df_t1['VISIT_DATE'].max()
-visits15_table_ld = df_t1[df_t1['VISIT_DATE'] == last_day2]
+df_t1_filtrado['VISIT_DATE'] = pd.to_datetime(df_t1_filtrado['VISIT_DATE'])
+last_day2 = df_t1_filtrado['VISIT_DATE'].max()
+visits15_table_ld = df_t1_filtrado[df_t1_filtrado['VISIT_DATE'] == last_day2]
 
 visits15_table_ld_grouped = visits15_table_ld.groupby(['BDR Name']).agg(
     Total_Visits=('VISITED_STORES', 'sum')
@@ -2719,7 +2728,7 @@ visits15_table_ld_grouped.reset_index(drop=True, inplace=True)
 ### Penultimo dia
 
 penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
-visits15_table_pld = df_t1[df_t1['VISIT_DATE'] == penultimo_dia2]
+visits15_table_pld = df_t1_filtrado[df_t1_filtrado['VISIT_DATE'] == penultimo_dia2]
 
 visits15_table_pld_grouped = visits15_table_pld.groupby(['BDR Name']).agg(
     Total_Visits=('VISITED_STORES', 'sum')
@@ -2740,9 +2749,9 @@ visits15_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits15_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-df_t1['week_of_year'] = df_t1['VISIT_DATE'].dt.isocalendar().week
+df_t1_filtrado['week_of_year'] = df_t1_filtrado['VISIT_DATE'].dt.isocalendar().week
 current_week_number = pd.Timestamp('now').isocalendar()[1]
-visits_current_week = df_t1[df_t1['week_of_year'] == current_week_number]
+visits_current_week = df_t1_filtrado[df_t1_filtrado['week_of_year'] == current_week_number]
 
 visits15_table_lw_grouped = visits_current_week.groupby(['BDR Name']).agg(
     Total_Visits=('VISITED_STORES', 'sum')
