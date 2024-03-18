@@ -2872,7 +2872,7 @@ visits_gpsapp_df = pd.merge(df_t1_filtrado, df_t5_filtrado, left_on=['BDR Name',
 visits_gpsapp_df['VISITS_GPS'] = visits_gpsapp_df['VISITED_STORES'] * visits_gpsapp_df['GPS']
 
 visits_gpsapp_df_grouped = visits_gpsapp_df.groupby(['BDR Name']).agg(
-    Total_Register=('VISITS_GPS', 'sum')
+    VISITS_GPS=('VISITS_GPS', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2896,7 +2896,7 @@ last_day2 = visits_gpsapp_df['VISIT_DATE'].max()
 visits_gpsapp_df_ld = visits_gpsapp_df[visits_gpsapp_df['VISIT_DATE'] == last_day2]
 
 visits_gpsapp_df_ld_grouped = visits_gpsapp_df_ld.groupby(['BDR Name']).agg(
-    Total_Register=('VISITS_GPS', 'sum')
+    VISITS_GPS=('VISITS_GPS', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2919,7 +2919,7 @@ penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
 visits_gpsapp_df_pld = visits_gpsapp_df[visits_gpsapp_df['VISIT_DATE'] == penultimo_dia2]
 
 visits_gpsapp_df_pld_grouped = visits_gpsapp_df_pld.groupby(['BDR Name']).agg(
-    Total_Register=('VISITS_GPS', 'sum')
+    VISITS_GPS=('VISITS_GPS', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
@@ -2942,7 +2942,7 @@ current_week_number = pd.Timestamp('now').isocalendar()[1]
 visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == current_week_number]
 
 visits_gpsapp_df_lw_grouped = visits_gpsapp_df.groupby(['BDR Name']).agg(
-    Total_Register=('VISITS_GPS', 'sum')
+    VISITS_GPS=('VISITS_GPS', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
