@@ -2665,6 +2665,49 @@ def style_table_3(df, columns, font_size='10pt'):
 
     return styler
 
+
+def style_table_4(df, columns, font_size='10pt'):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
+
+    # Aplicando a formatação com pontos para os valores numéricos
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            # Estilo do cabeçalho
+            {'selector': 'thead th',
+             'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
+            # Alinhamento dos dados na célula
+            {'selector': 'td',
+             'props': [('text-align', 'center')]},
+            # Estilo da fonte e tamanho para toda a tabela
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]},
+            # Removendo linhas de grade
+            {'selector': 'table',
+             'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
+        ])
+
+    # Adicionando bordas grossas a cada 6 colunas, começando na terceira coluna (índice 3)
+    for col in range(3, len(df.columns) + 1, 6):
+        styler = styler.set_table_styles([
+            {'selector': f'td:nth-child({col})',
+             'props': [('border-right', '2px solid black')]}
+        ], overwrite=False, axis=1)
+
+    # Estilizando a última coluna com a mesma cor do restante
+    styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[:, df.columns[-1]])
+
+    # Aplicando um mapa de calor às colunas % com gradiente de verde para valores altos, amarelo para médios e vermelho para baixos
+    percent_columns = [col for col in df.columns if '%' in col]
+    if percent_columns:
+        styler = styler.background_gradient(subset=percent_columns, cmap='RdYlGn', low=0.5, high=0.5)
+
+    return styler
+
+
+
 ### Tabela v2
 
 #### DF com colunas selecionadas
@@ -3026,7 +3069,7 @@ for col in achieved_columns:
 track_alma_df_v2.set_index(track_alma_df_v2.columns[0], inplace=True)
 
 alma_csv_v2 = track_alma_df_v2.to_csv(index=False).encode('utf-8')
-master_table_3 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
+master_table_3 = style_table_4(track_alma_df_v2, track_alma_df_v2.columns)
 master_table_3_html = master_table_3.to_html()
 
 #------------------------------------------------------------------------------------------------------
