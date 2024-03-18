@@ -2765,7 +2765,10 @@ visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 ############################ Register
 ##### Registered com df_8v
 ##### ALLD
-visits8_table = df_t2.groupby(['BDR Name']).agg(
+data_inicio = pd.Timestamp('2024-02-26')
+df_t2_filtrado = df_t2[df_t2.index >= data_inicio]
+
+visits8_table = df_t2_filtrado.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
 ).reset_index()
 
@@ -2785,9 +2788,9 @@ visits8_table.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia - visits15_table
 
-df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
-last_day2 = df_t2['DATE'].max()
-visits8_table_ld = df_t2[df_t2['DATE'] == last_day2]
+df_t2_filtrado['DATE'] = pd.to_datetime(df_t2_filtrado['DATE'])
+last_day2 = df_t2_filtrado['DATE'].max()
+visits8_table_ld = df_t2_filtrado[df_t2_filtrado['DATE'] == last_day2]
 
 visits8_table_ld_grouped = visits8_table_ld.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
@@ -2810,7 +2813,7 @@ visits8_table_ld_grouped.reset_index(drop=True, inplace=True)
 ### Penultimo dia
 
 penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
-visits8_table_pld = df_t2[df_t2['DATE'] == penultimo_dia2]
+visits8_table_pld = df_t2_filtrado[df_t2_filtrado['DATE'] == penultimo_dia2]
 
 visits8_table_pld_grouped = visits8_table_pld.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
@@ -2831,9 +2834,9 @@ visits8_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits8_table_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-df_t2['week_of_year'] = df_t2['DATE'].dt.isocalendar().week
+df_t2_filtrado['week_of_year'] = df_t2_filtrado['DATE'].dt.isocalendar().week
 current_week_number = pd.Timestamp('now').isocalendar()[1]
-visits_current_week8 = df_t2[df_t2['week_of_year'] == current_week_number]
+visits_current_week8 = df_t2_filtrado[df_t2_filtrado['week_of_year'] == current_week_number]
 
 visits8_table_lw_grouped = visits_current_week8.groupby(['BDR Name']).agg(
     Total_Register=('count_registered_stores', 'sum')
