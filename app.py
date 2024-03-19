@@ -3367,37 +3367,28 @@ with colP[0]:
     """, unsafe_allow_html=True)
 
 with colP_1[0]:
-    st.markdown(f"""
-    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
-        <a href="data:text/csv;base64,{force_csv}" download="data.csv">
-            <button>
-                This table as CSV
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
+    st.download_button(
+    label="Download data as CSV",
+    data=force_csv,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_Y")
 
 with colP_1[1]:
-    st.markdown(f"""
-    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
-        <a href="data:text/csv;base64,{csv_t4}" download="data.csv">
-            <button>
-                Raw Tasks as CSV
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
+    st.download_button(
+    label="Download data as CSV",
+    data=csv_t4,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_B")
 
 with colP_1[2]:
-    st.markdown(f"""
-    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
-        <a href="data:text/csv;base64,{csv_t5}" download="data.csv">
-            <button>
-                Raw GPS as CSV
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
+    st.download_button(
+    label="Download data as CSV",
+    data=csv_t5,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_C")
 
 with colS[0]:
     st.plotly_chart(tasks_stacked, use_container_width=True)
@@ -3672,15 +3663,13 @@ with colBm[0]:
 with colCm[0]:
     st.markdown(html_date, unsafe_allow_html=True)
     st.markdown(master_table_2_html, unsafe_allow_html=True)
-    st.markdown(f"""
-    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
-        <a href="data:text/csv;base64,{alma_csv}" download="data.csv">
-            <button>
-                This table as CSV
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
+    st.download_button(
+    label="This table as CSV",
+    data=alma_csv,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_D"
+)
     st.markdown(html_date, unsafe_allow_html=True)
     st.markdown("""
     <style>
@@ -3706,12 +3695,10 @@ with colCm[0]:
         Start date = Feb 26 2024
     </div>
     """, unsafe_allow_html=True)
-    st.markdown(f"""
-    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
-        <a href="data:text/csv;base64,{alma_csv_v2}" download="data.csv">
-            <button>
-                This table as CSV
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
+    st.download_button(
+    label="This table as CSV",
+    data=alma_csv_v2,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_E"
+)
