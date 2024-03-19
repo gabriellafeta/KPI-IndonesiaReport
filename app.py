@@ -3171,17 +3171,13 @@ with colB_alpha[0]:
     </div>
     """, unsafe_allow_html=True)
     st.markdown(master_table_html, unsafe_allow_html=True)
-    st.markdown(f"""
-    <div style="text-align: center; margin-top: 20px;">  <!-- Adjust margin-top as needed -->
-        <a href="data:text/csv;base64,{merged_df_master_table_sorted_cv}" download="data.csv">
-            <button>
-                This table as CSV
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
-    
-
+    st.download_button(
+    label="Download data as CSV",
+    data=merged_df_master_table_sorted_cv,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_Z"
+)
 
 with colC_1[0]:
     st.metric(label="Total Visits", value=sum_visits, delta=diff_visits)
