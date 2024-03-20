@@ -3039,16 +3039,16 @@ track_alma_v2 = {
 }
 
 track_alma_df_v2 = pd.DataFrame(track_alma_v2)
-track_alma_df_v2.sort_values(by='Achieved Adopted %', inplace=True, ascending=False)
+track_alma_df_v2.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
 
 totals_row = {'BDR': 'TOTALS'}
 totals_row.update(sum_row.to_dict())
 
-totals_row['Achieved %'] = (sum_row['Visits LTD'] / sum_row['Target']) if sum_row['Target'] != 0 else 0
-totals_row['Achieved Register %'] = (sum_row['Register LTD'] / sum_row['Target Register']) if sum_row['Target Register'] != 0 else 0
-totals_row['Achieved Adopted %'] = (sum_row['Adoption LTD'] / sum_row['Target Adopted']) if sum_row['Target Adopted'] != 0 else 0
+totals_row['Customers Visited Achieved %'] = (sum_row['# Customers Visited LTD'] / sum_row['Customers Visited Target']) if sum_row['Customers Visited Target'] != 0 else 0
+totals_row['Achieved Customers Registered %'] = (sum_row['# Customers Registered LTD'] / sum_row['Target Customers Registered']) if sum_row['Target Customers Registered'] != 0 else 0
+totals_row['Achieved Customers Adopted %'] = (sum_row['# Customers Adopted LTD'] / sum_row['Target Customers Adopted']) if sum_row['Target Customers Adopted'] != 0 else 0
 totals_df = pd.DataFrame([totals_row])
 
 track_alma_df_v2 = pd.concat([track_alma_df_v2, totals_df], ignore_index=True)
