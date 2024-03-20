@@ -2655,7 +2655,7 @@ def style_table_3(df, columns, font_size='10pt'):
 
     # Adding thick borders every 5 columns, except for the last 6 columns
     total_columns = len(df.columns)
-    for col in range(5, total_columns - 6, 5):  # Start from the 5th column and skip every 5 columns, avoiding the last 6
+    for col in range(2, total_columns - 6, 5):  # Start from the 5th column and skip every 5 columns, avoiding the last 6
         styler = styler.set_table_styles([
             {'selector': f'td:nth-child({col}), th:nth-child({col})',
              'props': [('border-right', '2px solid black')]}
