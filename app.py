@@ -2690,7 +2690,7 @@ def style_table_4(df, columns, font_size='10pt'):
         ])
 
     # Adicionando bordas grossas a cada 6 colunas, começando na terceira coluna (índice 3)
-    for col in range(3, len(df.columns) + 1, 6):
+    for col in range(3, len(df.columns) + 1, 5):
         styler = styler.set_table_styles([
             {'selector': f'td:nth-child({col})',
              'props': [('border-right', '2px solid black')]}
