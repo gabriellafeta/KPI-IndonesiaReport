@@ -2636,35 +2636,35 @@ def style_table_3(df, columns, font_size='10pt'):
             return '{:,.0f}'.format(value).replace(',', '.')
         return value
 
-    # Aplicando a formatação com pontos para os valores numéricos
+    # Applying formatting with dots for numeric values
     styler = df.style.format(format_with_dots, subset=columns)\
         .set_table_styles([
-            # Estilo do cabeçalho
+            # Header style
             {'selector': 'thead th',
              'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
-            # Alinhamento dos dados na célula
+            # Cell data alignment
             {'selector': 'td',
              'props': [('text-align', 'center')]},
-            # Estilo da fonte e tamanho para toda a tabela
+            # Font style and size for the entire table
             {'selector': 'table, th, td',
              'props': [('font-size', font_size)]},
-            # Removendo linhas de grade
+            # Removing grid lines
             {'selector': 'table',
              'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
         ])
 
-    # Adicionando bordas grossas a cada 4 colunas, começando na terceira coluna
-    for col in range(1, len(df.columns), 6):
+    # Adding thick borders every 5 columns, except for the last 6 columns
+    total_columns = len(df.columns)
+    for col in range(5, total_columns - 6, 5):  # Start from the 5th column and skip every 5 columns, avoiding the last 6
         styler = styler.set_table_styles([
-            {'selector': f'td:nth-child({col})',
+            {'selector': f'td:nth-child({col}), th:nth-child({col})',
              'props': [('border-right', '2px solid black')]}
         ], overwrite=False, axis=1)
 
-    # Estilizando a última linha com fundo preto e fonte amarela
+    # Styling the last row with a black background and white font
     styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
     return styler
-
 
 def style_table_4(df, columns, font_size='10pt'):
     def format_with_dots(value):
