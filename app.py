@@ -153,6 +153,12 @@ blob_content = blob_client.download_blob().content_as_text()
 weekly_data_id = StringIO(blob_content)
 weekly_data_id_df = pd.read_csv(weekly_data_id)
 
+blob_name = 't_order.csv'
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+blob_content = blob_client.download_blob().content_as_text()
+t_order = StringIO(blob_content)
+t_order_df = pd.read_csv(t_order)
+
 ##### Imagens
 
 logo = "logo.png"
@@ -180,6 +186,7 @@ df_t3['BDR Name'] = df_t3['bdr_id'].map(BDR_dict)
 df_t4['BDR Name'] = df_t4['BDR_ID'].map(BDR_dict)
 df_t5['BDR Name'] = df_t5['BDR_ID'].map(BDR_dict)
 df_t6['BDR Name'] = df_t6['bdr_id'].map(BDR_dict)
+t_order_df['BDR Name'] = t_order_df['bdr_id'].map(BDR_dict)
 
 df_t1 = df_t1[df_t1['BDR Name'].notnull()]
 df_t2 = df_t2[df_t2['BDR Name'].notnull()]
@@ -187,6 +194,7 @@ df_t3 = df_t3[df_t3['BDR Name'].notnull()]
 df_t4 = df_t4[df_t4['BDR Name'].notnull()]
 df_t5 = df_t5[df_t5['BDR Name'].notnull()]
 df_t6 = df_t6[df_t6['BDR Name'].notnull()]
+t_order_df['BDR Name'] = t_order_df[[t_order_df['BDR Name'].notnull()]]
 
 # Mostrar apenas os últimos 30 dias
 
@@ -3067,7 +3075,9 @@ alma_csv_v2 = track_alma_df_v2.to_csv(index=False).encode('utf-8')
 master_table_3 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
 
 master_table_3_html = master_table_3.to_html()
-display_date = df_t1_filtrado['VISIT_DATE'].max()
+max_date = df_t1_filtrado['VISIT_DATE'].max()
+display_date = max_date - pd.Timedelta(days=1)
+
 
 html_date = f"""
     <style>
