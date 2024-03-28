@@ -2753,7 +2753,7 @@ visits15_table.reset_index(drop=True, inplace=True)
 ##### Ultimo dia - visits15_table
 
 df_t1_filtrado['VISIT_DATE'] = pd.to_datetime(df_t1_filtrado['VISIT_DATE'])
-last_day2 = df_t1_filtrado['VISIT_DATE'].max()
+last_day2 = df_t1_filtrado['VISIT_DATE'].max() - pd.Timedelta(days=1)
 visits15_table_ld = df_t1_filtrado[df_t1_filtrado['VISIT_DATE'] == last_day2]
 
 visits15_table_ld_grouped = visits15_table_ld.groupby(['BDR Name']).agg(
@@ -2847,7 +2847,7 @@ visits8_table.reset_index(drop=True, inplace=True)
 ##### Ultimo dia - visits15_table
 
 df_t2_filtrado['DATE'] = pd.to_datetime(df_t2_filtrado['DATE'])
-last_day2 = df_t2_filtrado['DATE'].max()
+last_day2 = df_t2_filtrado['DATE'].max() - pd.Timedelta(days=1)
 visits8_table_ld = df_t2_filtrado[df_t2_filtrado['DATE'] == last_day2]
 
 visits8_table_ld_grouped = visits8_table_ld.groupby(['BDR Name']).agg(
@@ -2943,7 +2943,7 @@ visits_gpsapp_df_grouped.reset_index(drop=True, inplace=True)
 ##### Ultimo dia - GPS
 
 visits_gpsapp_df['VISIT_DATE'] = pd.to_datetime(visits_gpsapp_df['VISIT_DATE'])
-last_day2 = visits_gpsapp_df['VISIT_DATE'].max()
+last_day2 = visits_gpsapp_df['VISIT_DATE'].max() - pd.Timedelta(days=1)
 visits_gpsapp_df_ld = visits_gpsapp_df[visits_gpsapp_df['VISIT_DATE'] == last_day2]
 
 visits_gpsapp_df_ld_grouped = visits_gpsapp_df_ld.groupby(['BDR Name']).agg(
@@ -3018,29 +3018,29 @@ target_value3 = 90
 
 track_alma_v2 = {
     "BDR": buyers_table["BDR Name"].tolist(),
-    f"# Customers Visited Today": visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist(),
+    f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist(),
     "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
     "# Customers Visited LTD": visits_gpsapp_df_grouped["VISITS_GPS"].tolist(),
     "Customers Visited Target": [target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()),
     "Customers Visited Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()],
 
-    f"# Customers Registered Today": visits8_table_ld_grouped["Total_Register"].fillna(0).tolist(),
+    f"# Customers Registered Previous day": visits8_table_ld_grouped["Total_Register"].fillna(0).tolist(),
     "# Customers Registered WTD": visits8_table_lw_grouped["Total_Register"].fillna(0).tolist(),
     "# Customers Registered LTD": visits8_table["Total_Register"].fillna(0).tolist(),
     "Target Customers Registered": [target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist()),
     "Achieved Customers Registered %": [x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()],
 
-    f"# Customers Adopted Today": buyers_table_lastday["Total_Buyers"].tolist(),
+    f"# Customers Adopted Previous day": buyers_table_lastday["Total_Buyers"].tolist(),
     "# Customers Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
     "# Customers Adopted LTD": buyers_table["Total_Buyers"].tolist(),
     "Target Customers Adopted": [target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist()),
     "Achieved Customers Adopted %": [x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()],
 
-    f"Orders Today": buyers_table_lastday["Total_Orders"].tolist(),
+    f"Orders Previous day": buyers_table_lastday["Total_Orders"].tolist(),
     "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
     "Orders LTD": buyers_table["Total_Orders"].tolist(),
 
-    f"GMV Today": buyers_table_lastday["Total_GMV"].tolist(),
+    f"GMV Previous day": buyers_table_lastday["Total_GMV"].tolist(),
     "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
     "GMV LTD": buyers_table["Total_GMV"].tolist()
 
