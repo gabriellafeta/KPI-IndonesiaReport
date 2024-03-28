@@ -186,7 +186,7 @@ df_t3['BDR Name'] = df_t3['bdr_id'].map(BDR_dict)
 df_t4['BDR Name'] = df_t4['BDR_ID'].map(BDR_dict)
 df_t5['BDR Name'] = df_t5['BDR_ID'].map(BDR_dict)
 df_t6['BDR Name'] = df_t6['bdr_id'].map(BDR_dict)
-t_order_df['BDR Name'] = t_order_df['BDR_ID'].map(BDR_dict)
+#t_order_df['BDR Name'] = t_order_df['BDR_ID'].map(BDR_dict)
 
 df_t1 = df_t1[df_t1['BDR Name'].notnull()]
 df_t2 = df_t2[df_t2['BDR Name'].notnull()]
@@ -194,7 +194,7 @@ df_t3 = df_t3[df_t3['BDR Name'].notnull()]
 df_t4 = df_t4[df_t4['BDR Name'].notnull()]
 df_t5 = df_t5[df_t5['BDR Name'].notnull()]
 df_t6 = df_t6[df_t6['BDR Name'].notnull()]
-t_order_df['BDR Name'] = t_order_df[[t_order_df['BDR_ID'].notnull()]]
+#t_order_df['BDR Name'] = t_order_df[[t_order_df['BDR_ID'].notnull()]]
 
 # Mostrar apenas os últimos 30 dias
 
