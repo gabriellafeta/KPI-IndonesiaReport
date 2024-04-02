@@ -2847,7 +2847,7 @@ visits8_table.reset_index(drop=True, inplace=True)
 ##### Ultimo dia - visits15_table
 
 df_t2_filtrado['DATE'] = pd.to_datetime(df_t2_filtrado['DATE'])
-last_day2 = df_t2_filtrado['DATE'].max() - pd.Timedelta(days=1)
+last_day2 = df_t2_filtrado['DATE'].max()
 visits8_table_ld = df_t2_filtrado[df_t2_filtrado['DATE'] == last_day2]
 
 visits8_table_ld_grouped = visits8_table_ld.groupby(['BDR Name']).agg(
