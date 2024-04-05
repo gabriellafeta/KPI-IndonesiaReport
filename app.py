@@ -2250,7 +2250,7 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 #### Master Table
 
 data_inicio = pd.Timestamp('2024-02-26') # para março
-data_fim = pd.Timestamp('2024-03-30')
+data_fim = pd.Timestamp('2024-03-31')
 
 df_t1_filtrado = df_t1[(df_t1['VISIT_DATE'] >= data_inicio) & (df_t1['VISIT_DATE'] <= data_fim)]
 df_t2_filtrado = df_t2[(df_t2['DATE'] >= data_inicio) & (df_t2['DATE'] <= data_fim)]
@@ -2990,7 +2990,7 @@ visits_gpsapp_df_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
 visits_gpsapp_df['week_of_year'] = visits_gpsapp_df['VISIT_DATE'].dt.isocalendar().week
-current_week_number = pd.Timestamp('now').isocalendar()[1]
+current_week_number = visits_gpsapp_df['week_of_year'].max()
 visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == current_week_number]
 
 visits_gpsapp_df_lw_grouped = visits_gpsapp_df_lw.groupby(['BDR Name']).agg(
