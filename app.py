@@ -3091,7 +3091,7 @@ html_date = f"""
     }}
     </style>
     <div class="fonte-personalizada4">
-        Current day: {display_date.strftime('%d-%m-%Y')}
+        Last day: {display_date.strftime('%d-%m-%Y')}
     </div>
     """
 #------------------------------------------------------------------------------------------------------
