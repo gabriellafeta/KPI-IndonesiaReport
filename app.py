@@ -2944,7 +2944,7 @@ visits_gpsapp_df_grouped.reset_index(drop=True, inplace=True)
 ##### Ultimo dia - GPS
 
 visits_gpsapp_df['VISIT_DATE'] = pd.to_datetime(visits_gpsapp_df['VISIT_DATE'])
-last_day2 = visits_gpsapp_df['VISIT_DATE'].max() - pd.Timedelta(days=1)
+last_day2 = visits_gpsapp_df['VISIT_DATE'].max()
 visits_gpsapp_df_ld = visits_gpsapp_df[visits_gpsapp_df['VISIT_DATE'] == last_day2]
 
 visits_gpsapp_df_ld_grouped = visits_gpsapp_df_ld.groupby(['BDR Name']).agg(
