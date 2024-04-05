@@ -3014,7 +3014,7 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        vvisits_gpsapp_df_grouped = pd.concat([visits_gpsapp_df_grouped, new_row_df], ignore_index=True)
+        visits_gpsapp_df_grouped = pd.concat([visits_gpsapp_df_grouped, new_row_df], ignore_index=True)
 
 visits_gpsapp_df_lw_grouped.sort_values(by='BDR Name', inplace=True)
 visits_gpsapp_df_lw_grouped.reset_index(drop=True, inplace=True)
