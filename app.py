@@ -2989,8 +2989,10 @@ visits_gpsapp_df_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits_gpsapp_df_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
+data_final = pd.Timestamp('2024-03-31')
+
 visits_gpsapp_df['week_of_year'] = visits_gpsapp_df['VISIT_DATE'].dt.isocalendar().week
-current_week_number = pd.Timestamp('now').isocalendar()[1]
+current_week_number = data_final.isocalendar()[1]
 visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == current_week_number]
 
 visits_gpsapp_df_lw_grouped = visits_gpsapp_df_lw.groupby(['BDR Name']).agg(
@@ -3020,7 +3022,7 @@ target_value3 = 90
 track_alma_v2 = {
     "BDR": buyers_table["BDR Name"].tolist(),
     f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist(),
-    # "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
+    "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
     "# Customers Visited LTD": visits_gpsapp_df_grouped["VISITS_GPS"].tolist(),
     "Customers Visited Target": [target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()),
     "Customers Visited Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()],
