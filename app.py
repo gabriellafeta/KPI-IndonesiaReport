@@ -3219,6 +3219,22 @@ buyers_table = df_t3_filtrado_abril.groupby(['BDR Name']).agg(
     Total_GMV = ('TOTAL_SALES', 'sum')
 ).reset_index()
 
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in buyers_table['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        buyers_table = pd.concat([buyers_table, new_row_df], ignore_index=True)
+
+
+
 buyers_table.sort_values(by='BDR Name', inplace=True)
 buyers_table.reset_index(drop=True, inplace=True)
 
@@ -3729,6 +3745,8 @@ track_alma_v3 = {
     "GMV LTD": buyers_table["Total_GMV"].tolist()
 
 }
+
+
 
 track_alma_df_v3 = pd.DataFrame(track_alma_v3)
 track_alma_df_v3.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
