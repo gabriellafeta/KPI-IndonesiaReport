@@ -2989,10 +2989,17 @@ visits_gpsapp_df_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits_gpsapp_df_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-visits_gpsapp_df['week_of_year'] = visits_gpsapp_df['VISIT_DATE'].dt.isocalendar().week
-current_week_number = 12
-visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == current_week_number]
+max_date = visits_gpsapp_df['VISIT_DATE'].max()
 
+if max_date.weekday() == 0:
+    start_of_last_full_week = max_date - pd.Timedelta(days=7)
+else:
+    start_of_last_full_week = max_date - pd.Timedelta(days=max_date.weekday()) - pd.Timedelta(days=7)
+
+last_full_week_number = start_of_last_full_week.isocalendar()[1]
+visits_gpsapp_df['week_of_year'] = visits_gpsapp_df['VISIT_DATE'].dt.isocalendar().week
+
+visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == last_full_week_number]
 
 visits_gpsapp_df_lw_grouped = visits_gpsapp_df_lw.groupby(['BDR Name']).agg(
     VISITS_GPS=('VISITS_GPS', 'sum')
