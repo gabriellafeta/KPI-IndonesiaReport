@@ -2250,7 +2250,7 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 #### Master Table
 
 data_inicio = pd.Timestamp('2024-02-26') # para março
-data_fim = pd.Timestamp('2024-03-31')
+data_fim = pd.Timestamp('2024-03-30')
 
 df_t1_filtrado = df_t1[(df_t1['VISIT_DATE'] >= data_inicio) & (df_t1['VISIT_DATE'] <= data_fim)]
 df_t2_filtrado = df_t2[(df_t2['DATE'] >= data_inicio) & (df_t2['DATE'] <= data_fim)]
@@ -3047,8 +3047,10 @@ track_alma_v2 = {
 
 }
 
+
 track_alma_df_v2 = pd.DataFrame(track_alma_v2)
 track_alma_df_v2.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
+
 
 sum_row = track_alma_df_v2.sum(numeric_only=True)
 
