@@ -3091,9 +3091,870 @@ html_date = f"""
     }}
     </style>
     <div class="fonte-personalizada4">
-        Last day: {display_date.strftime('%d-%m-%Y')}
+        Lastc day: {display_date.strftime('%d-%m-%Y')}
     </div>
     """
+#------------------------------------------------------------------------------------------------------
+### Alma df - April
+
+data_inicio_abril = pd.Timestamp('2024-04-1') # para abril
+
+df_t1_filtrado_abril = df_t1[df_t1['VISIT_DATE'] >= data_inicio_abril]
+df_t2_filtrado_abril = df_t2[df_t2['DATE'] >= data_inicio_abril]
+df_t3_filtrado_abril = df_t3[df_t3['DAY'] >= data_inicio_abril]
+df_t4_filtrado_abril = df_t4[df_t4['DATE'] >= data_inicio_abril]
+df_t5_filtrado_abril = df_t5[df_t5['DATE'] >= data_inicio_abril]
+
+### Same code
+
+df_t3_filtrado_abril['week_of_year'] = df_t3_filtrado_abril['DAY'].dt.isocalendar().week
+df_t3_filtrado_abril['first_day'] = df_t3_filtrado_abril['DAY'].dt.to_period('W').dt.start_time
+df_t3_filtrado_abril['first_day'] = df_t3_filtrado_abril['first_day'].dt.strftime('%d-%m')
+df_t3_filtrado_abril['TOTAL_BUYERS'] = df_t3_filtrado_abril['count_buyers_customer'] + df_t3_filtrado_abril['count_buyers_force'] + df_t3_filtrado_abril['count_buyers_grow']
+
+weekly_sales_gmv = df_t3_filtrado_abril.groupby(['week_of_year', 'first_day']).agg(
+    Total_GMV=('TOTAL_SALES', 'sum'),
+    GMV_Customer=('gmv_placed_customer', 'sum'),
+    GMV_Force=('gmv_placed_force', 'sum'),
+    GMV_Grow=('gmv_placed_grow', 'sum'),
+
+    Total_Orders=('TOTAL_ORDERS', 'sum'),
+    Customer_Orders=('count_placed_orders_customer','sum'),
+    Force_Orders=('count_placed_orders_force','sum'),
+    Grow_Orders=('count_placed_orders_grow','sum'),
+
+    Total_Buyers=('TOTAL_BUYERS', 'sum')
+).reset_index()
+
+##df_t1
+df_t1_filtrado_abril['week_of_year'] = df_t1_filtrado_abril['VISIT_DATE'].dt.isocalendar().week
+
+weekly_visits = df_t1_filtrado_abril.groupby('week_of_year').agg(
+    PLANNED_VISITS=('PLANNED_VISITS', 'sum')
+).reset_index()
+
+##df_t2
+df_t2_filtrado_abril['week_of_year'] = df_t2_filtrado_abril['DATE'].dt.isocalendar().week
+
+weekly_register = df_t2_filtrado_abril.groupby('week_of_year').agg(
+    Registered_Stores=('count_registered_stores', 'sum')
+).reset_index()
+
+
+## df_tf4
+df_t4_filtrado_abril['week_of_year'] = df_t4_filtrado_abril['DATE'].dt.isocalendar().week
+df_t4_filtrado_abril['p_completed_tasks'] = df_t4_filtrado_abril['COMPLETED_TASKS'] / df_t4_filtrado_abril['TOTAL_TASKS']
+
+weekly_tasks = df_t4_filtrado_abril.groupby('week_of_year').agg(
+    Total_Tasks=('TOTAL_TASKS', 'sum'),
+    Completed_Tasks=('p_completed_tasks', 'mean'),
+    Task_Effect=('TASK_EFFECTIVENESS', 'mean')
+).reset_index()
+
+## df_tf5
+df_t5_filtrado_abril['week_of_year'] = df_t5_filtrado_abril['DATE'].dt.isocalendar().week
+
+weekly_gps = df_t5_filtrado_abril.groupby('week_of_year').agg(
+    GPS=('GPS', 'mean'),
+    GPS_QUALITY=('GPS_QUALITY', 'mean')
+).reset_index()
+
+
+#Merging
+merged_df = pd.merge(weekly_sales_gmv, weekly_visits, on='week_of_year', how='left')
+merged_df = pd.merge(merged_df, weekly_tasks, on='week_of_year', how='left')
+merged_df = pd.merge(merged_df, weekly_register, on='week_of_year', how='left')
+merged_df_master_table = pd.merge(merged_df, weekly_gps, on='week_of_year', how='left')
+
+### Final master table
+merged_df_master_table['AOV'] = merged_df_master_table['Total_GMV'] / merged_df_master_table['Total_Orders']
+
+aggregated_values = {}
+for column in merged_df_master_table.columns:
+    if column in ['GPS', 'GPS_QUALITY', 'Task_Effect', 'Completed_Tasks']:
+        aggregated_values[column] = np.mean(merged_df_master_table[column].replace(0, np.nan))
+    else:
+        aggregated_values[column] = merged_df_master_table[column].sum()
+
+aggregated_df = pd.DataFrame(aggregated_values, index=['Accumulated'])
+
+merged_df_master_table_with_accumulated = pd.concat([aggregated_df, merged_df_master_table])
+
+for column in merged_df_master_table_with_accumulated.columns[2:]:
+    merged_df_master_table_with_accumulated[column] = pd.to_numeric(merged_df_master_table_with_accumulated[column], errors='coerce')
+
+merged_df_master_table_with_accumulated['GMV_Customer'] = merged_df_master_table_with_accumulated['GMV_Customer'].apply(formata_numero)
+merged_df_master_table_with_accumulated['GMV_Force'] = merged_df_master_table_with_accumulated['GMV_Force'].apply(formata_numero)
+merged_df_master_table_with_accumulated['GMV_Grow'] = merged_df_master_table_with_accumulated['GMV_Grow'].apply(formata_numero)
+merged_df_master_table_with_accumulated['Total_GMV'] = merged_df_master_table_with_accumulated['Total_GMV'].apply(formata_numero)
+
+merged_df_master_table_with_accumulated['GPS'] = merged_df_master_table_with_accumulated['GPS'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['GPS_QUALITY'] = merged_df_master_table_with_accumulated['GPS_QUALITY'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['Task_Effect'] = merged_df_master_table_with_accumulated['Task_Effect'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['Completed_Tasks'] = merged_df_master_table_with_accumulated['Completed_Tasks'].apply(formata_percentual)
+
+merged_df_master_table_sorted = merged_df_master_table_with_accumulated.sort_values(by='week_of_year', ascending=False).fillna(0)
+merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_table_sorted['week_of_year'].isin([3, 4])]
+merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
+merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
+
+merged_df_master_table_sorted = merged_df_master_table_sorted.rename(index={merged_df_master_table_sorted.index[0]: "Accumulated"})
+merged_df_master_table_sorted.iloc[0, 0] = "Launch"
+
+merged_df_master_table_sorted.fillna(0, inplace=True)
+
+columns_master_table = merged_df_master_table_sorted.columns
+merged_df_master_table_sorted_cv = merged_df_master_table_sorted.to_csv(index=False).encode('utf-8')
+
+master_table = style_table(merged_df_master_table_sorted, columns_master_table)
+master_table_html = master_table.to_html()
+
+####### KPI track Table
+### Tabela Buyers
+
+buyers_table = df_t3_filtrado_abril.groupby(['BDR Name']).agg(
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Custumer_Adopted = ('count_buyers_customer', 'sum'),
+    Total_Orders = ('TOTAL_ORDERS', 'sum'),
+    Total_GMV = ('TOTAL_SALES', 'sum')
+).reset_index()
+
+buyers_table.sort_values(by='BDR Name', inplace=True)
+buyers_table.reset_index(drop=True, inplace=True)
+
+### Filtro ultimo dia
+
+df_t3_filtrado_abril['DAY'] = pd.to_datetime(df_t3_filtrado_abril['DAY'])
+last_day = df_t3['DAY'].max()
+df_t3_ultimo = df_t3_filtrado_abril[df_t3_filtrado_abril['DAY'] == last_day]
+
+buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Custumer_Adopted = ('count_buyers_customer', 'sum'),
+    Total_Orders = ('TOTAL_ORDERS', 'sum'),
+    Total_GMV = ('TOTAL_SALES', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in buyers_table_lastday['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        buyers_table_lastday = pd.concat([buyers_table_lastday, new_row_df], ignore_index=True)
+
+buyers_table_lastday.sort_values(by='BDR Name', inplace=True)
+buyers_table_lastday.reset_index(drop=True, inplace=True)
+
+### Filtro penultimo dia
+penultimo_dia = last_day - pd.Timedelta(days=1)
+df_t3_penultimo = df_t3_filtrado_abril[df_t3_filtrado_abril['DAY'] == penultimo_dia]
+
+buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Custumer_Adopted = ('count_buyers_customer', 'sum'),
+    Total_Orders = ('TOTAL_ORDERS', 'sum'),
+    Total_GMV = ('TOTAL_SALES', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in buyers_table_penultimo['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        buyers_table_penultimo = pd.concat([buyers_table_penultimo, new_row_df], ignore_index=True)
+
+buyers_table_penultimo.sort_values(by='BDR Name', inplace=True)
+buyers_table_penultimo.reset_index(drop=True, inplace=True)
+
+### Semana Atual
+semana_atual = df_t3_filtrado_abril['week_of_year'].max()
+df_t3_semana_atual= df_t3_filtrado_abril[df_t3_filtrado_abril['week_of_year'] == semana_atual]
+
+buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
+    Total_Buyers=('TOTAL_BUYERS', 'sum'),
+    Custumer_Adopted = ('count_buyers_customer', 'sum'),
+    Total_Orders = ('TOTAL_ORDERS', 'sum'),
+    Total_GMV = ('TOTAL_SALES', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in buyers_table_semana_atual['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        buyers_table_semana_atual = pd.concat([buyers_table_semana_atual, new_row_df], ignore_index=True)
+
+buyers_table_semana_atual.sort_values(by='BDR Name', inplace=True)
+buyers_table_semana_atual.reset_index(drop=True, inplace=True)
+
+# REGISTER
+##### ALLD
+register_table = df_t2_filtrado_abril.groupby(['BDR Name']).agg(
+    Total_Registers=('count_registered_stores', 'sum')
+).reset_index()
+
+register_table.sort_values(by='BDR Name', inplace=True)
+register_table.reset_index(drop=True, inplace=True)
+
+##### Ultimo dia
+
+df_t2_filtrado_abril['DATE'] = pd.to_datetime(df_t2_filtrado_abril['DATE'])
+last_day2 = pd.Timestamp.now().normalize() - pd.Timedelta(days=1)
+df_t2_ultimo = df_t2[df_t2['DATE'] == last_day2]
+
+registers_table_lastday = df_t2_ultimo.groupby(['BDR Name']).agg(
+    Total_Registers=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in registers_table_lastday['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        registers_table_lastday = pd.concat([registers_table_lastday, new_row_df], ignore_index=True)
+
+registers_table_lastday.sort_values(by='BDR Name', inplace=True)
+registers_table_lastday.reset_index(drop=True, inplace=True)
+
+### Penultimo dia
+
+penultimo_dia2 = last_day - pd.Timedelta(days=1)
+df_t2_penultimo = df_t2[df_t2['DATE'] == penultimo_dia2]
+
+registers_table_penultimo = df_t2_penultimo.groupby(['BDR Name']).agg(
+    Total_Registers=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in registers_table_penultimo['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        registers_table_penultimo = pd.concat([registers_table_penultimo, new_row_df], ignore_index=True)
+
+registers_table_penultimo.sort_values(by='BDR Name', inplace=True)
+registers_table_penultimo.reset_index(drop=True, inplace=True)
+
+##### Semana
+
+semana_atual2 = df_t2_filtrado_abril['week_of_year'].max()
+df_t2_semana_atual= df_t2_filtrado_abril[df_t2_filtrado_abril['week_of_year'] == semana_atual2]
+
+register_table_semana_atual = df_t2_semana_atual.groupby(['BDR Name']).agg(
+    Total_Registers=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in register_table_semana_atual['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Buyers': 0,
+            'Customer_Adopted': 0,
+            'Total_Orders': 0,
+            'Total_GMV': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        register_table_semana_atual = pd.concat([register_table_semana_atual, new_row_df], ignore_index=True)
+
+register_table_semana_atual.sort_values(by='BDR Name', inplace=True)
+register_table_semana_atual.reset_index(drop=True, inplace=True)
+
+
+### DF consolidado
+adopted_last_day_key = f"{last_day.strftime('%d-%m')}"
+adopted_yesterday_day_key = f"{penultimo_dia.strftime('%d-%m')}"
+
+track_alma = {
+    "BDR": buyers_table["BDR Name"].tolist(),
+    "Adopted": buyers_table["Total_Buyers"].tolist(),
+    f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
+    f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
+    "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
+
+    f"Orders {adopted_last_day_key}": buyers_table_lastday["Total_Orders"].tolist(),
+    f"Orders {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Orders"].tolist(),
+    "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
+    "Orders LTD": buyers_table["Total_Orders"].tolist(),
+
+    f"GMV {adopted_last_day_key}": buyers_table_lastday["Total_GMV"].tolist(),
+    f"GMV {adopted_yesterday_day_key}": buyers_table_penultimo["Total_GMV"].tolist(),
+    "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
+    "GMV LTD": buyers_table["Total_GMV"].tolist(),
+
+    f"Register {adopted_last_day_key}": registers_table_lastday["Total_Registers"].fillna(0).tolist(),
+    f"Register {adopted_yesterday_day_key}": registers_table_penultimo["Total_Registers"].fillna(0).tolist(),
+    "Register Current Week": register_table_semana_atual["Total_Registers"].fillna(0).tolist(),
+    "Register LTD": register_table["Total_Registers"].fillna(0).tolist()
+
+}
+
+track_alma_df = pd.DataFrame(track_alma)
+track_alma_df.sort_values(by='Adopted', inplace=True, ascending=False)
+
+sum_row = track_alma_df.sum(numeric_only=True)
+totals_row = {'BDR': 'TOTALS'}
+totals_row.update(sum_row.to_dict())
+totals_df = pd.DataFrame([totals_row])
+
+track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
+
+gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
+for col in gmv_columns:
+    track_alma_df[col] = track_alma_df[col].apply(formata_numero)
+
+track_alma_df.set_index(track_alma_df.columns[0], inplace=True)
+
+
+#### New Styler
+
+def style_table_2(df, columns, font_size='10pt'):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
+
+    # Aplicando a formatação com pontos para os valores numéricos
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            # Estilo do cabeçalho
+            {'selector': 'thead th',
+             'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
+            # Alinhamento dos dados na célula
+            {'selector': 'td',
+             'props': [('text-align', 'center')]},
+            # Estilo da fonte e tamanho para toda a tabela
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]},
+            # Removendo linhas de grade
+            {'selector': 'table',
+             'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
+        ])
+
+    # Adicionando bordas grossas a cada 4 colunas, começando na terceira coluna
+    for col in range(1, len(df.columns), 4):
+        styler = styler.set_table_styles([
+            {'selector': f'td:nth-child({col})',
+             'props': [('border-right', '2px solid black')]}
+        ], overwrite=False, axis=1)
+
+    # Estilizando a última linha com fundo preto e fonte amarela
+    styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
+
+    return styler
+
+alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
+master_table_2 = style_table_2(track_alma_df, track_alma_df.columns)
+master_table_2_html = master_table_2.to_html()
+
+#------------------------------------------------------------------------------------------------------
+#### New Styler
+
+def style_table_3(df, columns, font_size='10pt'):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
+
+    # Applying formatting with dots for numeric values
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            # Header style
+            {'selector': 'thead th',
+             'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
+            # Cell data alignment
+            {'selector': 'td',
+             'props': [('text-align', 'center')]},
+            # Font style and size for the entire table
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]},
+            # Removing grid lines
+            {'selector': 'table',
+             'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
+        ])
+
+    # Adding thick borders every 5 columns, except for the last 6 columns
+    total_columns = len(df.columns)
+    for col in range(1, total_columns - 6, 5):  # Start from the 5th column and skip every 5 columns, avoiding the last 6
+        styler = styler.set_table_styles([
+            {'selector': f'td:nth-child({col}), th:nth-child({col})',
+             'props': [('border-right', '2px solid black')]}
+        ], overwrite=False, axis=1)
+
+    # Styling the last row with a black background and white font
+    styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
+
+    return styler
+
+def style_table_4(df, columns, font_size='10pt'):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
+
+    # Aplicando a formatação com pontos para os valores numéricos
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            # Estilo do cabeçalho
+            {'selector': 'thead th',
+             'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
+            # Alinhamento dos dados na célula
+            {'selector': 'td',
+             'props': [('text-align', 'center')]},
+            # Estilo da fonte e tamanho para toda a tabela
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]},
+            # Removendo linhas de grade
+            {'selector': 'table',
+             'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
+        ])
+
+    # Adicionando bordas grossas a cada 6 colunas, começando na terceira coluna (índice 3)
+    for col in range(3, len(df.columns) + 1, 5):
+        styler = styler.set_table_styles([
+            {'selector': f'td:nth-child({col})',
+             'props': [('border-right', '2px solid black')]}
+        ], overwrite=False, axis=1)
+
+    # Estilizando a última coluna com a mesma cor do restante
+    styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[:, df.columns[-1]])
+
+    # Aplicando um mapa de calor às colunas % com gradiente de verde para valores altos, amarelo para médios e vermelho para baixos
+    percent_columns = [col for col in df.columns if '%' in col]
+    if percent_columns:
+        styler = styler.background_gradient(subset=percent_columns, cmap='RdYlGn', low=0.1, high=0.5)
+
+    return styler
+
+### Tabela v2
+
+#### DF com colunas selecionadas
+
+# df_merged_intermediario = pd.merge(df_t3, df_t1[['BDR Name', 'VISIT_DATE', 'VISITS']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'VISIT_DATE'], how='left')
+# df_select = pd.merge(df_merged_intermediario, df_t2[['BDR Name', 'DATE', 'count_registered_stores']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'DATE'], how='left')
+# df_select.drop_duplicates(inplace=True)
+
+# select_csv = df_select.to_csv(index=False).encode('utf-8')
+
+### DF select segmentado por Visits
+
+# df_15v = df_select[df_select['VISITS'] >= 15]
+# df_8v = df_select[(df_select['VISITS'] >= 8) & (df_select['VISITS'] < 15)]
+# df_3v = df_select[(df_select['VISITS'] >= 3) & (df_select['VISITS'] < 8)]
+
+##### Customer Visit com df_15v
+##### ALLD
+visits15_table = df_t1_filtrado_abril.groupby(['BDR Name']).agg(
+    Total_Visits=('VISITED_STORES', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits15_table['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits15_table = pd.concat([visits15_table, new_row_df], ignore_index=True)
+
+visits15_table.sort_values(by='BDR Name', inplace=True)
+visits15_table.reset_index(drop=True, inplace=True)
+
+##### Ultimo dia - visits15_table
+
+df_t1_filtrado_abril['VISIT_DATE'] = pd.to_datetime(df_t1_filtrado_abril['VISIT_DATE'])
+last_day2 = df_t1_filtrado_abril['VISIT_DATE'].max() - pd.Timedelta(days=1)
+visits15_table_ld = df_t1_filtrado_abril[df_t1_filtrado_abril['VISIT_DATE'] == last_day2]
+
+visits15_table_ld_grouped = visits15_table_ld.groupby(['BDR Name']).agg(
+    Total_Visits=('VISITED_STORES', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits15_table_ld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits15_table_ld_grouped = pd.concat([visits15_table_ld_grouped, new_row_df], ignore_index=True)
+
+visits15_table_ld_grouped.sort_values(by='BDR Name', inplace=True)
+visits15_table_ld_grouped.reset_index(drop=True, inplace=True)
+
+### Penultimo dia
+
+penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
+visits15_table_pld = df_t1_filtrado_abril[df_t1_filtrado_abril['VISIT_DATE'] == penultimo_dia2]
+
+visits15_table_pld_grouped = visits15_table_pld.groupby(['BDR Name']).agg(
+    Total_Visits=('VISITED_STORES', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits15_table_pld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits15_table_pld_grouped = pd.concat([visits15_table_pld_grouped, new_row_df], ignore_index=True)
+
+visits15_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
+visits15_table_pld_grouped.reset_index(drop=True, inplace=True)
+
+##### Semana
+df_t1_filtrado_abril['week_of_year'] = df_t1_filtrado_abril['VISIT_DATE'].dt.isocalendar().week
+current_week_number = pd.Timestamp('now').isocalendar()[1]
+visits_current_week = df_t1_filtrado_abril[df_t1_filtrado_abril['week_of_year'] == current_week_number]
+
+visits15_table_lw_grouped = visits_current_week.groupby(['BDR Name']).agg(
+    Total_Visits=('VISITED_STORES', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits15_table_lw_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits15_table_lw_grouped = pd.concat([visits15_table_lw_grouped, new_row_df], ignore_index=True)
+
+visits15_table_lw_grouped.sort_values(by='BDR Name', inplace=True)
+visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
+
+############################ Register
+##### Registered com df_8v
+##### ALLD
+data_inicio = pd.Timestamp('2024-02-26')
+df_t2_filtrado_abril = df_t2[df_t2['DATE'] >= data_inicio]
+
+visits8_table = df_t2_filtrado_abril.groupby(['BDR Name']).agg(
+    Total_Register=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits8_table['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Register': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits8_table = pd.concat([visits8_table, new_row_df], ignore_index=True)
+
+visits8_table.sort_values(by='BDR Name', inplace=True)
+visits8_table.reset_index(drop=True, inplace=True)
+
+##### Ultimo dia - visits15_table
+
+df_t2_filtrado_abril['DATE'] = pd.to_datetime(df_t2_filtrado_abril['DATE'])
+last_day2 = df_t2_filtrado_abril['DATE'].max()
+visits8_table_ld = df_t2_filtrado_abril[df_t2_filtrado_abril['DATE'] == last_day2]
+
+visits8_table_ld_grouped = visits8_table_ld.groupby(['BDR Name']).agg(
+    Total_Register=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits8_table_ld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits8_table_ld_grouped = pd.concat([visits8_table_ld_grouped, new_row_df], ignore_index=True)
+
+visits8_table_ld_grouped.sort_values(by='BDR Name', inplace=True)
+visits8_table_ld_grouped.reset_index(drop=True, inplace=True)
+
+### Penultimo dia
+
+penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
+visits8_table_pld = df_t2_filtrado_abril[df_t2_filtrado_abril['DATE'] == penultimo_dia2]
+
+visits8_table_pld_grouped = visits8_table_pld.groupby(['BDR Name']).agg(
+    Total_Register=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits8_table_pld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits8_table_pld_grouped = pd.concat([visits8_table_pld_grouped, new_row_df], ignore_index=True)
+
+visits8_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
+visits8_table_pld_grouped.reset_index(drop=True, inplace=True)
+
+##### Semana
+df_t2_filtrado_abril['week_of_year'] = df_t2_filtrado_abril['DATE'].dt.isocalendar().week
+current_week_number = df_t2_filtrado_abril['week_of_year'].max()
+visits_current_week8 = df_t2_filtrado_abril[df_t2_filtrado_abril['week_of_year'] == current_week_number]
+
+visits8_table_lw_grouped = visits_current_week8.groupby(['BDR Name']).agg(
+    Total_Register=('count_registered_stores', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits8_table_lw_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits8_table_lw_grouped = pd.concat([visits8_table_lw_grouped, new_row_df], ignore_index=True)
+
+visits8_table_lw_grouped.sort_values(by='BDR Name', inplace=True)
+visits8_table_lw_grouped.reset_index(drop=True, inplace=True)
+
+############## Adoption
+
+# Visits X GPS
+gps_daily_avg = df_t5_filtrado_abril.groupby(['DATE', 'BDR Name'])['GPS'].mean().reset_index()
+
+visits_gpsapp_df = pd.merge(df_t1_filtrado_abril, gps_daily_avg, left_on=['BDR Name', 'VISIT_DATE'], right_on=['BDR Name', 'DATE'], how='inner')
+visits_gpsapp_df['VISITS_GPS'] = visits_gpsapp_df['VISITED_STORES'] * visits_gpsapp_df['GPS']
+
+visits_gpsapp_df_grouped = visits_gpsapp_df.groupby(['BDR Name']).agg(
+    VISITS_GPS=('VISITS_GPS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits_gpsapp_df_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Register': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits_gpsapp_df_grouped = pd.concat([visits_gpsapp_df_grouped, new_row_df], ignore_index=True)
+
+visits_gpsapp_df_grouped.sort_values(by='BDR Name', inplace=True)
+visits_gpsapp_df_grouped.reset_index(drop=True, inplace=True)
+
+##### Ultimo dia - GPS
+
+visits_gpsapp_df['VISIT_DATE'] = pd.to_datetime(visits_gpsapp_df['VISIT_DATE'])
+last_day2 = visits_gpsapp_df['VISIT_DATE'].max()
+visits_gpsapp_df_ld = visits_gpsapp_df[visits_gpsapp_df['VISIT_DATE'] == last_day2]
+
+visits_gpsapp_df_ld_grouped = visits_gpsapp_df_ld.groupby(['BDR Name']).agg(
+    VISITS_GPS=('VISITS_GPS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits_gpsapp_df_ld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits_gpsapp_df_ld_grouped = pd.concat([visits_gpsapp_df_ld_grouped, new_row_df], ignore_index=True)
+
+visits_gpsapp_df_ld_grouped.sort_values(by='BDR Name', inplace=True)
+visits_gpsapp_df_ld_grouped.reset_index(drop=True, inplace=True)
+
+### Penultimo dia
+
+penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
+visits_gpsapp_df_pld = visits_gpsapp_df[visits_gpsapp_df['VISIT_DATE'] == penultimo_dia2]
+
+visits_gpsapp_df_pld_grouped = visits_gpsapp_df_pld.groupby(['BDR Name']).agg(
+    VISITS_GPS=('VISITS_GPS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits_gpsapp_df_pld_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        visits_gpsapp_df_pld_grouped = pd.concat([visits_gpsapp_df_pld_grouped, new_row_df], ignore_index=True)
+
+visits_gpsapp_df_pld_grouped.sort_values(by='BDR Name', inplace=True)
+visits_gpsapp_df_pld_grouped.reset_index(drop=True, inplace=True)
+
+##### Semana
+data_final = pd.Timestamp('2024-03-31')
+
+visits_gpsapp_df['week_of_year'] = visits_gpsapp_df['VISIT_DATE'].dt.isocalendar().week
+current_week_number = data_final.isocalendar()[1]
+visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == current_week_number]
+
+visits_gpsapp_df_lw_grouped = visits_gpsapp_df_lw.groupby(['BDR Name']).agg(
+    VISITS_GPS=('VISITS_GPS', 'sum')
+).reset_index()
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in visits_gpsapp_df_lw_grouped['BDR Name'].values:
+        # Se um BDR específico não estiver presente, adicione-o com valores 0
+        new_row = {
+            'BDR Name': bdr_name,
+            'Total_Visits': 0
+        }
+        # Adicionando a nova linha ao buyers_table
+        new_row_df = pd.DataFrame([new_row])
+        vvisits_gpsapp_df_grouped = pd.concat([visits_gpsapp_df_grouped, new_row_df], ignore_index=True)
+
+visits_gpsapp_df_lw_grouped.sort_values(by='BDR Name', inplace=True)
+visits_gpsapp_df_lw_grouped.reset_index(drop=True, inplace=True)
+
+# DF CONSOLIDADO
+
+target_value1 = 450
+target_value2 = 240
+target_value3 = 90
+
+track_alma_v3 = {
+    "BDR": buyers_table["BDR Name"].tolist(),
+    f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist(),
+    "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
+    "# Customers Visited LTD": visits_gpsapp_df_grouped["VISITS_GPS"].tolist(),
+    "Customers Visited Target": [target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()),
+    "Customers Visited Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()],
+
+    f"# Customers Registered Previous day": visits8_table_ld_grouped["Total_Register"].fillna(0).tolist(),
+    "# Customers Registered WTD": visits8_table_lw_grouped["Total_Register"].fillna(0).tolist(),
+    "# Customers Registered LTD": visits8_table["Total_Register"].fillna(0).tolist(),
+    "Target Customers Registered": [target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist()),
+    "Achieved Customers Registered %": [x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()],
+
+    f"# Customers Adopted Previous day": buyers_table_lastday["Total_Buyers"].tolist(),
+    "# Customers Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
+    "# Customers Adopted LTD": buyers_table["Total_Buyers"].tolist(),
+    "Target Customers Adopted": [target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist()),
+    "Achieved Customers Adopted %": [x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()],
+
+    f"Orders Previous day": buyers_table_lastday["Total_Orders"].tolist(),
+    "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
+    "Orders LTD": buyers_table["Total_Orders"].tolist(),
+
+    f"GMV Previous day": buyers_table_lastday["Total_GMV"].tolist(),
+    "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
+    "GMV LTD": buyers_table["Total_GMV"].tolist()
+
+}
+
+track_alma_df_v3 = pd.DataFrame(track_alma_v3)
+track_alma_df_v3.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
+
+
+sum_row = track_alma_df_v3.sum(numeric_only=True)
+
+totals_row = {'BDR': 'TOTALS'}
+totals_row.update(sum_row.to_dict())
+
+totals_row['Customers Visited Achieved %'] = (sum_row['# Customers Visited LTD'] / sum_row['Customers Visited Target']) if sum_row['Customers Visited Target'] != 0 else 0
+totals_row['Achieved Customers Registered %'] = (sum_row['# Customers Registered LTD'] / sum_row['Target Customers Registered']) if sum_row['Target Customers Registered'] != 0 else 0
+totals_row['Achieved Customers Adopted %'] = (sum_row['# Customers Adopted LTD'] / sum_row['Target Customers Adopted']) if sum_row['Target Customers Adopted'] != 0 else 0
+totals_df = pd.DataFrame([totals_row])
+
+track_alma_df_v3 = pd.concat([track_alma_df_v3, totals_df], ignore_index=True)
+
+gmv_columns = [col for col in track_alma_df_v3.columns if 'GMV' in col]
+for col in gmv_columns:
+    track_alma_df_v3[col] = track_alma_df_v3[col].apply(formata_numero)
+
+achieved_columns = [col for col in track_alma_df_v3.columns if '%' in col]
+for col in achieved_columns:
+    track_alma_df_v3[col] = track_alma_df_v3[col].apply(formata_percentual)
+
+track_alma_df_v3.set_index(track_alma_df_v3.columns[0], inplace=True)
+
+alma_csv_v3 = track_alma_df_v3.to_csv(index=False).encode('utf-8')
+master_table_4 = style_table_3(track_alma_df_v3, track_alma_df_v3.columns)
+
+master_table_4_html = master_table_4.to_html()
+max_date = df_t1_filtrado_abril['VISIT_DATE'].max() - pd.Timedelta(days=1)
+display_date_abril = max_date
+
+
+html_date_abril = f"""
+    <style>
+    .fonte-personalizada4 {{
+        font-size: 20px;
+        font-weight: bold;  /* 'font-style: bold' está incorreto. Deve ser 'font-weight' para negrito */
+    }}
+    </style>
+    <div class="fonte-personalizada4">
+        Current day: {display_date_abril.strftime('%d-%m-%Y')}
+    </div>
+    """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -3709,6 +4570,26 @@ with colCm[0]:
     st.download_button(
     label="This table as CSV",
     data=alma_csv_v2,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_E"
+) 
+    st.markdown(master_table_4_html, unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    .fonte-personalizada3 {
+        font-size: 10px;
+        font-style: italic
+    }
+    </style>
+    <div class="fonte-personalizada3">
+        Start date = Apr 1 2024
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.download_button(
+    label="This table as CSV",
+    data=alma_csv_v3,
     file_name='data.csv',
     mime='text/csv',
     key="download_button_E"
