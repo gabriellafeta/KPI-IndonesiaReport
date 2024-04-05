@@ -3929,7 +3929,6 @@ master_table_4_html = master_table_4.to_html()
 max_date = df_t1_filtrado_abril['VISIT_DATE'].max() - pd.Timedelta(days=1)
 display_date_abril = max_date
 
-
 html_date_abril = f"""
     <style>
     .fonte-personalizada4 {{
@@ -3941,20 +3940,6 @@ html_date_abril = f"""
         Current day: {display_date_abril.strftime('%d-%m-%Y')}
     </div>
     """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
@@ -4542,7 +4527,7 @@ with colCm[0]:
     mime='text/csv',
     key="download_button_D"
 )
-    st.markdown(html_date, unsafe_allow_html=True)
+    st.markdown(html_date_abril, unsafe_allow_html=True)
     st.markdown("""
     <style>
     .fonte-personalizada2 {
@@ -4574,6 +4559,7 @@ with colCm[0]:
     mime='text/csv',
     key="download_button_E"
 ) 
+    st.markdown(html_date_abril, unsafe_allow_html=True)
     st.markdown(master_table_4_html, unsafe_allow_html=True)
     st.markdown("""
     <style>
