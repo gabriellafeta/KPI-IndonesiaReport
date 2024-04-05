@@ -2989,17 +2989,9 @@ visits_gpsapp_df_pld_grouped.sort_values(by='BDR Name', inplace=True)
 visits_gpsapp_df_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-max_date = visits_gpsapp_df['VISIT_DATE'].max()
-
-if max_date.weekday() == 0:
-    start_of_last_full_week = max_date - pd.Timedelta(days=7)
-else:
-    start_of_last_full_week = max_date - pd.Timedelta(days=max_date.weekday()) - pd.Timedelta(days=7)
-
-last_full_week_number = start_of_last_full_week.isocalendar()[1]
 visits_gpsapp_df['week_of_year'] = visits_gpsapp_df['VISIT_DATE'].dt.isocalendar().week
-
-visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == last_full_week_number]
+current_week_number = pd.Timestamp('now').isocalendar()[1]
+visits_gpsapp_df_lw = visits_gpsapp_df[visits_gpsapp_df['week_of_year'] == current_week_number]
 
 visits_gpsapp_df_lw_grouped = visits_gpsapp_df_lw.groupby(['BDR Name']).agg(
     VISITS_GPS=('VISITS_GPS', 'sum')
@@ -3010,11 +3002,11 @@ for bdr_key, bdr_name in BDR_dict.items():
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
-            'VISITS_GPS': 0
+            'Total_Visits': 0
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        visits_gpsapp_df_grouped = pd.concat([visits_gpsapp_df_grouped, new_row_df], ignore_index=True)
+        vvisits_gpsapp_df_grouped = pd.concat([visits_gpsapp_df_grouped, new_row_df], ignore_index=True)
 
 visits_gpsapp_df_lw_grouped.sort_values(by='BDR Name', inplace=True)
 visits_gpsapp_df_lw_grouped.reset_index(drop=True, inplace=True)
@@ -3028,7 +3020,7 @@ target_value3 = 90
 track_alma_v2 = {
     "BDR": buyers_table["BDR Name"].tolist(),
     f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist(),
-    "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
+    # "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
     "# Customers Visited LTD": visits_gpsapp_df_grouped["VISITS_GPS"].tolist(),
     "Customers Visited Target": [target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()),
     "Customers Visited Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()],
@@ -3054,6 +3046,7 @@ track_alma_v2 = {
     "GMV LTD": buyers_table["Total_GMV"].tolist()
 
 }
+
 
 
 track_alma_df_v2 = pd.DataFrame(track_alma_v2)
