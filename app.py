@@ -3010,7 +3010,7 @@ for bdr_key, bdr_name in BDR_dict.items():
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
-            'Total_Visits': 0
+            'VISITS_GPS': 0
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
