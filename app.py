@@ -3049,8 +3049,6 @@ track_alma_v2 = {
 
 }
 
-
-
 track_alma_df_v2 = pd.DataFrame(track_alma_v2)
 track_alma_df_v2.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
 
@@ -3082,7 +3080,7 @@ master_table_3 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
 
 master_table_3_html = master_table_3.to_html()
 max_date = df_t1_filtrado['VISIT_DATE'].max()
-display_date = max_date - pd.Timedelta(days=1)
+display_date = max_date
 
 
 html_date = f"""
