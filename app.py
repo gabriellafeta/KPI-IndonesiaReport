@@ -3080,7 +3080,7 @@ master_table_3 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
 
 master_table_3_html = master_table_3.to_html()
 max_date = df_t1_filtrado['VISIT_DATE'].max()
-display_date = max_date
+display_date = pd.Timestamp(year=max_date.year, month=3, day=31)
 
 
 html_date = f"""
@@ -3091,7 +3091,7 @@ html_date = f"""
     }}
     </style>
     <div class="fonte-personalizada4">
-        Lastc day: {display_date.strftime('%d-%m-%Y')}
+        Last day: {display_date.strftime('%d-%m-%Y')}
     </div>
     """
 #------------------------------------------------------------------------------------------------------
