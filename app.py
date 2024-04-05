@@ -2248,13 +2248,15 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 )
 #------------------------------------------------------------------------------------------------------
 #### Master Table
-data_inicio = pd.Timestamp('2024-02-26')
 
-df_t1_filtrado = df_t1[df_t1['VISIT_DATE'] >= data_inicio]
-df_t2_filtrado = df_t2[df_t2['DATE'] >= data_inicio]
-df_t3_filtrado = df_t3[df_t3['DAY'] >= data_inicio]
-df_t4_filtrado = df_t4[df_t4['DATE'] >= data_inicio]
-df_t5_filtrado = df_t5[df_t5['DATE'] >= data_inicio]
+data_inicio = pd.Timestamp('2024-02-26') # para março
+data_fim = pd.Timestamp('2024-03-31')
+
+df_t1_filtrado = df_t1[(df_t1['VISIT_DATE'] >= data_inicio) & (df_t1['VISIT_DATE'] <= data_fim)]
+df_t2_filtrado = df_t2[(df_t2['DATE'] >= data_inicio) & (df_t2['DATE'] <= data_fim)]
+df_t3_filtrado = df_t3[(df_t3['DAY'] >= data_inicio) & (df_t3['DAY'] <= data_fim)]
+df_t4_filtrado = df_t4[(df_t4['DATE'] >= data_inicio) & (df_t4['DATE'] <= data_fim)]
+df_t5_filtrado = df_t5[(df_t5['DATE'] >= data_inicio) & (df_t5['DATE'] <= data_fim)]
 
 
 ## df_t3
