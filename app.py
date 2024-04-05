@@ -3022,7 +3022,7 @@ target_value3 = 90
 track_alma_v2 = {
     "BDR": buyers_table["BDR Name"].tolist(),
     f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist(),
-    "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
+    # "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
     "# Customers Visited LTD": visits_gpsapp_df_grouped["VISITS_GPS"].tolist(),
     "Customers Visited Target": [target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()),
     "Customers Visited Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()],
