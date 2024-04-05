@@ -4583,7 +4583,7 @@ with colCm[0]:
     }
     </style>
     <div class="fonte-personalizada3">
-        Start date = Apr 1 2024
+        Start date = Apr 01 2024
     </div>
     """, unsafe_allow_html=True)
 
