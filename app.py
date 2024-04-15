@@ -3746,11 +3746,9 @@ track_alma_v3 = {
 
 }
 
-
-
 track_alma_df_v3 = pd.DataFrame(track_alma_v3)
 track_alma_df_v3.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
-
+print
 
 sum_row = track_alma_df_v3.sum(numeric_only=True)
 
@@ -3778,7 +3776,7 @@ alma_csv_v3 = track_alma_df_v3.to_csv(index=False).encode('utf-8')
 master_table_4 = style_table_3(track_alma_df_v3, track_alma_df_v3.columns)
 
 master_table_4_html = master_table_4.to_html()
-max_date = df_t1_filtrado_abril['VISIT_DATE'].max() - pd.Timedelta(days=1)
+max_date = df_t1_filtrado_abril['VISIT_DATE'].max()
 display_date_abril = max_date
 
 html_date_abril = f"""
@@ -3794,49 +3792,49 @@ html_date_abril = f"""
     """
 
 
-print("Length of 'BDR':", len(buyers_table["BDR Name"].tolist()))
+# print("Length of 'BDR':", len(buyers_table["BDR Name"].tolist()))
 
-print("Length of '# Customers Visited Previous day':", len(visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist()))
+# print("Length of '# Customers Visited Previous day':", len(visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist()))
 
-print("Length of '# Customers Visited WTD':", len(visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist()))
+# print("Length of '# Customers Visited WTD':", len(visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist()))
 
-print("Length of '# Customers Visited LTD':", len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()))
+# print("Length of '# Customers Visited LTD':", len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()))
 
-print("Length of 'Customers Visited Target':", len([target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist())))
+# print("Length of 'Customers Visited Target':", len([target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist())))
 
-print("Length of 'Customers Visited Achieved %':", len([x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()]))
+# print("Length of 'Customers Visited Achieved %':", len([x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()]))
 
-print("Length of '# Customers Registered Previous day':", len(visits8_table_ld_grouped["Total_Register"].fillna(0).tolist()))
+# print("Length of '# Customers Registered Previous day':", len(visits8_table_ld_grouped["Total_Register"].fillna(0).tolist()))
 
-print("Length of '# Customers Registered WTD':", len(visits8_table_lw_grouped["Total_Register"].fillna(0).tolist()))
+# print("Length of '# Customers Registered WTD':", len(visits8_table_lw_grouped["Total_Register"].fillna(0).tolist()))
 
-print("Length of '# Customers Registered LTD':", len(visits8_table["Total_Register"].fillna(0).tolist()))
+# print("Length of '# Customers Registered LTD':", len(visits8_table["Total_Register"].fillna(0).tolist()))
 
-print("Length of 'Target Customers Registered':", len([target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist())))
+# print("Length of 'Target Customers Registered':", len([target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist())))
 
-print("Length of 'Achieved Customers Registered %':", len([x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()]))
+# print("Length of 'Achieved Customers Registered %':", len([x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()]))
 
-print("Length of '# Customers Adopted Previous day':", len(buyers_table_lastday["Total_Buyers"].tolist()))
+# print("Length of '# Customers Adopted Previous day':", len(buyers_table_lastday["Total_Buyers"].tolist()))
 
-print("Length of '# Customers Adopted Current Week':", len(buyers_table_semana_atual["Total_Buyers"].tolist()))
+# print("Length of '# Customers Adopted Current Week':", len(buyers_table_semana_atual["Total_Buyers"].tolist()))
 
-print("Length of '# Customers Adopted LTD':", len(buyers_table["Total_Buyers"].tolist()))
+# print("Length of '# Customers Adopted LTD':", len(buyers_table["Total_Buyers"].tolist()))
 
-print("Length of 'Target Customers Adopted':", len([target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist())))
+# print("Length of 'Target Customers Adopted':", len([target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist())))
 
-print("Length of 'Achieved Customers Adopted %':", len([x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()]))
+# print("Length of 'Achieved Customers Adopted %':", len([x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()]))
 
-print("Length of 'Orders Previous day':", len(buyers_table_lastday["Total_Orders"].tolist()))
+# print("Length of 'Orders Previous day':", len(buyers_table_lastday["Total_Orders"].tolist()))
 
-print("Length of 'Orders Current Week':", len(buyers_table_semana_atual["Total_Orders"].tolist()))
+# print("Length of 'Orders Current Week':", len(buyers_table_semana_atual["Total_Orders"].tolist()))
 
-print("Length of 'Orders LTD':", len(buyers_table["Total_Orders"].tolist()))
+# print("Length of 'Orders LTD':", len(buyers_table["Total_Orders"].tolist()))
 
-print("Length of 'GMV Previous day':", len(buyers_table_lastday["Total_GMV"].tolist()))
+# print("Length of 'GMV Previous day':", len(buyers_table_lastday["Total_GMV"].tolist()))
 
-print("Length of 'GMV Current Week':", len(buyers_table_semana_atual["Total_GMV"].tolist()))
+# print("Length of 'GMV Current Week':", len(buyers_table_semana_atual["Total_GMV"].tolist()))
 
-print("Length of 'GMV LTD':", len(buyers_table["Total_GMV"].tolist()))
+# print("Length of 'GMV LTD':", len(buyers_table["Total_GMV"].tolist()))
 #------------------------------------------------------------------------------------------------------
 #### App
 # Abas
