@@ -2250,6 +2250,122 @@ visists_seg_mtd.update_layout( # Adjust the width to fit within the column
 #### Master Table
 
 data_inicio = pd.Timestamp('2024-02-26') # para março
+data_fim = pd.Timestamp.now().normalize()
+
+df_t1_full = df_t1[(df_t1['VISIT_DATE'] >= data_inicio) & (df_t1['VISIT_DATE'] <= data_fim)]
+df_t2_full = df_t2[(df_t2['DATE'] >= data_inicio) & (df_t2['DATE'] <= data_fim)]
+df_t3_full = df_t3[(df_t3['DAY'] >= data_inicio) & (df_t3['DAY'] <= data_fim)]
+df_t4_full = df_t4[(df_t4['DATE'] >= data_inicio) & (df_t4['DATE'] <= data_fim)]
+df_t5_full = df_t5[(df_t5['DATE'] >= data_inicio) & (df_t5['DATE'] <= data_fim)]
+
+## df_t3
+
+df_t3_full['week_of_year'] = df_t3_full['DAY'].dt.isocalendar().week
+df_t3_full['first_day'] = df_t3_full['DAY'].dt.to_period('W').dt.start_time
+df_t3_full['first_day'] = df_t3_full['first_day'].dt.strftime('%d-%m')
+df_t3_full['TOTAL_BUYERS'] = df_t3_full['count_buyers_customer'] + df_t3_full['count_buyers_force'] + df_t3_full['count_buyers_grow']
+
+weekly_sales_gmv = df_t3_full.groupby(['week_of_year', 'first_day']).agg(
+    Total_GMV=('TOTAL_SALES', 'sum'),
+    GMV_Customer=('gmv_placed_customer', 'sum'),
+    GMV_Force=('gmv_placed_force', 'sum'),
+    GMV_Grow=('gmv_placed_grow', 'sum'),
+
+    Total_Orders=('TOTAL_ORDERS', 'sum'),
+    Customer_Orders=('count_placed_orders_customer','sum'),
+    Force_Orders=('count_placed_orders_force','sum'),
+    Grow_Orders=('count_placed_orders_grow','sum'),
+
+    Total_Buyers=('TOTAL_BUYERS', 'sum')
+).reset_index()
+
+##df_t1
+df_t1_full['week_of_year'] = df_t1_full['VISIT_DATE'].dt.isocalendar().week
+
+weekly_visits = df_t1_full.groupby('week_of_year').agg(
+    PLANNED_VISITS=('PLANNED_VISITS', 'sum')
+).reset_index()
+
+##df_t2
+df_t2_full['week_of_year'] = df_t2_full['DATE'].dt.isocalendar().week
+
+weekly_register = df_t2_full.groupby('week_of_year').agg(
+    Registered_Stores=('count_registered_stores', 'sum')
+).reset_index()
+
+
+## df_tf4
+df_t4_full['week_of_year'] = df_t4_full['DATE'].dt.isocalendar().week
+df_t4_full['p_completed_tasks'] = df_t4_full['COMPLETED_TASKS'] / df_t4_full['TOTAL_TASKS']
+
+weekly_tasks = df_t4_full.groupby('week_of_year').agg(
+    Total_Tasks=('TOTAL_TASKS', 'sum'),
+    Completed_Tasks=('p_completed_tasks', 'mean'),
+    Task_Effect=('TASK_EFFECTIVENESS', 'mean')
+).reset_index()
+
+## df_tf5
+df_t5_full['week_of_year'] = df_t5_full['DATE'].dt.isocalendar().week
+
+weekly_gps = df_t5_full.groupby('week_of_year').agg(
+    GPS=('GPS', 'mean'),
+    GPS_QUALITY=('GPS_QUALITY', 'mean')
+).reset_index()
+
+
+#Merging
+merged_df = pd.merge(weekly_sales_gmv, weekly_visits, on='week_of_year', how='left')
+merged_df = pd.merge(merged_df, weekly_tasks, on='week_of_year', how='left')
+merged_df = pd.merge(merged_df, weekly_register, on='week_of_year', how='left')
+merged_df_master_table = pd.merge(merged_df, weekly_gps, on='week_of_year', how='left')
+
+### Final master table
+merged_df_master_table['AOV'] = merged_df_master_table['Total_GMV'] / merged_df_master_table['Total_Orders']
+
+aggregated_values = {}
+for column in merged_df_master_table.columns:
+    if column in ['GPS', 'GPS_QUALITY', 'Task_Effect', 'Completed_Tasks']:
+        aggregated_values[column] = np.mean(merged_df_master_table[column].replace(0, np.nan))
+    else:
+        aggregated_values[column] = merged_df_master_table[column].sum()
+
+aggregated_df = pd.DataFrame(aggregated_values, index=['Accumulated'])
+
+merged_df_master_table_with_accumulated = pd.concat([aggregated_df, merged_df_master_table])
+
+for column in merged_df_master_table_with_accumulated.columns[2:]:
+    merged_df_master_table_with_accumulated[column] = pd.to_numeric(merged_df_master_table_with_accumulated[column], errors='coerce')
+
+merged_df_master_table_with_accumulated['GMV_Customer'] = merged_df_master_table_with_accumulated['GMV_Customer'].apply(formata_numero)
+merged_df_master_table_with_accumulated['GMV_Force'] = merged_df_master_table_with_accumulated['GMV_Force'].apply(formata_numero)
+merged_df_master_table_with_accumulated['GMV_Grow'] = merged_df_master_table_with_accumulated['GMV_Grow'].apply(formata_numero)
+merged_df_master_table_with_accumulated['Total_GMV'] = merged_df_master_table_with_accumulated['Total_GMV'].apply(formata_numero)
+
+merged_df_master_table_with_accumulated['GPS'] = merged_df_master_table_with_accumulated['GPS'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['GPS_QUALITY'] = merged_df_master_table_with_accumulated['GPS_QUALITY'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['Task_Effect'] = merged_df_master_table_with_accumulated['Task_Effect'].apply(formata_percentual)
+merged_df_master_table_with_accumulated['Completed_Tasks'] = merged_df_master_table_with_accumulated['Completed_Tasks'].apply(formata_percentual)
+
+merged_df_master_table_sorted = merged_df_master_table_with_accumulated.sort_values(by='week_of_year', ascending=False).fillna(0)
+merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_table_sorted['week_of_year'].isin([3, 4])]
+merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
+merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
+
+merged_df_master_table_sorted = merged_df_master_table_sorted.rename(index={merged_df_master_table_sorted.index[0]: "Accumulated"})
+merged_df_master_table_sorted.iloc[0, 0] = "Launch"
+
+merged_df_master_table_sorted.fillna(0, inplace=True)
+
+columns_master_table = merged_df_master_table_sorted.columns
+merged_df_master_table_sorted_cv = merged_df_master_table_sorted.to_csv(index=False).encode('utf-8')
+
+master_table = style_table(merged_df_master_table_sorted, columns_master_table)
+master_table_html = master_table.to_html()
+
+#------------------------------------------------------------------------------------------------------
+#### Master Table
+
+data_inicio = pd.Timestamp('2024-02-26') # para março
 data_fim = pd.Timestamp('2024-03-31')
 
 df_t1_filtrado = df_t1[(df_t1['VISIT_DATE'] >= data_inicio) & (df_t1['VISIT_DATE'] <= data_fim)]
@@ -2331,36 +2447,36 @@ for column in merged_df_master_table.columns:
 
 aggregated_df = pd.DataFrame(aggregated_values, index=['Accumulated'])
 
-merged_df_master_table_with_accumulated = pd.concat([aggregated_df, merged_df_master_table])
+# merged_df_master_table_with_accumulated = pd.concat([aggregated_df, merged_df_master_table])
 
-for column in merged_df_master_table_with_accumulated.columns[2:]:
-    merged_df_master_table_with_accumulated[column] = pd.to_numeric(merged_df_master_table_with_accumulated[column], errors='coerce')
+# for column in merged_df_master_table_with_accumulated.columns[2:]:
+#     merged_df_master_table_with_accumulated[column] = pd.to_numeric(merged_df_master_table_with_accumulated[column], errors='coerce')
 
-merged_df_master_table_with_accumulated['GMV_Customer'] = merged_df_master_table_with_accumulated['GMV_Customer'].apply(formata_numero)
-merged_df_master_table_with_accumulated['GMV_Force'] = merged_df_master_table_with_accumulated['GMV_Force'].apply(formata_numero)
-merged_df_master_table_with_accumulated['GMV_Grow'] = merged_df_master_table_with_accumulated['GMV_Grow'].apply(formata_numero)
-merged_df_master_table_with_accumulated['Total_GMV'] = merged_df_master_table_with_accumulated['Total_GMV'].apply(formata_numero)
+# merged_df_master_table_with_accumulated['GMV_Customer'] = merged_df_master_table_with_accumulated['GMV_Customer'].apply(formata_numero)
+# merged_df_master_table_with_accumulated['GMV_Force'] = merged_df_master_table_with_accumulated['GMV_Force'].apply(formata_numero)
+# merged_df_master_table_with_accumulated['GMV_Grow'] = merged_df_master_table_with_accumulated['GMV_Grow'].apply(formata_numero)
+# merged_df_master_table_with_accumulated['Total_GMV'] = merged_df_master_table_with_accumulated['Total_GMV'].apply(formata_numero)
 
-merged_df_master_table_with_accumulated['GPS'] = merged_df_master_table_with_accumulated['GPS'].apply(formata_percentual)
-merged_df_master_table_with_accumulated['GPS_QUALITY'] = merged_df_master_table_with_accumulated['GPS_QUALITY'].apply(formata_percentual)
-merged_df_master_table_with_accumulated['Task_Effect'] = merged_df_master_table_with_accumulated['Task_Effect'].apply(formata_percentual)
-merged_df_master_table_with_accumulated['Completed_Tasks'] = merged_df_master_table_with_accumulated['Completed_Tasks'].apply(formata_percentual)
+# merged_df_master_table_with_accumulated['GPS'] = merged_df_master_table_with_accumulated['GPS'].apply(formata_percentual)
+# merged_df_master_table_with_accumulated['GPS_QUALITY'] = merged_df_master_table_with_accumulated['GPS_QUALITY'].apply(formata_percentual)
+# merged_df_master_table_with_accumulated['Task_Effect'] = merged_df_master_table_with_accumulated['Task_Effect'].apply(formata_percentual)
+# merged_df_master_table_with_accumulated['Completed_Tasks'] = merged_df_master_table_with_accumulated['Completed_Tasks'].apply(formata_percentual)
 
-merged_df_master_table_sorted = merged_df_master_table_with_accumulated.sort_values(by='week_of_year', ascending=False).fillna(0)
-merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_table_sorted['week_of_year'].isin([3, 4])]
-merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
-merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
+# merged_df_master_table_sorted = merged_df_master_table_with_accumulated.sort_values(by='week_of_year', ascending=False).fillna(0)
+# merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_table_sorted['week_of_year'].isin([3, 4])]
+# merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
+# merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
 
-merged_df_master_table_sorted = merged_df_master_table_sorted.rename(index={merged_df_master_table_sorted.index[0]: "Accumulated"})
-merged_df_master_table_sorted.iloc[0, 0] = "Launch"
+# merged_df_master_table_sorted = merged_df_master_table_sorted.rename(index={merged_df_master_table_sorted.index[0]: "Accumulated"})
+# merged_df_master_table_sorted.iloc[0, 0] = "Launch"
 
-merged_df_master_table_sorted.fillna(0, inplace=True)
+# merged_df_master_table_sorted.fillna(0, inplace=True)
 
-columns_master_table = merged_df_master_table_sorted.columns
-merged_df_master_table_sorted_cv = merged_df_master_table_sorted.to_csv(index=False).encode('utf-8')
+# columns_master_table = merged_df_master_table_sorted.columns
+# merged_df_master_table_sorted_cv = merged_df_master_table_sorted.to_csv(index=False).encode('utf-8')
 
-master_table = style_table(merged_df_master_table_sorted, columns_master_table)
-master_table_html = master_table.to_html()
+# master_table = style_table(merged_df_master_table_sorted, columns_master_table)
+# master_table_html = master_table.to_html()
 
 ####### KPI track Table
 ### Tabela Buyers
