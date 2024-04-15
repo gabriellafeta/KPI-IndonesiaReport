@@ -3748,7 +3748,6 @@ track_alma_v3 = {
 
 track_alma_df_v3 = pd.DataFrame(track_alma_v3)
 track_alma_df_v3.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
-print
 
 sum_row = track_alma_df_v3.sum(numeric_only=True)
 
