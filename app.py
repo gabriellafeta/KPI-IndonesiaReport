@@ -3913,7 +3913,6 @@ for bdr_key, bdr_name in BDR_dict.items():
         buyers_table_abril = pd.concat([buyers_table_abril, new_row_df], ignore_index=True)
 
 
-
 buyers_table_abril.sort_values(by='BDR Name', inplace=True)
 buyers_table_abril.reset_index(drop=True, inplace=True)
 
@@ -4200,7 +4199,7 @@ visits15_table_lw_grouped.reset_index(drop=True, inplace=True)
 ############################ Register
 ##### Registered com df_8v
 ##### ALLD
-data_inicio = pd.Timestamp('2024-02-26')
+data_inicio = pd.Timestamp('2024-04-01')
 df_t2_filtrado_abril = df_t2[df_t2['DATE'] >= data_inicio]
 
 visits8_table = df_t2_filtrado_abril.groupby(['BDR Name']).agg(
@@ -5080,7 +5079,7 @@ with colCm[0]:
     }
     </style>
     <div class="fonte-personalizada3">
-        Start date = Feb 26 2024 testeeeee
+        Start date = Feb 26 2024
     </div>
     """, unsafe_allow_html=True)
     st.download_button(
