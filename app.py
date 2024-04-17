@@ -2911,7 +2911,7 @@ html_date = f"""
     }}
     </style>
     <div class="fonte-personalizada4">
-        Last day tessset: {data_fim.strftime('%d-%m-%Y')}
+        Last day: {data_fim.strftime('%d-%m-%Y')}
     </div>
     """
 
@@ -5080,7 +5080,7 @@ with colCm[0]:
     }
     </style>
     <div class="fonte-personalizada3">
-        Start date = Feb 26 2024
+        Start date = Feb 26 2024 testeeeee
     </div>
     """, unsafe_allow_html=True)
     st.download_button(
