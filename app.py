@@ -2901,7 +2901,6 @@ master_table_3 = style_table_3(track_alma_df, track_alma_df.columns)
 
 master_table_2_html = master_table_3.to_html()
 max_date = df_t1_filtrado_v2['VISIT_DATE'].max()
-display_date = pd.Timestamp(year=max_date.year, month=3, day=31)
 
 
 html_date = f"""
