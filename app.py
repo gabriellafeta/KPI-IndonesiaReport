@@ -2804,7 +2804,7 @@ gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
 for col in gmv_columns:
     track_alma_df[col] = track_alma_df[col].apply(formata_numero)
 
-achieved_columns = [col for col in track_alma_df_v2.columns if '%' in col]
+achieved_columns = [col for col in track_alma_df.columns if '%' in col]
 for col in achieved_columns:
     track_alma_df[col] = track_alma_df[col].apply(formata_percentual)
 
