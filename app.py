@@ -3754,9 +3754,9 @@ for col in achieved_columns:
 track_alma_df_v2.set_index(track_alma_df_v2.columns[0], inplace=True)
 
 alma_csv_v2 = track_alma_df_v2.to_csv(index=False).encode('utf-8')
-master_table_3 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
+master_table_4 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
 
-master_table_3_html = master_table_3.to_html()
+master_table_3_html = master_table_4.to_html()
 max_date = df_t1_filtrado['VISIT_DATE'].max()
 display_date = pd.Timestamp(year=max_date.year, month=3, day=31)
 
@@ -4450,9 +4450,9 @@ for col in achieved_columns:
 track_alma_df_v3.set_index(track_alma_df_v3.columns[0], inplace=True)
 
 alma_csv_v3 = track_alma_df_v3.to_csv(index=False).encode('utf-8')
-master_table_4 = style_table_3(track_alma_df_v3, track_alma_df_v3.columns)
+master_table_5 = style_table_3(track_alma_df_v3, track_alma_df_v3.columns)
 
-master_table_4_html = master_table_4.to_html()
+master_table_4_html = master_table_5.to_html()
 max_date = df_t1_filtrado_abril['VISIT_DATE'].max()
 display_date_abril = max_date
 
