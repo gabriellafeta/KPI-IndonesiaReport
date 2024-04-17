@@ -2378,7 +2378,7 @@ visits_table_all = df_t1_filtrado_v2.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in visits15_table['BDR Name'].values:
+    if bdr_name not in visits_table_all['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -2386,7 +2386,7 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        visits15_table = pd.concat([visits15_table, new_row_df], ignore_index=True)
+        visits_table_all = pd.concat([visits_table_all, new_row_df], ignore_index=True)
 
 visits_table_all.sort_values(by='BDR Name', inplace=True)
 visits_table_all.reset_index(drop=True, inplace=True)
