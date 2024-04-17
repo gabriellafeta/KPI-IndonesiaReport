@@ -2897,7 +2897,7 @@ def style_table_4(df, columns, font_size='10pt'):
 alma_csv_v2 = track_alma_df.to_csv(index=False).encode('utf-8')
 master_table_3 = style_table_3(track_alma_df, track_alma_df.columns)
 
-master_table_html = master_table_3.to_html()
+master_table_2_html = master_table_3.to_html()
 max_date = df_t1_filtrado_v2['VISIT_DATE'].max()
 display_date = pd.Timestamp(year=max_date.year, month=3, day=31)
 
