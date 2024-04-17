@@ -3310,7 +3310,7 @@ def style_table_2(df, columns, font_size='10pt'):
 
     return styler
 
-# alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
+alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
 # master_table_2 = style_table_2(track_alma_df, track_alma_df.columns)
 # master_table_2_html = master_table_2.to_html()
 
