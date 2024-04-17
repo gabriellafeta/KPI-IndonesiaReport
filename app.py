@@ -8,6 +8,7 @@ import os
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
+from datetime import datetime
 
 #------------------------------------------------------------------------------------------------------
 st.set_page_config(layout="wide") # Configuração da página larga
@@ -2628,7 +2629,7 @@ visits_gpsapp_df_ld_grouped_all.reset_index(drop=True, inplace=True)
 # visits_gpsapp_df_pld_grouped.reset_index(drop=True, inplace=True)
 
 ##### Semana
-
+visits_gpsapp_df_all['VISIT_DATE'] = pd.to_datetime(visits_gpsapp_df_all['VISIT_DATE'])
 visits_gpsapp_df_all['week_of_year'] = visits_gpsapp_df_all['VISIT_DATE'].dt.isocalendar().week
 data_final = visits_gpsapp_df_all['week_of_year'].max()
 current_week_number = data_final.isocalendar()[1]
