@@ -2660,15 +2660,17 @@ for bdr_key, bdr_name in BDR_dict.items():
 visits_gpsapp_df_lw_grouped_all.sort_values(by='BDR Name', inplace=True)
 visits_gpsapp_df_lw_grouped_all.reset_index(drop=True, inplace=True)
 
-buyers_table = df_t3_filtrado_v2.groupby(['BDR Name']).agg(
+# Buyers table all
+
+buyers_table_all = df_t3_filtrado_v2.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
     Total_GMV = ('TOTAL_SALES', 'sum')
 ).reset_index()
 
-buyers_table.sort_values(by='BDR Name', inplace=True)
-buyers_table.reset_index(drop=True, inplace=True)
+buyers_table_all.sort_values(by='BDR Name', inplace=True)
+buyers_table_all.reset_index(drop=True, inplace=True)
 
 ### Filtro ultimo dia
 
@@ -2676,7 +2678,7 @@ df_t3_filtrado_v2['DAY'] = pd.to_datetime(df_t3_filtrado_v2['DAY'])
 last_day = df_t3['DAY'].max()
 df_t3_ultimo = df_t3_filtrado_v2[df_t3_filtrado_v2['DAY'] == last_day]
 
-buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
+buyers_table_lastday_all = df_t3_ultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2684,7 +2686,7 @@ buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in buyers_table_lastday['BDR Name'].values:
+    if bdr_name not in buyers_table_lastday_all['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -2695,16 +2697,16 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        buyers_table_lastday = pd.concat([buyers_table_lastday, new_row_df], ignore_index=True)
+        buyers_table_lastday_all = pd.concat([buyers_table_lastday_all, new_row_df], ignore_index=True)
 
-buyers_table_lastday.sort_values(by='BDR Name', inplace=True)
-buyers_table_lastday.reset_index(drop=True, inplace=True)
+buyers_table_lastday_all.sort_values(by='BDR Name', inplace=True)
+buyers_table_lastday_all.reset_index(drop=True, inplace=True)
 
 ### Filtro penultimo dia
 penultimo_dia = last_day - pd.Timedelta(days=1)
 df_t3_penultimo = df_t3_filtrado_v2[df_t3_filtrado_v2['DAY'] == penultimo_dia]
 
-buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
+buyers_table_penultimo_all = df_t3_penultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2712,7 +2714,7 @@ buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in buyers_table_penultimo['BDR Name'].values:
+    if bdr_name not in buyers_table_penultimo_all['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -2723,16 +2725,16 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        buyers_table_penultimo = pd.concat([buyers_table_penultimo, new_row_df], ignore_index=True)
+        buyers_table_penultimo_all = pd.concat([buyers_table_penultimo_all, new_row_df], ignore_index=True)
 
-buyers_table_penultimo.sort_values(by='BDR Name', inplace=True)
-buyers_table_penultimo.reset_index(drop=True, inplace=True)
+buyers_table_penultimo_all.sort_values(by='BDR Name', inplace=True)
+buyers_table_penultimo_all.reset_index(drop=True, inplace=True)
 
 ### Semana Atual
 semana_atual = df_t3_filtrado_v2['week_of_year'].max()
-df_t3_semana_atual= df_t3_filtrado_v2[df_t3_filtrado_v2['week_of_year'] == semana_atual]
+df_t3_semana_atual_all= df_t3_filtrado_v2[df_t3_filtrado_v2['week_of_year'] == semana_atual]
 
-buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
+buyers_table_semana_atual_all = df_t3_semana_atual_all.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2740,7 +2742,7 @@ buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in buyers_table_semana_atual['BDR Name'].values:
+    if bdr_name not in buyers_table_semana_atual_all['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -2751,10 +2753,10 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        buyers_table_semana_atual = pd.concat([buyers_table_semana_atual, new_row_df], ignore_index=True)
+        buyers_table_semana_atual_all = pd.concat([buyers_table_semana_atual_all, new_row_df], ignore_index=True)
 
-buyers_table_semana_atual.sort_values(by='BDR Name', inplace=True)
-buyers_table_semana_atual.reset_index(drop=True, inplace=True)
+buyers_table_semana_atual_all.sort_values(by='BDR Name', inplace=True)
+buyers_table_semana_atual_all.reset_index(drop=True, inplace=True)
 
 # DF CONSOLIDADO
 
@@ -2763,7 +2765,7 @@ target_value2 = 240
 target_value3 = 90
 
 track_alma = {
-    "BDR": buyers_table["BDR Name"].tolist(),
+    "BDR": buyers_table_all["BDR Name"].tolist(),
     f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped_all["VISITS_GPS"].fillna(0).tolist(),
     "# Customers Visited WTD": visits_gpsapp_df_lw_grouped_all["VISITS_GPS"].tolist(),
     "# Customers Visited LTD": visits_gpsapp_df_grouped_all["VISITS_GPS"].tolist(),
@@ -2776,19 +2778,19 @@ track_alma = {
     "Target Customers Registered": [target_value2] * len(visits_table_all["Total_Register"].fillna(0).tolist()),
     "Achieved Customers Registered %": [x / target_value2 for x in visits_table_all["Total_Register"].fillna(0).tolist()],
 
-    f"# Customers Adopted Previous day": buyers_table_lastday["Total_Buyers"].tolist(),
-    "# Customers Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
-    "# Customers Adopted LTD": buyers_table["Total_Buyers"].tolist(),
-    "Target Customers Adopted": [target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist()),
-    "Achieved Customers Adopted %": [x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()],
+    f"# Customers Adopted Previous day": buyers_table_lastday_all["Total_Buyers"].tolist(),
+    "# Customers Adopted Current Week": buyers_table_semana_atual_all["Total_Buyers"].tolist(),
+    "# Customers Adopted LTD": buyers_table_all["Total_Buyers"].tolist(),
+    "Target Customers Adopted": [target_value3] * len(buyers_table_all["Total_Buyers"].fillna(0).tolist()),
+    "Achieved Customers Adopted %": [x / target_value3 for x in buyers_table_all["Total_Buyers"].fillna(0).tolist()],
 
-    f"Orders Previous day": buyers_table_lastday["Total_Orders"].tolist(),
-    "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
-    "Orders LTD": buyers_table["Total_Orders"].tolist(),
+    f"Orders Previous day": buyers_table_lastday_all["Total_Orders"].tolist(),
+    "Orders Current Week": buyers_table_semana_atual_all["Total_Orders"].tolist(),
+    "Orders LTD": buyers_table_all["Total_Orders"].tolist(),
 
-    f"GMV Previous day": buyers_table_lastday["Total_GMV"].tolist(),
-    "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
-    "GMV LTD": buyers_table["Total_GMV"].tolist()
+    f"GMV Previous day": buyers_table_lastday_all["Total_GMV"].tolist(),
+    "GMV Current Week": buyers_table_semana_atual_all["Total_GMV"].tolist(),
+    "GMV LTD": buyers_table_all["Total_GMV"].tolist()
 
 }
 
