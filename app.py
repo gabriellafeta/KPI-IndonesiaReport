@@ -4006,7 +4006,7 @@ buyers_table_semana_atual_abril.reset_index(drop=True, inplace=True)
 
 # REGISTER
 ##### ALLD
-register_table = df_t2_filtrado_abril.groupby(['BDR Name']).agg(
+register_table_abril = df_t2_filtrado_abril.groupby(['BDR Name']).agg(
     Total_Registers=('count_registered_stores', 'sum')
 ).reset_index()
 
