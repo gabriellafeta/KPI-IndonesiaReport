@@ -2652,7 +2652,7 @@ for bdr_key, bdr_name in BDR_dict.items():
 visits_gpsapp_df_lw_grouped_all.sort_values(by='BDR Name', inplace=True)
 visits_gpsapp_df_lw_grouped_all.reset_index(drop=True, inplace=True)
 
-buyers_table = df_t3_filtrado.groupby(['BDR Name']).agg(
+buyers_table = df_t3_filtrado_v2.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -2664,9 +2664,9 @@ buyers_table.reset_index(drop=True, inplace=True)
 
 ### Filtro ultimo dia
 
-df_t3_filtrado['DAY'] = pd.to_datetime(df_t3_filtrado['DAY'])
+df_t3_filtrado_v2['DAY'] = pd.to_datetime(df_t3_filtrado_v2['DAY'])
 last_day = df_t3['DAY'].max()
-df_t3_ultimo = df_t3_filtrado[df_t3_filtrado['DAY'] == last_day]
+df_t3_ultimo = df_t3_filtrado_v2[df_t3_filtrado_v2['DAY'] == last_day]
 
 buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
