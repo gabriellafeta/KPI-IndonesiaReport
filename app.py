@@ -2373,12 +2373,10 @@ df_t4_filtrado_v2 = df_t4[(df_t4['DATE'] >= data_inicio)]
 df_t5_filtrado_v2 = df_t5[(df_t5['DATE'] >= data_inicio)]
 
 df_t1_filtrado_v2['week_of_year'] = df_t1_filtrado_v2['VISIT_DATE'].dt.isocalendar().week
-df_t2_filtrado_v2['week_of_year'] = df_t2_filtrado_v2['VISIT_DATE'].dt.isocalendar().week
-df_t3_filtrado_v2['week_of_year'] = df_t3_filtrado_v2['VISIT_DATE'].dt.isocalendar().week
-df_t4_filtrado_v2['week_of_year'] = df_t4_filtrado_v2['VISIT_DATE'].dt.isocalendar().week
-df_t5_filtrado_v2['week_of_year'] = df_t5_filtrado_v2['VISIT_DATE'].dt.isocalendar().week
-
-
+df_t2_filtrado_v2['week_of_year'] = df_t2_filtrado_v2['DATE'].dt.isocalendar().week
+df_t3_filtrado_v2['week_of_year'] = df_t3_filtrado_v2['DAY'].dt.isocalendar().week
+df_t4_filtrado_v2['week_of_year'] = df_t4_filtrado_v2['DATE'].dt.isocalendar().week
+df_t5_filtrado_v2['week_of_year'] = df_t5_filtrado_v2['DATE'].dt.isocalendar().week
 
 
 df_t3_filtrado_v2['TOTAL_BUYERS'] = df_t3_filtrado_v2['count_buyers_customer'] + df_t3_filtrado_v2['count_buyers_force'] + df_t3_filtrado_v2['count_buyers_grow']
