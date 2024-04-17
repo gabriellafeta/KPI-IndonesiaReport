@@ -2911,7 +2911,7 @@ html_date = f"""
     }}
     </style>
     <div class="fonte-personalizada4">
-        Last day: {max_date.strftime('%d-%m-%Y')}
+        Last day: {data_fim.strftime('%d-%m-%Y')}
     </div>
     """
 
