@@ -2632,8 +2632,7 @@ visits_gpsapp_df_ld_grouped_all.reset_index(drop=True, inplace=True)
 visits_gpsapp_df_all['VISIT_DATE'] = pd.to_datetime(visits_gpsapp_df_all['VISIT_DATE'])
 visits_gpsapp_df_all['week_of_year'] = visits_gpsapp_df_all['VISIT_DATE'].dt.isocalendar().week
 data_final = visits_gpsapp_df_all['week_of_year'].max()
-current_week_number = data_final.isocalendar()[1]
-visits_gpsapp_df_lw_all = visits_gpsapp_df_all[visits_gpsapp_df_all['week_of_year'] == current_week_number]
+visits_gpsapp_df_lw_all = visits_gpsapp_df_all[visits_gpsapp_df_all['week_of_year'] == data_final]
 
 visits_gpsapp_df_lw_grouped_all = visits_gpsapp_df_lw_all.groupby(['BDR Name']).agg(
     VISITS_GPS=('VISITS_GPS', 'sum')
