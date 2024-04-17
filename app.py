@@ -2896,7 +2896,7 @@ def style_table_4(df, columns, font_size='10pt'):
 
     return styler
 
-alma_csv_v2 = track_alma_df.to_csv(index=False).encode('utf-8')
+alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
 master_table_3 = style_table_3(track_alma_df, track_alma_df.columns)
 
 master_table_2_html = master_table_3.to_html()
@@ -5092,7 +5092,7 @@ with colCm[0]:
     key="download_button_E"
 ) 
     st.markdown(html_date_abril, unsafe_allow_html=True)
-    st.markdown(master_table_5_html, unsafe_allow_html=True)
+    st.markdown(master_table_4_html, unsafe_allow_html=True)
     st.markdown("""
     <style>
     .fonte-personalizada3 {
