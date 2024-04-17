@@ -2911,7 +2911,7 @@ html_date = f"""
     }}
     </style>
     <div class="fonte-personalizada4">
-        Last day: {}
+        Last day tessset: {data_fim.strftime('%d-%m-%Y')}
     </div>
     """
 
