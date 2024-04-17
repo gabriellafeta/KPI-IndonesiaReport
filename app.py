@@ -3892,7 +3892,7 @@ merged_df_master_table = pd.merge(merged_df, weekly_gps, on='week_of_year', how=
 ####### KPI track Table
 ### Tabela Buyers
 
-buyers_table = df_t3_filtrado_abril.groupby(['BDR Name']).agg(
+buyers_table_abril = df_t3_filtrado_abril.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -3900,7 +3900,7 @@ buyers_table = df_t3_filtrado_abril.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in buyers_table['BDR Name'].values:
+    if bdr_name not in buyers_table_abril['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -3911,12 +3911,12 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        buyers_table = pd.concat([buyers_table, new_row_df], ignore_index=True)
+        buyers_table_abril = pd.concat([buyers_table_abril, new_row_df], ignore_index=True)
 
 
 
-buyers_table.sort_values(by='BDR Name', inplace=True)
-buyers_table.reset_index(drop=True, inplace=True)
+buyers_table_abril.sort_values(by='BDR Name', inplace=True)
+buyers_table_abril.reset_index(drop=True, inplace=True)
 
 ### Filtro ultimo dia
 
@@ -3924,7 +3924,7 @@ df_t3_filtrado_abril['DAY'] = pd.to_datetime(df_t3_filtrado_abril['DAY'])
 last_day = df_t3['DAY'].max()
 df_t3_ultimo = df_t3_filtrado_abril[df_t3_filtrado_abril['DAY'] == last_day]
 
-buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
+buyers_table_lastday_abril = df_t3_ultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -3932,7 +3932,7 @@ buyers_table_lastday = df_t3_ultimo.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in buyers_table_lastday['BDR Name'].values:
+    if bdr_name not in buyers_table_lastday_abril['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -3943,16 +3943,16 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        buyers_table_lastday = pd.concat([buyers_table_lastday, new_row_df], ignore_index=True)
+        buyers_table_lastday_abril = pd.concat([buyers_table_lastday_abril, new_row_df], ignore_index=True)
 
-buyers_table_lastday.sort_values(by='BDR Name', inplace=True)
-buyers_table_lastday.reset_index(drop=True, inplace=True)
+buyers_table_lastday_abril.sort_values(by='BDR Name', inplace=True)
+buyers_table_lastday_abril.reset_index(drop=True, inplace=True)
 
 ### Filtro penultimo dia
 penultimo_dia = last_day - pd.Timedelta(days=1)
 df_t3_penultimo = df_t3_filtrado_abril[df_t3_filtrado_abril['DAY'] == penultimo_dia]
 
-buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
+buyers_table_penultimo_abril = df_t3_penultimo.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -3960,7 +3960,7 @@ buyers_table_penultimo = df_t3_penultimo.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in buyers_table_penultimo['BDR Name'].values:
+    if bdr_name not in buyers_table_penultimo_abril['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -3971,16 +3971,16 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        buyers_table_penultimo = pd.concat([buyers_table_penultimo, new_row_df], ignore_index=True)
+        buyers_table_penultimo_abril = pd.concat([buyers_table_penultimo_abril, new_row_df], ignore_index=True)
 
-buyers_table_penultimo.sort_values(by='BDR Name', inplace=True)
-buyers_table_penultimo.reset_index(drop=True, inplace=True)
+buyers_table_penultimo_abril.sort_values(by='BDR Name', inplace=True)
+buyers_table_penultimo_abril.reset_index(drop=True, inplace=True)
 
 ### Semana Atual
 semana_atual = df_t3_filtrado_abril['week_of_year'].max()
 df_t3_semana_atual= df_t3_filtrado_abril[df_t3_filtrado_abril['week_of_year'] == semana_atual]
 
-buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
+buyers_table_semana_atual_abril = df_t3_semana_atual.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
     Custumer_Adopted = ('count_buyers_customer', 'sum'),
     Total_Orders = ('TOTAL_ORDERS', 'sum'),
@@ -3988,7 +3988,7 @@ buyers_table_semana_atual = df_t3_semana_atual.groupby(['BDR Name']).agg(
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in buyers_table_semana_atual['BDR Name'].values:
+    if bdr_name not in buyers_table_semana_atual_abril['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -3999,19 +3999,19 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        buyers_table_semana_atual = pd.concat([buyers_table_semana_atual, new_row_df], ignore_index=True)
+        buyers_table_semana_atual_abril = pd.concat([buyers_table_semana_atual_abril, new_row_df], ignore_index=True)
 
-buyers_table_semana_atual.sort_values(by='BDR Name', inplace=True)
-buyers_table_semana_atual.reset_index(drop=True, inplace=True)
+buyers_table_semana_atual_abril.sort_values(by='BDR Name', inplace=True)
+buyers_table_semana_atual_abril.reset_index(drop=True, inplace=True)
 
 # REGISTER
 ##### ALLD
-register_table = df_t2_filtrado_abril.groupby(['BDR Name']).agg(
+register_table = df_t2_filtrado_abril_abril.groupby(['BDR Name']).agg(
     Total_Registers=('count_registered_stores', 'sum')
 ).reset_index()
 
-register_table.sort_values(by='BDR Name', inplace=True)
-register_table.reset_index(drop=True, inplace=True)
+register_table_abril.sort_values(by='BDR Name', inplace=True)
+register_table_abril.reset_index(drop=True, inplace=True)
 
 ##### Ultimo dia
 
@@ -4019,12 +4019,12 @@ df_t2_filtrado_abril['DATE'] = pd.to_datetime(df_t2_filtrado_abril['DATE'])
 last_day2 = pd.Timestamp.now().normalize() - pd.Timedelta(days=1)
 df_t2_ultimo = df_t2[df_t2['DATE'] == last_day2]
 
-registers_table_lastday = df_t2_ultimo.groupby(['BDR Name']).agg(
+registers_table_lastday_abril = df_t2_ultimo.groupby(['BDR Name']).agg(
     Total_Registers=('count_registered_stores', 'sum')
 ).reset_index()
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in registers_table_lastday['BDR Name'].values:
+    if bdr_name not in registers_table_lastday_abril['BDR Name'].values:
         # Se um BDR específico não estiver presente, adicione-o com valores 0
         new_row = {
             'BDR Name': bdr_name,
@@ -4035,10 +4035,10 @@ for bdr_key, bdr_name in BDR_dict.items():
         }
         # Adicionando a nova linha ao buyers_table
         new_row_df = pd.DataFrame([new_row])
-        registers_table_lastday = pd.concat([registers_table_lastday, new_row_df], ignore_index=True)
+        registers_table_lastday_abril = pd.concat([registers_table_lastday_abril, new_row_df], ignore_index=True)
 
-registers_table_lastday.sort_values(by='BDR Name', inplace=True)
-registers_table_lastday.reset_index(drop=True, inplace=True)
+registers_table_lastday_abril.sort_values(by='BDR Name', inplace=True)
+registers_table_lastday_abril.reset_index(drop=True, inplace=True)
 
 ### Penultimo dia
 
@@ -4397,7 +4397,7 @@ target_value2 = 240
 target_value3 = 90
 
 track_alma_v3 = {
-    "BDR": buyers_table["BDR Name"].tolist(),
+    "BDR": buyers_table_abril["BDR Name"].tolist(),
     f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist(),
     "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
     "# Customers Visited LTD": visits_gpsapp_df_grouped["VISITS_GPS"].tolist(),
@@ -4410,19 +4410,19 @@ track_alma_v3 = {
     "Target Customers Registered": [target_value2] * len(visits8_table["Total_Register"].fillna(0).tolist()),
     "Achieved Customers Registered %": [x / target_value2 for x in visits8_table["Total_Register"].fillna(0).tolist()],
 
-    f"# Customers Adopted Previous day": buyers_table_lastday["Total_Buyers"].tolist(),
-    "# Customers Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
-    "# Customers Adopted LTD": buyers_table["Total_Buyers"].tolist(),
-    "Target Customers Adopted": [target_value3] * len(buyers_table["Total_Buyers"].fillna(0).tolist()),
-    "Achieved Customers Adopted %": [x / target_value3 for x in buyers_table["Total_Buyers"].fillna(0).tolist()],
+    f"# Customers Adopted Previous day": buyers_table_lastday_abril["Total_Buyers"].tolist(),
+    "# Customers Adopted Current Week": buyers_table_semana_atual_abril["Total_Buyers"].tolist(),
+    "# Customers Adopted LTD": buyers_table_abril["Total_Buyers"].tolist(),
+    "Target Customers Adopted": [target_value3] * len(buyers_table_abril["Total_Buyers"].fillna(0).tolist()),
+    "Achieved Customers Adopted %": [x / target_value3 for x in buyers_table_abril["Total_Buyers"].fillna(0).tolist()],
 
-    f"Orders Previous day": buyers_table_lastday["Total_Orders"].tolist(),
-    "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
-    "Orders LTD": buyers_table["Total_Orders"].tolist(),
+    f"Orders Previous day": buyers_table_lastday_abril["Total_Orders"].tolist(),
+    "Orders Current Week": buyers_table_semana_atual_abril["Total_Orders"].tolist(),
+    "Orders LTD": buyers_table_abril["Total_Orders"].tolist(),
 
-    f"GMV Previous day": buyers_table_lastday["Total_GMV"].tolist(),
-    "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
-    "GMV LTD": buyers_table["Total_GMV"].tolist()
+    f"GMV Previous day": buyers_table_lastday_abril["Total_GMV"].tolist(),
+    "GMV Current Week": buyers_table_semana_atual_abril["Total_GMV"].tolist(),
+    "GMV LTD": buyers_table_abril["Total_GMV"].tolist()
 
 }
 
