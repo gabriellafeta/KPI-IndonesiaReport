@@ -3234,11 +3234,11 @@ adopted_last_day_key = f"{last_day.strftime('%d-%m')}"
 adopted_yesterday_day_key = f"{penultimo_dia.strftime('%d-%m')}"
 
 track_alma = {
-    #"BDR": buyers_table["BDR Name"].tolist(),
-    #"Adopted": buyers_table["Total_Buyers"].tolist(),
-    #f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
-    #f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
-    "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
+    "BDR": buyers_table["BDR Name"].tolist(),
+    "Adopted": buyers_table["Total_Buyers"].tolist(),
+    f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
+    f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
+    #"Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
 
     f"Orders {adopted_last_day_key}": buyers_table_lastday["Total_Orders"].tolist(),
     f"Orders {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Orders"].tolist(),
