@@ -3242,57 +3242,6 @@ register_table_semana_atual.reset_index(drop=True, inplace=True)
 ### DF consolidado
 adopted_last_day_key = f"{last_day.strftime('%d-%m')}"
 adopted_yesterday_day_key = f"{penultimo_dia.strftime('%d-%m')}"
-
-# track_alma = {
-#     "BDR": buyers_table["BDR Name"].tolist(),
-#     "Adopted": buyers_table["Total_Buyers"].tolist(),
-#     f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
-#     f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
-#     "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
-
-#     f"Orders {adopted_last_day_key}": buyers_table_lastday["Total_Orders"].tolist(),
-#     f"Orders {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Orders"].tolist(),
-#     "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
-#     "Orders LTD": buyers_table["Total_Orders"].tolist(),
-
-#     f"GMV {adopted_last_day_key}": buyers_table_lastday["Total_GMV"].tolist(),
-#     f"GMV {adopted_yesterday_day_key}": buyers_table_penultimo["Total_GMV"].tolist(),
-#     "GMV Current Week": buyers_table_semana_atual["Total_GMV"].tolist(),
-#     "GMV LTD": buyers_table["Total_GMV"].tolist(),
-
-#     f"Register {adopted_last_day_key}": registers_table_lastday["Total_Registers"].fillna(0).tolist(),
-#     f"Register {adopted_yesterday_day_key}": registers_table_penultimo["Total_Registers"].fillna(0).tolist(),
-#     "Register Current Week": register_table_semana_atual["Total_Registers"].fillna(0).tolist(),
-#     "Register LTD": register_table["Total_Registers"].fillna(0).tolist()
-
-# }
-
-# max_length = max(len(lst) for lst in track_alma.values())
-
-# # Pad shorter lists with zeros
-# for key in track_alma:
-#     length_difference = max_length - len(track_alma[key])
-#     if length_difference > 0:
-#         track_alma[key].extend([0] * length_difference)
-
-# # Create DataFrame
-# track_alma_df = pd.DataFrame(track_alma)
-
-# sum_row = track_alma_df.sum(numeric_only=True)
-# totals_row = {'BDR': 'TOTALS'}
-# totals_row.update(sum_row.to_dict())
-# totals_df = pd.DataFrame([totals_row])
-
-# track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
-# track_alma_df.sort_values(by='Adopted', inplace=True, ascending=False)
-
-# gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
-# for col in gmv_columns:
-#     track_alma_df[col] = track_alma_df[col].apply(formata_numero)
-
-# track_alma_df.set_index(track_alma_df.columns[0], inplace=True)
-
-
 #### New Styler
 
 def style_table_2(df, columns, font_size='10pt'):
@@ -3329,10 +3278,6 @@ def style_table_2(df, columns, font_size='10pt'):
     styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
     return styler
-
-alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
-# master_table_2 = style_table_2(track_alma_df, track_alma_df.columns)
-# master_table_2_html = master_table_2.to_html()
 
 #------------------------------------------------------------------------------------------------------
 #### New Styler
