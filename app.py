@@ -2773,36 +2773,41 @@ track_alma = {
 
 }
 
-for bdr_key, bdr_name in BDR_dict.items():
-    # Check if the BDR name is not in any dictionary within the track_alma list
-    if not any(d['BDR'] == bdr_name for d in track_alma):
-        # Define a new row with default values
-        new_row = {
-            'BDR': bdr_name,
-            "# Customers Visited Previous day": 0,
-            "# Customers Visited WTD": 0,
-            "# Customers Visited LTD": 0,
-            "Customers Visited Target": 0,
-            "Customers Visited Achieved %": 0,
-            "# Customers Registered Previous day": 0,
-            "# Customers Registered WTD": 0,
-            "# Customers Registered LTD": 0,
-            "Target Customers Registered": 0,
-            "Achieved Customers Registered %": 0,
-            "# Customers Adopted Previous day": 0,
-            "# Customers Adopted Current Week": 0,
-            "# Customers Adopted LTD": 0,
-            "Target Customers Adopted": 0,
-            "Achieved Customers Adopted %": 0,
-            "Orders Previous day": 0,
-            "Orders Current Week": 0,
-            "Orders LTD": 0,
-            "GMV Previous day": 0,
-            "GMV Current Week": 0,
-            "GMV LTD": 0
-        }
-        # Append the new dictionary to the track_alma list
-        track_alma.append(new_row)
+valid_bdrs = list(BDR_dict.values())
+valid_indices = [i for i, bdr_name in enumerate(track_alma["BDR"]) if bdr_name in valid_bdrs]
+
+filtered_track_alma = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
+
+# for bdr_key, bdr_name in BDR_dict.items():
+#     # Check if the BDR name is not in any dictionary within the track_alma list
+#     if not any(d['BDR'] == bdr_name for d in track_alma):
+#         # Define a new row with default values
+#         new_row = {
+#             'BDR': bdr_name,
+#             "# Customers Visited Previous day": 0,
+#             "# Customers Visited WTD": 0,
+#             "# Customers Visited LTD": 0,
+#             "Customers Visited Target": 0,
+#             "Customers Visited Achieved %": 0,
+#             "# Customers Registered Previous day": 0,
+#             "# Customers Registered WTD": 0,
+#             "# Customers Registered LTD": 0,
+#             "Target Customers Registered": 0,
+#             "Achieved Customers Registered %": 0,
+#             "# Customers Adopted Previous day": 0,
+#             "# Customers Adopted Current Week": 0,
+#             "# Customers Adopted LTD": 0,
+#             "Target Customers Adopted": 0,
+#             "Achieved Customers Adopted %": 0,
+#             "Orders Previous day": 0,
+#             "Orders Current Week": 0,
+#             "Orders LTD": 0,
+#             "GMV Previous day": 0,
+#             "GMV Current Week": 0,
+#             "GMV LTD": 0
+#         }
+#         # Append the new dictionary to the track_alma list
+#         track_alma.append(new_row)
 
 
 
