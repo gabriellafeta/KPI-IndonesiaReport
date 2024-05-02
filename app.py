@@ -2785,7 +2785,7 @@ for key in track_alma:
 track_alma_df = pd.DataFrame(track_alma)
 
 # Sort DataFrame by 'Adopted', descending order
-track_alma_df.sort_values(by='Adopted', inplace=True, ascending=False)
+track_alma_df.sort_values(by='BDR', inplace=True, ascending=False)
 
 sum_row = track_alma_df.sum(numeric_only=True)
 
