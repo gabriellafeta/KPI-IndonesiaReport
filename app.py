@@ -2774,8 +2774,9 @@ track_alma = {
 }
 
 for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in track_alma['BDR'].values:
-        # Create a new row with zeros or appropriate default values
+    # Check if the BDR name is not in any dictionary within the track_alma list
+    if not any(d['BDR'] == bdr_name for d in track_alma):
+        # Define a new row with default values
         new_row = {
             'BDR': bdr_name,
             "# Customers Visited Previous day": 0,
@@ -2800,8 +2801,8 @@ for bdr_key, bdr_name in BDR_dict.items():
             "GMV Current Week": 0,
             "GMV LTD": 0
         }
-        # Append the new row to the DataFrame
-        track_alma = track_alma.append(new_row, ignore_index=True)
+        # Append the new dictionary to the track_alma list
+        track_alma.append(new_row)
 
 
 
