@@ -2787,6 +2787,7 @@ track_alma_df = pd.DataFrame(track_alma)
 
 # Sort DataFrame by 'Adopted', descending order
 track_alma_df.sort_values(by='Target Customers Adopted', inplace=True, ascending=False)
+track_alma_df.reset_index(drop=True, inplace=True)
 
 sum_row = track_alma_df.sum(numeric_only=True)
 
@@ -2801,6 +2802,7 @@ totals_df = pd.DataFrame([totals_row])
 track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
 
 gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
+
 for col in gmv_columns:
     track_alma_df[col] = track_alma_df[col].apply(formata_numero)
 
