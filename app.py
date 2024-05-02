@@ -2776,10 +2776,10 @@ track_alma = {
 max_length = max(len(lst) for lst in track_alma.values())
 
 # Pad shorter lists with zeros
-# for key in track_alma:
-#     length_difference = max_length - len(track_alma[key])
-#     if length_difference > 0:
-#         track_alma[key].extend([0] * length_difference)
+for key in track_alma:
+    length_difference = max_length - len(track_alma[key])
+    if length_difference > 0:
+        track_alma[key].extend([0] * length_difference)
 
 # Create DataFrame
 track_alma_df = pd.DataFrame(track_alma)
