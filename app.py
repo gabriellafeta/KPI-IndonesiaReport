@@ -2773,42 +2773,12 @@ track_alma = {
 
 }
 # Create DataFrame
+
+valid_indices = [i for i, bdr in enumerate(track_alma['BDR']) if bdr.strip()]
+filtered_track_alma = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
+
 track_alma_df = pd.DataFrame(track_alma)
-
-for bdr_key, bdr_name in BDR_dict.items():
-    if bdr_name not in track_alma_df['BDR'].values:
-        # Create a new row with zeros or appropriate default values
-        new_row = {
-            'BDR': bdr_name,
-            "# Customers Visited Previous day": 0,
-            "# Customers Visited WTD": 0,
-            "# Customers Visited LTD": 0,
-            "Customers Visited Target": 0,
-            "Customers Visited Achieved %": 0,
-            "# Customers Registered Previous day": 0,
-            "# Customers Registered WTD": 0,
-            "# Customers Registered LTD": 0,
-            "Target Customers Registered": 0,
-            "Achieved Customers Registered %": 0,
-            "# Customers Adopted Previous day": 0,
-            "# Customers Adopted Current Week": 0,
-            "# Customers Adopted LTD": 0,
-            "Target Customers Adopted": 0,
-            "Achieved Customers Adopted %": 0,
-            "Orders Previous day": 0,
-            "Orders Current Week": 0,
-            "Orders LTD": 0,
-            "GMV Previous day": 0,
-            "GMV Current Week": 0,
-            "GMV LTD": 0
-        }
-        # Append the new row to the DataFrame
-        new_row_df = pd.DataFrame([new_row])
-        track_alma_df = pd.concat([buyers_table_semana_atual_all, new_row_df], ignore_index=True)
-
-
-# Sort DataFrame by 'Adopted', descending order
-track_alma_df.sort_values(by='Target Customers Adopted', inplace=True, ascending=False)
+track_alma_df.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
 
 sum_row = track_alma_df.sum(numeric_only=True)
 
