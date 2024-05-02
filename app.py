@@ -2777,6 +2777,10 @@ track_alma = {
 valid_indices = [i for i, bdr in enumerate(track_alma['BDR']) if bdr.strip()]
 filtered_track_alma = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
 
+# for key in filtered_track_alma:
+#     print(f"Length of '{key}': {len(filtered_track_alma[key])}")
+
+
 track_alma_df = pd.DataFrame(filtered_track_alma)
 track_alma_df.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
 
@@ -3649,7 +3653,11 @@ track_alma_v2 = {
 
 }
 
-track_alma_df_v2 = pd.DataFrame(track_alma_v2)
+valid_indices = [i for i, bdr in enumerate(track_alma_v2['BDR']) if bdr.strip()]
+filtered_track_alma_v2 = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
+
+
+track_alma_df_v2 = pd.DataFrame(filtered_track_alma_v2)
 track_alma_df_v2.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
 
 
