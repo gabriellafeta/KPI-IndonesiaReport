@@ -2776,7 +2776,6 @@ track_alma = {
 max_length = max(len(lst) for lst in track_alma.values())
 max_length = int(max_length)
 
-
 # Pad shorter lists with zeros
 for key in track_alma:
     length_difference = max_length - len(track_alma[key])
@@ -2787,7 +2786,7 @@ for key in track_alma:
 track_alma_df = pd.DataFrame(track_alma)
 
 # Sort DataFrame by 'Adopted', descending order
-track_alma_df.sort_values(by='BDR', inplace=True, ascending=False)
+track_alma_df.sort_values(by='Target Customers Adopted', inplace=True, ascending=False)
 
 sum_row = track_alma_df.sum(numeric_only=True)
 
