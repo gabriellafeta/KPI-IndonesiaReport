@@ -2774,6 +2774,8 @@ track_alma = {
 }
 
 max_length = max(len(lst) for lst in track_alma.values())
+max_length = int(max_length)
+
 
 # Pad shorter lists with zeros
 for key in track_alma:
