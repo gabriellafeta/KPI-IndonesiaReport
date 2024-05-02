@@ -2519,27 +2519,6 @@ visits_table_ld_grouped_all.reset_index(drop=True, inplace=True)
 
 # ### Penultimo dia
 
-# penultimo_dia2 = last_day2 - pd.Timedelta(days=1)
-# visits8_table_pld = df_t2_filtrado[df_t2_filtrado['DATE'] == penultimo_dia2]
-
-# visits8_table_pld_grouped = visits8_table_pld.groupby(['BDR Name']).agg(
-#     Total_Register=('count_registered_stores', 'sum')
-# ).reset_index()
-
-# for bdr_key, bdr_name in BDR_dict.items():
-#     if bdr_name not in visits8_table_pld_grouped['BDR Name'].values:
-#         # Se um BDR específico não estiver presente, adicione-o com valores 0
-#         new_row = {
-#             'BDR Name': bdr_name,
-#             'Total_Visits': 0
-#         }
-#         # Adicionando a nova linha ao buyers_table
-#         new_row_df = pd.DataFrame([new_row])
-#         visits8_table_pld_grouped = pd.concat([visits8_table_pld_grouped, new_row_df], ignore_index=True)
-
-# visits8_table_pld_grouped.sort_values(by='BDR Name', inplace=True)
-# visits8_table_pld_grouped.reset_index(drop=True, inplace=True)
-
 ##### Semana
 df_t2_filtrado_v2['week_of_year'] = df_t2_filtrado_v2['DATE'].dt.isocalendar().week
 current_week_number_b = df_t2_filtrado_v2['week_of_year'].max()
@@ -3359,22 +3338,6 @@ def style_table_4(df, columns, font_size='10pt'):
     return styler
 
 ### Tabela v2
-
-#### DF com colunas selecionadas
-
-# df_merged_intermediario = pd.merge(df_t3, df_t1[['BDR Name', 'VISIT_DATE', 'VISITS']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'VISIT_DATE'], how='left')
-# df_select = pd.merge(df_merged_intermediario, df_t2[['BDR Name', 'DATE', 'count_registered_stores']], left_on=['BDR Name', 'DAY'], right_on=['BDR Name', 'DATE'], how='left')
-# df_select.drop_duplicates(inplace=True)
-
-# select_csv = df_select.to_csv(index=False).encode('utf-8')
-
-### DF select segmentado por Visits
-
-# df_15v = df_select[df_select['VISITS'] >= 15]
-# df_8v = df_select[(df_select['VISITS'] >= 8) & (df_select['VISITS'] < 15)]
-# df_3v = df_select[(df_select['VISITS'] >= 3) & (df_select['VISITS'] < 8)]
-
-##### Customer Visit com df_15v
 ##### ALLD
 visits15_table = df_t1_filtrado.groupby(['BDR Name']).agg(
     Total_Visits=('VISITED_STORES', 'sum')
@@ -3808,52 +3771,6 @@ merged_df = pd.merge(weekly_sales_gmv, weekly_visits, on='week_of_year', how='le
 merged_df = pd.merge(merged_df, weekly_tasks, on='week_of_year', how='left')
 merged_df = pd.merge(merged_df, weekly_register, on='week_of_year', how='left')
 merged_df_master_table = pd.merge(merged_df, weekly_gps, on='week_of_year', how='left')
-
-# ### Final master table
-# merged_df_master_table['AOV'] = merged_df_master_table['Total_GMV'] / merged_df_master_table['Total_Orders']
-
-# aggregated_values = {}
-# for column in merged_df_master_table.columns:
-#     if column in ['GPS', 'GPS_QUALITY', 'Task_Effect', 'Completed_Tasks']:
-#         aggregated_values[column] = np.mean(merged_df_master_table[column].replace(0, np.nan))
-#     else:
-#         aggregated_values[column] = merged_df_master_table[column].sum()
-
-# aggregated_df = pd.DataFrame(aggregated_values, index=['Accumulated'])
-
-# merged_df_master_table_with_accumulated = pd.concat([aggregated_df, merged_df_master_table])
-
-# for column in merged_df_master_table_with_accumulated.columns[2:]:
-#     merged_df_master_table_with_accumulated[column] = pd.to_numeric(merged_df_master_table_with_accumulated[column], errors='coerce')
-
-# merged_df_master_table_with_accumulated['GMV_Customer'] = merged_df_master_table_with_accumulated['GMV_Customer'].apply(formata_numero)
-# merged_df_master_table_with_accumulated['GMV_Force'] = merged_df_master_table_with_accumulated['GMV_Force'].apply(formata_numero)
-# merged_df_master_table_with_accumulated['GMV_Grow'] = merged_df_master_table_with_accumulated['GMV_Grow'].apply(formata_numero)
-# merged_df_master_table_with_accumulated['Total_GMV'] = merged_df_master_table_with_accumulated['Total_GMV'].apply(formata_numero)
-
-# merged_df_master_table_with_accumulated['GPS'] = merged_df_master_table_with_accumulated['GPS'].apply(formata_percentual)
-# merged_df_master_table_with_accumulated['GPS_QUALITY'] = merged_df_master_table_with_accumulated['GPS_QUALITY'].apply(formata_percentual)
-# merged_df_master_table_with_accumulated['Task_Effect'] = merged_df_master_table_with_accumulated['Task_Effect'].apply(formata_percentual)
-# merged_df_master_table_with_accumulated['Completed_Tasks'] = merged_df_master_table_with_accumulated['Completed_Tasks'].apply(formata_percentual)
-
-# merged_df_master_table_sorted = merged_df_master_table_with_accumulated.sort_values(by='week_of_year', ascending=False).fillna(0)
-# merged_df_master_table_sorted = merged_df_master_table_sorted[~merged_df_master_table_sorted['week_of_year'].isin([3, 4])]
-# merged_df_master_table_sorted.columns = merged_df_master_table_sorted.columns.str.replace('_', ' ')
-# merged_df_master_table_sorted = merged_df_master_table_sorted.set_index(merged_df_master_table_sorted.columns[0])
-
-# merged_df_master_table_sorted = merged_df_master_table_sorted.rename(index={merged_df_master_table_sorted.index[0]: "Accumulated"})
-# merged_df_master_table_sorted.iloc[0, 0] = "Launch"
-
-# merged_df_master_table_sorted.fillna(0, inplace=True)
-
-# columns_master_table = merged_df_master_table_sorted.columns
-# merged_df_master_table_sorted_cv = merged_df_master_table_sorted.to_csv(index=False).encode('utf-8')
-
-# master_table = style_table(merged_df_master_table_sorted, columns_master_table)
-# master_table_html = master_table.to_html()
-
-####### KPI track Table
-### Tabela Buyers
 
 buyers_table_abril = df_t3_filtrado_abril.groupby(['BDR Name']).agg(
     Total_Buyers=('TOTAL_BUYERS', 'sum'),
