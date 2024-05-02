@@ -3242,7 +3242,7 @@ track_alma = {
 
     f"Orders {adopted_last_day_key}": buyers_table_lastday["Total_Orders"].tolist(),
     f"Orders {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Orders"].tolist(),
-    #"Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
+    "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
     "Orders LTD": buyers_table["Total_Orders"].tolist(),
 
     f"GMV {adopted_last_day_key}": buyers_table_lastday["Total_GMV"].tolist(),
@@ -3257,9 +3257,16 @@ track_alma = {
 
 }
 
+max_length = max(len(lst) for lst in track_alma.values())
 
+# Pad shorter lists with zeros
+for key in track_alma:
+    length_difference = max_length - len(track_alma[key])
+    if length_difference > 0:
+        track_alma[key].extend([0] * length_difference)
+
+# Create DataFrame
 track_alma_df = pd.DataFrame(track_alma)
-track_alma_df.sort_values(by='Adopted', inplace=True, ascending=False)
 
 sum_row = track_alma_df.sum(numeric_only=True)
 totals_row = {'BDR': 'TOTALS'}
