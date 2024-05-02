@@ -3238,11 +3238,11 @@ track_alma = {
     "Adopted": buyers_table["Total_Buyers"].tolist(),
     f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
     f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
-    #"Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
+    "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
 
     f"Orders {adopted_last_day_key}": buyers_table_lastday["Total_Orders"].tolist(),
     f"Orders {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Orders"].tolist(),
-    "Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
+    #"Orders Current Week": buyers_table_semana_atual["Total_Orders"].tolist(),
     "Orders LTD": buyers_table["Total_Orders"].tolist(),
 
     f"GMV {adopted_last_day_key}": buyers_table_lastday["Total_GMV"].tolist(),
