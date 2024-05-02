@@ -3654,7 +3654,7 @@ track_alma_v2 = {
 }
 
 valid_indices = [i for i, bdr in enumerate(track_alma_v2['BDR']) if bdr.strip()]
-filtered_track_alma_v2 = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
+filtered_track_alma_v2 = {key: [value[i] for i in valid_indices] for key, value in track_alma_v2.items()}
 
 
 track_alma_df_v2 = pd.DataFrame(filtered_track_alma_v2)
@@ -4309,7 +4309,7 @@ track_alma_v3 = {
 }
 
 valid_indices = [i for i, bdr in enumerate(track_alma_v3['BDR']) if bdr.strip()]
-filtered_track_alma_v3 = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
+filtered_track_alma_v3 = {key: [value[i] for i in valid_indices] for key, value in track_alma_v3.items()}
 
 
 track_alma_df_v3 = pd.DataFrame(filtered_track_alma_v3)
