@@ -2772,37 +2772,42 @@ track_alma = {
     "GMV LTD": buyers_table_all["Total_GMV"].tolist()
 
 }
-
-
-columns_to_adjust = [col for col, data in track_alma.items() if len(data) < 7]
-
-# 2. Fill missing BDR values
-valid_bdrs = list(BDR_dict.values())  # Get valid BDR names from BDR_dict
-missing_bdr_values = [bdr for bdr in valid_bdrs if bdr not in track_alma['BDR']]
-track_alma['BDR'].extend(missing_bdr_values)
-missing_bdr_indices = [i for i, bdr in enumerate(track_alma['BDR']) if bdr in missing_bdr_values]
-for col in columns_to_adjust:
-    track_alma[col].extend([0] * len(missing_bdr_values))
-
-# 3. Fill missing values with zeros
-for col in track_alma.keys():
-    track_alma[col].extend([0] * (7 - len(track_alma[col])))
-
-# Ensure all columns have 7 rows
-for col in track_alma.keys():
-    track_alma[col] = track_alma[col][:7]
-
-# for key in track_alma:
-#     print(f"Length of '{key}': {len(track_alma[key])}")
-
-# Pad shorter lists with zeros
-# for key in track_alma:
-#     length_difference = max_length - len(track_alma[key])
-#     if length_difference > 0:
-#         track_alma[key].extend([0] * length_difference)
-
 # Create DataFrame
 track_alma_df = pd.DataFrame(track_alma)
+
+for bdr_key, bdr_name in BDR_dict.items():
+    if bdr_name not in track_alma_df['BDR'].values:
+        # Create a new row with zeros or appropriate default values
+        new_row = {
+            'BDR': bdr_name,
+            "# Customers Visited Previous day": 0,
+            "# Customers Visited WTD": 0,
+            "# Customers Visited LTD": 0,
+            "Customers Visited Target": 0,
+            "Customers Visited Achieved %": 0,
+            "# Customers Registered Previous day": 0,
+            "# Customers Registered WTD": 0,
+            "# Customers Registered LTD": 0,
+            "Target Customers Registered": 0,
+            "Achieved Customers Registered %": 0,
+            "# Customers Adopted Previous day": 0,
+            "# Customers Adopted Current Week": 0,
+            "# Customers Adopted LTD": 0,
+            "Target Customers Adopted": 0,
+            "Achieved Customers Adopted %": 0,
+            "Orders Previous day": 0,
+            "Orders Current Week": 0,
+            "Orders LTD": 0,
+            "GMV Previous day": 0,
+            "GMV Current Week": 0,
+            "GMV LTD": 0
+        }
+        # Append the new row to the DataFrame
+        new_row_df = pd.DataFrame([new_row])
+        track_alma_df = pd.concat([buyers_table_semana_atual_all, new_row_df], ignore_index=True)
+
+
+
 
 # Sort DataFrame by 'Adopted', descending order
 track_alma_df.sort_values(by='Target Customers Adopted', inplace=True, ascending=False)
