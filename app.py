@@ -3689,17 +3689,7 @@ master_table_4 = style_table_3(track_alma_df_v2, track_alma_df_v2.columns)
 master_table_3_html = master_table_4.to_html()
 max_date = df_t1_filtrado['VISIT_DATE'].max()
 
-year = int(max_date.year)
-month = int(max_date.month)
-day = int(max_date.day)
-
-try:
-    display_date = pd.Timestamp(year=year, month=month, day=day)
-except ValueError as e:
-    print(f"Error creating Timestamp: {e}")
-    # Handle the error or provide a default date
-    display_date = pd.Timestamp(year=year, month=3, day=31)
-
+# display_date = pd.Timestamp(year=max_date.year, month=3, day=31)
 
 
 html_date = f"""
@@ -3710,7 +3700,7 @@ html_date = f"""
     }}
     </style>
     <div class="fonte-personalizada4">
-        Last day: {display_date.strftime('%d-%m-%Y')}
+        Last day: 31-03-2024
     </div>
     """
 #------------------------------------------------------------------------------------------------------
