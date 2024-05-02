@@ -2807,8 +2807,6 @@ for bdr_key, bdr_name in BDR_dict.items():
         track_alma_df = pd.concat([buyers_table_semana_atual_all, new_row_df], ignore_index=True)
 
 
-
-
 # Sort DataFrame by 'Adopted', descending order
 track_alma_df.sort_values(by='Target Customers Adopted', inplace=True, ascending=False)
 
