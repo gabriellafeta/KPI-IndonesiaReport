@@ -2764,143 +2764,143 @@ target_value1 = 450
 target_value2 = 240
 target_value3 = 90
 
-# track_alma = {
-#     "BDR": buyers_table_all["BDR Name"].tolist(),
-#     f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped_all["VISITS_GPS"].fillna(0).tolist(),
-#     "# Customers Visited WTD": visits_gpsapp_df_lw_grouped_all["VISITS_GPS"].tolist(),
-#     "# Customers Visited LTD": visits_gpsapp_df_grouped_all["VISITS_GPS"].tolist(),
-#     "Customers Visited Target": [target_value1] * len(visits_gpsapp_df_grouped_all["VISITS_GPS"].tolist()),
-#     "Customers Visited Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped_all["VISITS_GPS"].tolist()],
+track_alma = {
+    "BDR": buyers_table_all["BDR Name"].tolist(),
+    f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped_all["VISITS_GPS"].fillna(0).tolist(),
+    "# Customers Visited WTD": visits_gpsapp_df_lw_grouped_all["VISITS_GPS"].tolist(),
+    "# Customers Visited LTD": visits_gpsapp_df_grouped_all["VISITS_GPS"].tolist(),
+    "Customers Visited Target": [target_value1] * len(visits_gpsapp_df_grouped_all["VISITS_GPS"].tolist()),
+    "Customers Visited Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped_all["VISITS_GPS"].tolist()],
 
-#     f"# Customers Registered Previous day": visits_table_ld_grouped_all["Total_Register"].fillna(0).tolist(),
-#     "# Customers Registered WTD": visits_table_lw_grouped_all["Total_Register"].fillna(0).tolist(),
-#     "# Customers Registered LTD": visits_table_all["Total_Register"].fillna(0).tolist(),
-#     "Target Customers Registered": [target_value2] * len(visits_table_all["Total_Register"].fillna(0).tolist()),
-#     "Achieved Customers Registered %": [x / target_value2 for x in visits_table_all["Total_Register"].fillna(0).tolist()],
+    f"# Customers Registered Previous day": visits_table_ld_grouped_all["Total_Register"].fillna(0).tolist(),
+    "# Customers Registered WTD": visits_table_lw_grouped_all["Total_Register"].fillna(0).tolist(),
+    "# Customers Registered LTD": visits_table_all["Total_Register"].fillna(0).tolist(),
+    "Target Customers Registered": [target_value2] * len(visits_table_all["Total_Register"].fillna(0).tolist()),
+    "Achieved Customers Registered %": [x / target_value2 for x in visits_table_all["Total_Register"].fillna(0).tolist()],
 
-#     f"# Customers Adopted Previous day": buyers_table_lastday_all["Total_Buyers"].tolist(),
-#     "# Customers Adopted Current Week": buyers_table_semana_atual_all["Total_Buyers"].tolist(),
-#     "# Customers Adopted LTD": buyers_table_all["Total_Buyers"].tolist(),
-#     "Target Customers Adopted": [target_value3] * len(buyers_table_all["Total_Buyers"].fillna(0).tolist()),
-#     "Achieved Customers Adopted %": [x / target_value3 for x in buyers_table_all["Total_Buyers"].fillna(0).tolist()],
+    f"# Customers Adopted Previous day": buyers_table_lastday_all["Total_Buyers"].tolist(),
+    "# Customers Adopted Current Week": buyers_table_semana_atual_all["Total_Buyers"].tolist(),
+    "# Customers Adopted LTD": buyers_table_all["Total_Buyers"].tolist(),
+    "Target Customers Adopted": [target_value3] * len(buyers_table_all["Total_Buyers"].fillna(0).tolist()),
+    "Achieved Customers Adopted %": [x / target_value3 for x in buyers_table_all["Total_Buyers"].fillna(0).tolist()],
 
-#     f"Orders Previous day": buyers_table_lastday_all["Total_Orders"].tolist(),
-#     "Orders Current Week": buyers_table_semana_atual_all["Total_Orders"].tolist(),
-#     "Orders LTD": buyers_table_all["Total_Orders"].tolist(),
+    f"Orders Previous day": buyers_table_lastday_all["Total_Orders"].tolist(),
+    "Orders Current Week": buyers_table_semana_atual_all["Total_Orders"].tolist(),
+    "Orders LTD": buyers_table_all["Total_Orders"].tolist(),
 
-#     f"GMV Previous day": buyers_table_lastday_all["Total_GMV"].tolist(),
-#     "GMV Current Week": buyers_table_semana_atual_all["Total_GMV"].tolist(),
-#     "GMV LTD": buyers_table_all["Total_GMV"].tolist()
+    f"GMV Previous day": buyers_table_lastday_all["Total_GMV"].tolist(),
+    "GMV Current Week": buyers_table_semana_atual_all["Total_GMV"].tolist(),
+    "GMV LTD": buyers_table_all["Total_GMV"].tolist()
 
-# }
+}
 
-# track_alma_df = pd.DataFrame(track_alma)
-# track_alma_df.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
+track_alma_df = pd.DataFrame(track_alma)
+track_alma_df.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
 
 
-# sum_row = track_alma_df.sum(numeric_only=True)
+sum_row = track_alma_df.sum(numeric_only=True)
 
-# totals_row = {'BDR': 'TOTALS'}
-# totals_row.update(sum_row.to_dict())
+totals_row = {'BDR': 'TOTALS'}
+totals_row.update(sum_row.to_dict())
 
-# totals_row['Customers Visited Achieved %'] = (sum_row['# Customers Visited LTD'] / sum_row['Customers Visited Target']) if sum_row['Customers Visited Target'] != 0 else 0
-# totals_row['Achieved Customers Registered %'] = (sum_row['# Customers Registered LTD'] / sum_row['Target Customers Registered']) if sum_row['Target Customers Registered'] != 0 else 0
-# totals_row['Achieved Customers Adopted %'] = (sum_row['# Customers Adopted LTD'] / sum_row['Target Customers Adopted']) if sum_row['Target Customers Adopted'] != 0 else 0
-# totals_df = pd.DataFrame([totals_row])
+totals_row['Customers Visited Achieved %'] = (sum_row['# Customers Visited LTD'] / sum_row['Customers Visited Target']) if sum_row['Customers Visited Target'] != 0 else 0
+totals_row['Achieved Customers Registered %'] = (sum_row['# Customers Registered LTD'] / sum_row['Target Customers Registered']) if sum_row['Target Customers Registered'] != 0 else 0
+totals_row['Achieved Customers Adopted %'] = (sum_row['# Customers Adopted LTD'] / sum_row['Target Customers Adopted']) if sum_row['Target Customers Adopted'] != 0 else 0
+totals_df = pd.DataFrame([totals_row])
 
-# track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
+track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
 
-# gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
-# for col in gmv_columns:
-#     track_alma_df[col] = track_alma_df[col].apply(formata_numero)
+gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
+for col in gmv_columns:
+    track_alma_df[col] = track_alma_df[col].apply(formata_numero)
 
-# achieved_columns = [col for col in track_alma_df.columns if '%' in col]
-# for col in achieved_columns:
-#     track_alma_df[col] = track_alma_df[col].apply(formata_percentual)
+achieved_columns = [col for col in track_alma_df.columns if '%' in col]
+for col in achieved_columns:
+    track_alma_df[col] = track_alma_df[col].apply(formata_percentual)
 
-# track_alma_df.set_index(track_alma_df.columns[0], inplace=True)
+track_alma_df.set_index(track_alma_df.columns[0], inplace=True)
 
-# def style_table_3(df, columns, font_size='10pt'):
-#     def format_with_dots(value):
-#         if isinstance(value, (int, float)):
-#             return '{:,.0f}'.format(value).replace(',', '.')
-#         return value
+def style_table_3(df, columns, font_size='10pt'):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
 
-#     # Applying formatting with dots for numeric values
-#     styler = df.style.format(format_with_dots, subset=columns)\
-#         .set_table_styles([
-#             # Header style
-#             {'selector': 'thead th',
-#              'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
-#             # Cell data alignment
-#             {'selector': 'td',
-#              'props': [('text-align', 'center')]},
-#             # Font style and size for the entire table
-#             {'selector': 'table, th, td',
-#              'props': [('font-size', font_size)]},
-#             # Removing grid lines
-#             {'selector': 'table',
-#              'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
-#         ])
+    # Applying formatting with dots for numeric values
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            # Header style
+            {'selector': 'thead th',
+             'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
+            # Cell data alignment
+            {'selector': 'td',
+             'props': [('text-align', 'center')]},
+            # Font style and size for the entire table
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]},
+            # Removing grid lines
+            {'selector': 'table',
+             'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
+        ])
 
-#     # Adding thick borders every 5 columns, except for the last 6 columns
-#     total_columns = len(df.columns)
-#     for col in range(1, total_columns - 6, 5):  # Start from the 5th column and skip every 5 columns, avoiding the last 6
-#         styler = styler.set_table_styles([
-#             {'selector': f'td:nth-child({col}), th:nth-child({col})',
-#              'props': [('border-right', '2px solid black')]}
-#         ], overwrite=False, axis=1)
+    # Adding thick borders every 5 columns, except for the last 6 columns
+    total_columns = len(df.columns)
+    for col in range(1, total_columns - 6, 5):  # Start from the 5th column and skip every 5 columns, avoiding the last 6
+        styler = styler.set_table_styles([
+            {'selector': f'td:nth-child({col}), th:nth-child({col})',
+             'props': [('border-right', '2px solid black')]}
+        ], overwrite=False, axis=1)
 
-#     # Styling the last row with a black background and white font
-#     styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
+    # Styling the last row with a black background and white font
+    styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[df.index[-1], :])
 
-#     return styler
+    return styler
 
-# def style_table_4(df, columns, font_size='10pt'):
-#     def format_with_dots(value):
-#         if isinstance(value, (int, float)):
-#             return '{:,.0f}'.format(value).replace(',', '.')
-#         return value
+def style_table_4(df, columns, font_size='10pt'):
+    def format_with_dots(value):
+        if isinstance(value, (int, float)):
+            return '{:,.0f}'.format(value).replace(',', '.')
+        return value
 
-#     # Aplicando a formatação com pontos para os valores numéricos
-#     styler = df.style.format(format_with_dots, subset=columns)\
-#         .set_table_styles([
-#             # Estilo do cabeçalho
-#             {'selector': 'thead th',
-#              'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
-#             # Alinhamento dos dados na célula
-#             {'selector': 'td',
-#              'props': [('text-align', 'center')]},
-#             # Estilo da fonte e tamanho para toda a tabela
-#             {'selector': 'table, th, td',
-#              'props': [('font-size', font_size)]},
-#             # Removendo linhas de grade
-#             {'selector': 'table',
-#              'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
-#         ])
+    # Aplicando a formatação com pontos para os valores numéricos
+    styler = df.style.format(format_with_dots, subset=columns)\
+        .set_table_styles([
+            # Estilo do cabeçalho
+            {'selector': 'thead th',
+             'props': [('background-color', '#1a2634'), ('color', 'white'), ('font-weight', 'bold')]},
+            # Alinhamento dos dados na célula
+            {'selector': 'td',
+             'props': [('text-align', 'center')]},
+            # Estilo da fonte e tamanho para toda a tabela
+            {'selector': 'table, th, td',
+             'props': [('font-size', font_size)]},
+            # Removendo linhas de grade
+            {'selector': 'table',
+             'props': [('border-collapse', 'collapse'), ('border-spacing', '0'), ('border', '0')]}
+        ])
 
-#     # Adicionando bordas grossas a cada 6 colunas, começando na terceira coluna (índice 3)
-#     for col in range(3, len(df.columns) + 1, 5):
-#         styler = styler.set_table_styles([
-#             {'selector': f'td:nth-child({col})',
-#              'props': [('border-right', '2px solid black')]}
-#         ], overwrite=False, axis=1)
+    # Adicionando bordas grossas a cada 6 colunas, começando na terceira coluna (índice 3)
+    for col in range(3, len(df.columns) + 1, 5):
+        styler = styler.set_table_styles([
+            {'selector': f'td:nth-child({col})',
+             'props': [('border-right', '2px solid black')]}
+        ], overwrite=False, axis=1)
 
-#     # Estilizando a última coluna com a mesma cor do restante
-#     styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[:, df.columns[-1]])
+    # Estilizando a última coluna com a mesma cor do restante
+    styler = styler.set_properties(**{'background-color': '#1a2634', 'color': 'white'}, subset=pd.IndexSlice[:, df.columns[-1]])
 
-#     # Aplicando um mapa de calor às colunas % com gradiente de verde para valores altos, amarelo para médios e vermelho para baixos
-#     percent_columns = [col for col in df.columns if '%' in col]
-#     if percent_columns:
-#         styler = styler.background_gradient(subset=percent_columns, cmap='RdYlGn', low=0.1, high=0.5)
+    # Aplicando um mapa de calor às colunas % com gradiente de verde para valores altos, amarelo para médios e vermelho para baixos
+    percent_columns = [col for col in df.columns if '%' in col]
+    if percent_columns:
+        styler = styler.background_gradient(subset=percent_columns, cmap='RdYlGn', low=0.1, high=0.5)
 
-#     return styler
+    return styler
 
-# alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
-# master_table_3 = style_table_3(track_alma_df, track_alma_df.columns)
+alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
+master_table_3 = style_table_3(track_alma_df, track_alma_df.columns)
 
-# master_table_2_html = master_table_3.to_html()
-# max_date = df_t1_filtrado_v2['VISIT_DATE'].max()
+master_table_2_html = master_table_3.to_html()
+max_date = df_t1_filtrado_v2['VISIT_DATE'].max()
 
 
 html_date = f"""
@@ -3234,7 +3234,7 @@ adopted_last_day_key = f"{last_day.strftime('%d-%m')}"
 adopted_yesterday_day_key = f"{penultimo_dia.strftime('%d-%m')}"
 
 track_alma = {
-    "BDR": buyers_table["BDR Name"].tolist(),
+    #"BDR": buyers_table["BDR Name"].tolist(),
     "Adopted": buyers_table["Total_Buyers"].tolist(),
     f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
     f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
@@ -3257,21 +3257,22 @@ track_alma = {
 
 }
 
-# track_alma_df = pd.DataFrame(track_alma)
-# track_alma_df.sort_values(by='Adopted', inplace=True, ascending=False)
 
-# sum_row = track_alma_df.sum(numeric_only=True)
-# totals_row = {'BDR': 'TOTALS'}
-# totals_row.update(sum_row.to_dict())
-# totals_df = pd.DataFrame([totals_row])
+track_alma_df = pd.DataFrame(track_alma)
+track_alma_df.sort_values(by='Adopted', inplace=True, ascending=False)
 
-# track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
+sum_row = track_alma_df.sum(numeric_only=True)
+totals_row = {'BDR': 'TOTALS'}
+totals_row.update(sum_row.to_dict())
+totals_df = pd.DataFrame([totals_row])
 
-# gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
-# for col in gmv_columns:
-#     track_alma_df[col] = track_alma_df[col].apply(formata_numero)
+track_alma_df = pd.concat([track_alma_df, totals_df], ignore_index=True)
 
-# track_alma_df.set_index(track_alma_df.columns[0], inplace=True)
+gmv_columns = [col for col in track_alma_df.columns if 'GMV' in col]
+for col in gmv_columns:
+    track_alma_df[col] = track_alma_df[col].apply(formata_numero)
+
+track_alma_df.set_index(track_alma_df.columns[0], inplace=True)
 
 
 #### New Styler
@@ -3311,7 +3312,7 @@ def style_table_2(df, columns, font_size='10pt'):
 
     return styler
 
-# alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
+alma_csv = track_alma_df.to_csv(index=False).encode('utf-8')
 # master_table_2 = style_table_2(track_alma_df, track_alma_df.columns)
 # master_table_2_html = master_table_2.to_html()
 
@@ -5047,16 +5048,16 @@ with colBm[0]:
     </div>
     """, unsafe_allow_html=True)
 
-# with colCm[0]:
-#     st.markdown(html_date_abril, unsafe_allow_html=True)
-#     st.markdown(master_table_2_html, unsafe_allow_html=True)
-#     st.download_button(
-#     label="This table as CSV",
-#     data=alma_csv,
-#     file_name='data.csv',
-#     mime='text/csv',
-#     key="download_button_D"
-# )
+with colCm[0]:
+    st.markdown(html_date_abril, unsafe_allow_html=True)
+    st.markdown(master_table_2_html, unsafe_allow_html=True)
+    st.download_button(
+    label="This table as CSV",
+    data=alma_csv,
+    file_name='data.csv',
+    mime='text/csv',
+    key="download_button_D"
+)
     st.markdown(html_date, unsafe_allow_html=True)
     st.markdown("""
     <style>
