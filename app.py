@@ -2776,7 +2776,7 @@ track_alma = {
 valid_bdrs = list(BDR_dict.values())
 valid_indices = [i for i, bdr_name in enumerate(track_alma["BDR"]) if bdr_name in valid_bdrs]
 
-filtered_track_alma = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
+track_alma = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
 
 # for bdr_key, bdr_name in BDR_dict.items():
 #     # Check if the BDR name is not in any dictionary within the track_alma list
