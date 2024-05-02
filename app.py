@@ -3237,7 +3237,7 @@ track_alma = {
     #"BDR": buyers_table["BDR Name"].tolist(),
     #"Adopted": buyers_table["Total_Buyers"].tolist(),
     #f"Adopted {adopted_last_day_key}": buyers_table_lastday["Total_Buyers"].tolist(),
-    f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
+    #f"Adopted {adopted_yesterday_day_key}": buyers_table_penultimo["Total_Buyers"].tolist(),
     "Adopted Current Week": buyers_table_semana_atual["Total_Buyers"].tolist(),
 
     f"Orders {adopted_last_day_key}": buyers_table_lastday["Total_Orders"].tolist(),
