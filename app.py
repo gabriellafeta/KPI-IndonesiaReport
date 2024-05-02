@@ -2777,7 +2777,7 @@ track_alma = {
 valid_indices = [i for i, bdr in enumerate(track_alma['BDR']) if bdr.strip()]
 filtered_track_alma = {key: [value[i] for i in valid_indices] for key, value in track_alma.items()}
 
-track_alma_df = pd.DataFrame(track_alma)
+track_alma_df = pd.DataFrame(filtered_track_alma)
 track_alma_df.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
 
 sum_row = track_alma_df.sum(numeric_only=True)
