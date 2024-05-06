@@ -203,9 +203,7 @@ df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
 df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
 
 def clean_date(df, date_column):
-    # Convert column to datetime, coercing errors to NaT
     df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
-    # Drop rows where the date column is NaT
     df.dropna(subset=[date_column], inplace=True)
 
 clean_date(df_t1, 'VISIT_DATE')
@@ -213,12 +211,6 @@ clean_date(df_t2, 'DATE')
 clean_date(df_t3, 'DAY')
 clean_date(df_t4, 'DATE')
 clean_date(df_t5, 'DATE')
-
-df_t1.dropna(subset=['VISIT_DATE'], inplace=True)
-df_t2.dropna(subset=['DATE'], inplace=True) 
-df_t3.dropna(subset=['DAY'], inplace=True)
-df_t4.dropna(subset=['DATE'], inplace=True)
-df_t5.dropna(subset=['DATE'], inplace=True)  
 
 #t_order_df['BDR Name'] = t_order_df[[t_order_df['BDR_ID'].notnull()]]
 
