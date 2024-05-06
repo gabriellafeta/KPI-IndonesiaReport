@@ -172,13 +172,13 @@ blob_content_logo = blob_client_logo.download_blob().readall()
 ### Alias column for BDR
 
 BDR_dict = {
-    "6389058_BDR001": "Dinamis Artha Sukses",
-    "6658562_BDR001": "RMS Jakarta Selatan",
-    "6421535_BDR001": "RMS Depok",
-    "6828128_BDR001": "RMS Bogor",
-    "6713130_BDR001": "RMS Bekasi",
-    "5653270_BDR001":"ASR",
-    "6174675_BDR001": "CMP"
+    "NDID_6389058_BDR001": "Dinamis Artha Sukses",
+    "NDID_6658562_BDR001": "RMS Jakarta Selatan",
+    "NDID_6421535_BDR001": "RMS Depok",
+    "NDID_6828128_BDR001": "RMS Bogor",
+    "NDID_6713130_BDR001": "RMS Bekasi",
+    "NDID_5653270_BDR001":"ASR",
+    "NDID_6174675_BDR001": "CMP"
 }
 
 df_t1['BDR Name'] = df_t1['BDR_ID'].map(BDR_dict)
