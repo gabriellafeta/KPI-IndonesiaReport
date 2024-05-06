@@ -4341,8 +4341,8 @@ track_alma_v3 = {
 
 }
 
-for key, value in track_alma_v3.items():
-    print(f"Length of list for '{key}': {len(value)}")
+# for key, value in track_alma_v3.items():
+#     print(f"Length of list for '{key}': {len(value)}")
 
 
 
@@ -4383,8 +4383,11 @@ track_alma_df_v3.set_index(track_alma_df_v3.columns[0], inplace=True)
 alma_csv_v3 = track_alma_df_v3.to_csv(index=False).encode('utf-8')
 master_table_5 = style_table_3(track_alma_df_v3, track_alma_df_v3.columns)
 
+
+
+
 master_table_4_html = master_table_5.to_html()
-max_date = df_t1_filtrado_abril['VISIT_DATE'].max()
+max_date = df_t3['DAY'].max()
 display_date_abril = max_date
 
 html_date_abril = f"""
