@@ -304,6 +304,11 @@ kpi1_all_barplot.update_layout(
     height=400  # You can also adjust the height if necessary
 )
 ### Parâmetros para graficos por BDR
+df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
+df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
 
 max_date = df_t1['VISIT_DATE'].max()
 min_date = df_t1['VISIT_DATE'].min()
