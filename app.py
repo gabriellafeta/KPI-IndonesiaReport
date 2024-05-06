@@ -4341,9 +4341,9 @@ track_alma_v3 = {
 
 }
 
-valid_indices = [i for i, bdr in enumerate(track_alma_v3['BDR']) if bdr.strip()]
-filtered_track_alma_v3 = {key: [value[i] for i in valid_indices] for key, value in track_alma_v3.items()}
-
+#valid_indices = [i for i, bdr in enumerate(track_alma_v3['BDR']) if bdr.strip()]
+#filtered_track_alma_v3 = {key: [value[i] for i in valid_indices] for key, value in track_alma_v3.items()}
+filtered_track_alma_v3 = track_alma_v3
 
 track_alma_df_v3 = pd.DataFrame(filtered_track_alma_v3)
 track_alma_df_v3.sort_values(by='Achieved Customers Adopted %', inplace=True, ascending=False)
