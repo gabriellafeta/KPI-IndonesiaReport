@@ -4314,7 +4314,7 @@ target_value3 = 90
 track_alma_v3 = {
     "BDR": buyers_table_abril["BDR Name"].tolist(),
     f"# Customers Visited Previous day": visits_gpsapp_df_ld_grouped["VISITS_GPS"].fillna(0).tolist(),
-    "# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
+    #"# Customers Visited WTD": visits_gpsapp_df_lw_grouped["VISITS_GPS"].tolist(),
     "# Customers Visited LTD": visits_gpsapp_df_grouped["VISITS_GPS"].tolist(),
     "Customers Visited Target": [target_value1] * len(visits_gpsapp_df_grouped["VISITS_GPS"].tolist()),
     "Customers Visited Achieved %": [x / target_value1 for x in visits_gpsapp_df_grouped["VISITS_GPS"].tolist()],
@@ -4340,6 +4340,11 @@ track_alma_v3 = {
     "GMV LTD": buyers_table_abril["Total_GMV"].tolist()
 
 }
+
+for key, value in track_alma_v3.items():
+    print(f"Length of list for '{key}': {len(value)}")
+
+
 
 # valid_indices = [i for i, bdr in enumerate(track_alma_v3['BDR']) if bdr.strip()]
 # filtered_track_alma_v3 = {key: [value[i] for i in valid_indices] for key, value in track_alma_v3.items()}
