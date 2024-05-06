@@ -195,6 +195,19 @@ df_t3 = df_t3[df_t3['BDR Name'].notnull()]
 df_t4 = df_t4[df_t4['BDR Name'].notnull()]
 df_t5 = df_t5[df_t5['BDR Name'].notnull()]
 df_t6 = df_t6[df_t6['BDR Name'].notnull()]
+
+df_t1['VISIT_DATE'] = pd.to_datetime(df_t1['VISIT_DATE'])
+df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
+df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
+df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
+df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
+
+df_t1.dropna(subset=['VISIT_DATE'], inplace=True)
+df_t2.dropna(subset=['DATE'], inplace=True) 
+df_t3.dropna(subset=['DAY'], inplace=True)
+df_t4.dropna(subset=['DATE'], inplace=True)
+df_t5.dropna(subset=['DATE'], inplace=True)  
+
 #t_order_df['BDR Name'] = t_order_df[[t_order_df['BDR_ID'].notnull()]]
 
 # Mostrar apenas os últimos 30 dias
@@ -309,6 +322,9 @@ df_t2['DATE'] = pd.to_datetime(df_t2['DATE'])
 df_t3['DAY'] = pd.to_datetime(df_t3['DAY'])
 df_t4['DATE'] = pd.to_datetime(df_t4['DATE'])
 df_t5['DATE'] = pd.to_datetime(df_t5['DATE'])
+
+
+
 
 max_date = df_t1['VISIT_DATE'].max()
 min_date = df_t1['VISIT_DATE'].min()
